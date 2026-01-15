@@ -1,56 +1,33 @@
+import type { NotificationType } from "@/dto/notification.dto";
+import {
+  useMarkAllRead,
+  useMarkReadList,
+  usePaginationNotification,
+  useUnreadCount,
+} from "@/hooks/useNotification";
 import { Badge } from "primereact/badge";
 import { Button } from "primereact/button";
 import { useEffect, useRef, useState } from "react";
-
-type NotificationItem = {
-  id: string;
-  title: string;
-  message: string;
-  time: string;
-  read: boolean;
-  type: "info" | "warning" | "success" | "error";
-};
 
 export default function Notification() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const [notifications, setNotifications] = useState<NotificationItem[]>([
-    {
-      id: "1",
-      title: "Thông báo hệ thống",
-      message: "Hệ thống sẽ bảo trì vào 2h sáng ngày mai.",
-      time: "5 phút trước",
-      read: false,
-      type: "warning",
-    },
-    {
-      id: "2",
-      title: "Cập nhật thành công",
-      message: "Dữ liệu của bạn đã được cập nhật.",
-      time: "1 giờ trước",
-      read: false,
-      type: "success",
-    },
-    {
-      id: "3",
-      title: "Tin nhắn mới",
-      message: "Bạn có 3 tin nhắn chưa đọc từ quản trị viên.",
-      time: "2 giờ trước",
-      read: true,
-      type: "info",
-    },
-    {
-      id: "4",
-      title: "Cảnh báo bảo mật",
-      message: "Phát hiện đăng nhập từ thiết bị lạ.",
-      time: "3 giờ trước",
-      read: true,
-      type: "error",
-    },
-  ]);
+  // Fetch notifications từ API
+  const { data: notifications, refetch } = usePaginationNotification({
+    skip: 0,
+    take: 10,
+    where: {},
+  });
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  // Đếm số notification chưa đọc
+  const { count: unreadCount, refetch: refetchCount } = useUnreadCount();
+
+  // Hook đánh dấu tất cả đã đọc
+  const { onMarkAllRead } = useMarkAllRead();
+
+  // Hook đánh dấu danh sách đã đọc
+  const { onMarkReadList } = useMarkReadList();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -65,35 +42,54 @@ export default function Notification() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  const handleRefresh = () => setNotifications([...notifications]);
+  const handleRefresh = () => {
+    refetch();
+    refetchCount();
+  };
 
   const handleViewAll = () => {
     setIsOpen(false);
+    // TODO: Navigate to notifications page
   };
 
   const handleMarkAllAsRead = () => {
-    setNotifications(notifications.map((n) => ({ ...n, read: true })));
+    onMarkAllRead();
   };
 
-  const handleNotificationClick = (id: string) => {
-    setNotifications(
-      notifications.map((n) => (n.id === id ? { ...n, read: true } : n))
-    );
-  };
-
-  const getIconByType = (type: NotificationItem["type"]) => {
-    switch (type) {
-      case "info":
-        return "pi pi-info-circle text-blue-500";
-      case "warning":
-        return "pi pi-exclamation-triangle text-orange-500";
-      case "success":
-        return "pi pi-check-circle text-green-500";
-      case "error":
-        return "pi pi-times-circle text-red-500";
-      default:
-        return "pi pi-bell";
+  const handleNotificationClick = (id: string, isRead: boolean) => {
+    if (!isRead) {
+      onMarkReadList([id]);
     }
+  };
+
+  const getIconByType = (type: NotificationType) => {
+    switch (type) {
+      case "system":
+        return "pi pi-cog text-blue-500";
+      case "booking":
+        return "pi pi-calendar text-green-500";
+      case "payment":
+        return "pi pi-wallet text-orange-500";
+      case "promotion":
+        return "pi pi-gift text-purple-500";
+      case "general":
+      default:
+        return "pi pi-bell text-gray-500";
+    }
+  };
+
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 60) return `${minutes} phút trước`;
+    if (hours < 24) return `${hours} giờ trước`;
+    if (days < 7) return `${days} ngày trước`;
+    return date.toLocaleDateString("vi-VN");
   };
 
   return (
@@ -138,6 +134,7 @@ export default function Notification() {
                   onClick={handleMarkAllAsRead}
                   tooltip="Đánh dấu tất cả là đã đọc"
                   className="w-8! h-8!"
+                  disabled={unreadCount === 0}
                 />
                 <Button
                   icon="pi pi-refresh"
@@ -151,20 +148,25 @@ export default function Notification() {
               </div>
             </div>
 
-            <div className="flex flex-col max-h-[400px] overflow-y-auto custom-scrollbar">
+            <div className="flex flex-col max-h-100 overflow-y-auto custom-scrollbar">
               {notifications.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-10 text-(--text-color-secondary)">
                   <i className="pi pi-bell-slash text-4xl mb-3 opacity-50" />
                   <p className="m-0 text-sm">Không có thông báo mới</p>
                 </div>
               ) : (
-                notifications.map((notification) => (
+                notifications.map((notification: any) => (
                   <div
                     key={notification.id}
-                    onClick={() => handleNotificationClick(notification.id)}
+                    onClick={() =>
+                      handleNotificationClick(
+                        notification.id,
+                        notification.isRead
+                      )
+                    }
                     className={`group flex gap-4 p-4 border-b border-(--surface-border) last:border-0 cursor-pointer transition-all duration-200 hover:bg-(--surface-hover) 
                     ${
-                      !notification.read
+                      !notification.isRead
                         ? "bg-(--primary-50) dark:bg-white/5"
                         : ""
                     }`}
@@ -172,7 +174,7 @@ export default function Notification() {
                     <div className="shrink-0 mt-1">
                       <i
                         className={`${getIconByType(
-                          notification.type
+                          notification.notificationType
                         )} text-xl transition-transform group-hover:scale-110`}
                       />
                     </div>
@@ -181,25 +183,25 @@ export default function Notification() {
                       <div className="flex items-start justify-between gap-2 mb-1">
                         <h4
                           className={`text-sm m-0 truncate leading-tight ${
-                            !notification.read
+                            !notification.isRead
                               ? "font-bold"
                               : "font-medium opacity-90"
                           }`}
                         >
                           {notification.title}
                         </h4>
-                        {!notification.read && (
+                        {!notification.isRead && (
                           <div className="shrink-0 w-2.5 h-2.5 rounded-full bg-blue-500 mt-1 shadow-sm animate-pulse" />
                         )}
                       </div>
 
                       <p className="text-sm m-0 mb-2 line-clamp-2 text-(--text-color-secondary) leading-relaxed">
-                        {notification.message}
+                        {notification.content}
                       </p>
 
                       <span className="text-xs text-(--text-color-secondary) opacity-70 flex items-center gap-1">
                         <i className="pi pi-clock text-[10px]"></i>
-                        {notification.time}
+                        {formatTime(notification.createdAt)}
                       </span>
                     </div>
                   </div>

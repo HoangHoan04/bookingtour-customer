@@ -11,7 +11,6 @@ import CategoryMenu from "@/components/layout/CategoryMenu";
 import Notification from "@/components/layout/Notification";
 import tokenCache from "@/utils/token-cache";
 import { Avatar } from "primereact/avatar";
-import { Badge } from "primereact/badge";
 import { Button } from "primereact/button";
 import { IconField } from "primereact/iconfield";
 import { InputIcon } from "primereact/inputicon";
@@ -309,17 +308,7 @@ export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
               </div>
 
               <div className="flex items-center gap-2">
-                <Button
-                  icon="pi pi-shopping-cart"
-                  rounded
-                  text
-                  className="p-overlay-badge"
-                >
-                  <Badge value="3" severity="danger" />
-                </Button>
-
                 <Notification />
-
                 <Button
                   icon="pi pi-cog"
                   rounded
@@ -357,7 +346,7 @@ export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
                   )}
 
                   {showUserMenu && (
-                    <div className="absolute top-full right-0 mt-2 z-50 shadow-lg rounded-md overflow-hidden min-w-55">
+                    <div className="absolute top-full right-0 mt-2 z-50 shadow-lg rounded-md overflow-hidden ">
                       <Menu
                         model={
                           isLoggedIn
