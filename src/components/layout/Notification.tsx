@@ -4,7 +4,7 @@ import {
   useMarkReadList,
   usePaginationNotification,
   useUnreadCount,
-} from "@/hooks/useNotification";
+} from "@/hooks/layout/useNotification";
 import { Badge } from "primereact/badge";
 import { Button } from "primereact/button";
 import { useEffect, useRef, useState } from "react";

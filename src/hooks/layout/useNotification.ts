@@ -6,7 +6,6 @@ import { API_ENDPOINTS } from "@/services/api-route";
 import apiService from "@/services/api.service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-// Hook lấy danh sách notification với phân trang
 export const usePaginationNotification = (
   params: NotificationPaginationDto
 ) => {

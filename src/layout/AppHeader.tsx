@@ -7,8 +7,6 @@ import {
 import ForgotPasswordModal from "@/components/auth/ForgotPaswordForm";
 import LoginModal from "@/components/auth/LoginForm";
 import RegisterModal from "@/components/auth/RegisterFrom";
-import CategoryMenu from "@/components/layout/CategoryMenu";
-import Notification from "@/components/layout/Notification";
 import tokenCache from "@/utils/token-cache";
 import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
@@ -19,12 +17,24 @@ import { Menu } from "primereact/menu";
 import type { MenuItem } from "primereact/menuitem";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type AppHeaderProps = {
   onOpenSettings: () => void;
+  isScrolled?: boolean;
 };
 
-export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
+type MenuItemType = {
+  label: string;
+  path: string;
+  children?: { label: string; path: string }[];
+};
+
+export default function AppHeader({
+  onOpenSettings,
+  isScrolled = false,
+}: AppHeaderProps) {
+  const navigate = useNavigate();
   const [loginVisible, setLoginVisible] = useState(false);
   const [registerVisible, setRegisterVisible] = useState(false);
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
@@ -37,8 +47,16 @@ export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [searchPanelVisible, setSearchPanelVisible] = useState(false);
+  const [activeMenu, setActiveMenu] = useState("/");
+  const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
   const userMenuContainerRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const searchPanelRef = useRef<HTMLDivElement>(null);
+  const searchButtonRef = useRef<HTMLButtonElement>(null);
   const trendingSearchRef = useRef<OverlayPanel>(null);
+  const hoverTimeoutRef = useRef<number | null>(null);
+
   const userAvatarUrl = currentUser?.customer?.__avatar__?.[0]?.fileUrl;
   const displayName =
     currentUser?.customer?.name || currentUser?.username || "Thành viên";
@@ -49,12 +67,25 @@ export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        userMenuContainerRef.current &&
-        !userMenuContainerRef.current.contains(event.target as Node)
-      ) {
-        setShowUserMenu(false);
-      }
+      console.log("🔍 handleClickOutside triggered");
+      // Delay để onClick của button được xử lý trước
+      setTimeout(() => {
+        if (
+          userMenuContainerRef.current &&
+          !userMenuContainerRef.current.contains(event.target as Node)
+        ) {
+          console.log("❌ Closing user menu (click outside)");
+          setShowUserMenu(false);
+        }
+        if (
+          searchPanelRef.current &&
+          !searchPanelRef.current.contains(event.target as Node) &&
+          searchButtonRef.current &&
+          !searchButtonRef.current.contains(event.target as Node)
+        ) {
+          setSearchPanelVisible(false);
+        }
+      }, 0);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -116,6 +147,38 @@ export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
     },
   ];
 
+  const menuItems: MenuItemType[] = [
+    {
+      label: "Tour trong nước",
+      path: "/tours/domestic",
+      children: [
+        { label: "Miền Bắc", path: "/tours/domestic/north" },
+        { label: "Miền Trung", path: "/tours/domestic/central" },
+        { label: "Miền Nam", path: "/tours/domestic/south" },
+        { label: "Cao nguyên", path: "/tours/domestic/highland" },
+      ],
+    },
+    {
+      label: "Tour nước ngoài",
+      path: "/tours/international",
+      children: [
+        { label: "Châu Á", path: "/tours/international/asia" },
+        { label: "Châu Âu", path: "/tours/international/europe" },
+        { label: "Châu Mỹ", path: "/tours/international/america" },
+        { label: "Châu Úc", path: "/tours/international/oceania" },
+      ],
+    },
+
+    {
+      label: "Khuyến mãi",
+      path: "/promotions",
+    },
+    {
+      label: "Liên hệ",
+      path: "/contact",
+    },
+  ];
+
   const userMenuItemsLoggedIn: MenuItem[] = [
     {
       label: displayName,
@@ -127,14 +190,17 @@ export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
     {
       label: "Đơn hàng của tôi",
       icon: "pi pi-fw pi-shopping-bag",
+      command: () => navigate("/my-orders"),
     },
     {
       label: "Thông tin tài khoản",
       icon: "pi pi-fw pi-user-edit",
+      command: () => navigate("/profile"),
     },
     {
       label: "Đổi mật khẩu",
       icon: "pi pi-fw pi-key",
+      command: () => navigate("/change-password"),
     },
     {
       separator: true,
@@ -167,6 +233,7 @@ export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
   const handleSearch = () => {
     if (searchQuery.trim()) {
       console.log("Tìm kiếm:", searchQuery);
+      setSearchPanelVisible(false);
       trendingSearchRef.current?.hide();
     }
   };
@@ -181,12 +248,50 @@ export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
     setSearchQuery(itemName);
     trendingSearchRef.current?.hide();
     console.log("Tìm kiếm xu hướng:", itemName);
+    setSearchPanelVisible(false);
+  };
+
+  const handleMenuClick = (path: string) => {
+    setActiveMenu(path);
+    navigate(path);
+    setHoveredMenu(null);
+  };
+
+  const handleMenuMouseEnter = (itemPath: string) => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current);
+    }
+    setHoveredMenu(itemPath);
+  };
+
+  const handleMenuMouseLeave = () => {
+    hoverTimeoutRef.current = setTimeout(() => {
+      setHoveredMenu(null);
+    }, 200);
   };
 
   return (
     <>
-      <header className="sticky top-0 z-50 shadow-md ">
-        <div className="surface-700 ">
+      <header
+        className={`fixed z-50 transition-all duration-300 ${
+          isScrolled ? "top-0 shadow-lg" : "top-5 "
+        }`}
+        style={{
+          backdropFilter: isScrolled ? "none" : "blur(10px)",
+          left: "7.5rem",
+          right: "7.5rem",
+          borderRadius: isScrolled ? "0 0 12px 12px" : "12px",
+        }}
+      >
+        {/* Top bar */}
+        <div
+          style={{
+            borderRadius: isScrolled ? "0" : "12px 12px 0 0",
+          }}
+          className={`${
+            isScrolled ? "bg-blue-200" : "bg-transparent"
+          } surface-card border-bottom-1 surface-border transition-colors duration-300`}
+        >
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-10 text-sm">
               <div className="flex items-center gap-2 font-medium">
@@ -249,20 +354,167 @@ export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
           </div>
         </div>
 
-        <div className="surface-card border-bottom-1 surface-border ">
+        {/* Main header */}
+        <div
+          className={` surface-card border-bottom-1 surface-border transition-colors duration-300 ${
+            isScrolled ? "bg-blue-200" : "bg-transparent"
+          }`}
+          style={{
+            borderRadius: isScrolled ? "0 0 12px 12px" : "0",
+          }}
+        >
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16 gap-4">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 cursor-pointer">
-                  <span className="text-xl font-bold text-primary hidden sm:inline">
-                    HimLamTourist
-                  </span>
-                </div>
-                <CategoryMenu />
+              {/* Logo */}
+              <div
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={() => navigate("/")}
+              >
+                <span
+                  style={{
+                    fontSize: "clamp(1.5rem, 6vw, 2.5rem)",
+                    fontWeight: 700,
+                    color: "white",
+                    fontFamily: "'Brush Script MT', cursive",
+                    textShadow: `
+                      3px 3px 0 rgba(0,0,0,0.3),
+                      6px 6px 0 rgba(0,0,0,0.2),
+                      0 0 40px rgba(255,255,255,0.3)
+                `,
+                    position: "relative",
+                    display: "inline-block",
+                  }}
+                >
+                  HimLam Tourist
+                </span>
               </div>
 
-              <div className="flex-1 max-w-md hidden lg:block">
-                <IconField iconPosition="left" className="w-full text-xs">
+              {/* Navigation Menu */}
+              <nav className="hidden lg:flex items-center gap-6">
+                {menuItems.map((item, index) => {
+                  const isActive = activeMenu === item.path;
+                  const hasChildren = item.children && item.children.length > 0;
+                  const isHovered = hoveredMenu === item.path;
+
+                  return (
+                    <div
+                      key={index}
+                      className="relative"
+                      onMouseEnter={() => handleMenuMouseEnter(item.path)}
+                      onMouseLeave={handleMenuMouseLeave}
+                    >
+                      <button
+                        onClick={() => handleMenuClick(item.path)}
+                        className={`flex items-center gap-1 px-2 py-2 transition-all text-base font-semibold relative group ${
+                          isActive
+                            ? "text-primary"
+                            : "text-[--text-color] hover:text-primary"
+                        }`}
+                      >
+                        <span>{item.label}</span>
+                        {hasChildren && (
+                          <i
+                            className={`pi pi-angle-down text-xs transition-transform ${
+                              isHovered ? "rotate-180" : ""
+                            }`}
+                          ></i>
+                        )}
+                        {isActive && (
+                          <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary"></span>
+                        )}
+                        {!isActive && (
+                          <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+                        )}
+                      </button>
+
+                      {/* Dropdown Menu */}
+                      {hasChildren && isHovered && (
+                        <div className="absolute top-full left-0 mt-1  rounded-md overflow-hidden min-w-50 border surface-border">
+                          {item.children!.map((child, childIndex) => (
+                            <button
+                              key={childIndex}
+                              onClick={() => handleMenuClick(child.path)}
+                              className="w-full text-left px-4 py-3  transition-colors text-sm font-medium text-[--text-color] hover:text-primary border-bottom-1 surface-border last:border-none"
+                            >
+                              {child.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </nav>
+
+              {/* Right side icons */}
+              <div className="flex items-center gap-2">
+                {/* Search Icon */}
+                <Button
+                  icon="pi pi-search"
+                  rounded
+                  text
+                  onClick={() => setSearchPanelVisible(!searchPanelVisible)}
+                  tooltip="Tìm kiếm"
+                  tooltipOptions={{ position: "bottom" }}
+                />
+
+                <Button
+                  icon="pi pi-cog"
+                  rounded
+                  text
+                  onClick={onOpenSettings}
+                  tooltip="Cài đặt"
+                  tooltipOptions={{ position: "bottom" }}
+                />
+
+                {/* USER MENU */}
+                <div ref={userMenuRef} className="relative">
+                  <div
+                    className="flex items-center gap-2 cursor-pointer p-1 rounded-full hover:bg-gray-100"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowUserMenu((v) => !v);
+                    }}
+                  >
+                    <Avatar
+                      image={userAvatarUrl}
+                      label={avatarLabel}
+                      shape="circle"
+                      style={{ width: 32, height: 32 }}
+                    />
+                    <span className="hidden sm:block text-sm font-medium">
+                      {displayName}
+                    </span>
+                    <i className="pi pi-angle-down text-xs" />
+                  </div>
+
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 z-50 surface-card shadow-lg rounded-md border min-w-48">
+                      <Menu
+                        model={
+                          isLoggedIn
+                            ? userMenuItemsLoggedIn
+                            : userMenuItemsGuest
+                        }
+                        className="border-none"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Search Panel */}
+        {searchPanelVisible && (
+          <div
+            ref={searchPanelRef}
+            className="surface-card border-bottom-1 surface-border shadow-lg relative"
+          >
+            <div className="container mx-auto px-4 py-6">
+              <div className="max-w-3xl mx-auto relative">
+                <IconField iconPosition="left" className="w-full">
                   <InputIcon className="pi pi-search" />
                   <InputText
                     value={searchQuery}
@@ -270,15 +522,25 @@ export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
                     onKeyDown={handleKeyDown}
                     onFocus={handleSearchFocus}
                     onBlur={handleSearchBlur}
-                    placeholder="Tìm kiếm nhanh tour..."
-                    className="w-full text-xs"
+                    placeholder="Tìm kiếm nhanh tour du lịch..."
+                    className="w-full text-base pr-10"
+                    autoFocus
                   />
                 </IconField>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center hover:bg-[--surface-hover] rounded-full transition-colors"
+                    aria-label="Xóa text"
+                  >
+                    <i className="pi pi-times text-sm text-[--text-color-secondary] hover:text-primary"></i>
+                  </button>
+                )}
 
                 <OverlayPanel
                   ref={trendingSearchRef}
                   dismissable
-                  className="w-full max-w-2xl"
+                  className="w-full max-w-3xl"
                 >
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-4">
@@ -306,67 +568,9 @@ export default function AppHeader({ onOpenSettings }: AppHeaderProps) {
                   </div>
                 </OverlayPanel>
               </div>
-
-              <div className="flex items-center gap-2">
-                <Notification />
-                <Button
-                  icon="pi pi-cog"
-                  rounded
-                  text
-                  onClick={onOpenSettings}
-                  tooltip="Cài đặt"
-                  tooltipOptions={{ position: "bottom" }}
-                />
-
-                <div className="relative" ref={userMenuContainerRef}>
-                  {isLoggedIn ? (
-                    <div
-                      className="flex items-center gap-2 cursor-pointer p-1 hover:bg-[--surface-hover] rounded-full transition-colors pr-3"
-                      onClick={() => setShowUserMenu(!showUserMenu)}
-                    >
-                      <Avatar
-                        image={userAvatarUrl}
-                        label={avatarLabel}
-                        shape="circle"
-                        className="bg-primary text-white"
-                        style={{ width: "32px", height: "32px" }}
-                      />
-                      <span className="hidden sm:block font-medium text-sm max-w-30 truncate select-none">
-                        {displayName}
-                      </span>
-                      <i className="pi pi-angle-down text-xs ml-1 text-[--text-color-secondary]"></i>
-                    </div>
-                  ) : (
-                    <Button
-                      icon="pi pi-user"
-                      rounded
-                      text
-                      onClick={() => setShowUserMenu(!showUserMenu)}
-                    />
-                  )}
-
-                  {showUserMenu && (
-                    <div className="absolute top-full right-0 mt-2 z-50 shadow-lg rounded-md overflow-hidden ">
-                      <Menu
-                        model={
-                          isLoggedIn
-                            ? userMenuItemsLoggedIn
-                            : userMenuItemsGuest
-                        }
-                        className="w-full border-none"
-                        pt={{
-                          menuitem: { className: "text-sm" },
-                          label: { className: "text-sm font-medium" },
-                          icon: { className: "text-sm mr-2" },
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
             </div>
           </div>
-        </div>
+        )}
       </header>
 
       <LoginModal

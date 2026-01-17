@@ -75,7 +75,7 @@ export default function ConfigSetting({ visible, onHide }: ConfigSettingProps) {
       visible={visible}
       onHide={onHide}
       position="right"
-      className="w-full sm:w-[500px] lg:w-[600px] bg-(--surface-overlay) text-(--text-color)"
+      className="w-full sm:w-125 lg:w-150 bg-(--surface-overlay) text-(--text-color)"
       header={<h2 className="text-xl font-semibold m-0">Cài đặt</h2>}
     >
       <div className="space-y-6 p-4">
