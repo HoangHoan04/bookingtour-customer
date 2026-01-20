@@ -1,4 +1,5 @@
 import ConfigSetting from "@/components/layout/ConfigSetting";
+import BackToTop from "@/components/ui/back-to-top";
 import { useEffect, useState } from "react";
 import AppFooter from "./AppFooter";
 import AppHeader from "./AppHeader";
@@ -36,7 +37,9 @@ export default function PublicLayout({
         isScrolled={isScrolled}
       />
 
-      <div style={{ margin: 0, padding: 0 }}>{children}</div>
+      <main className="pt-32" style={{ margin: 0, padding: 0 }}>
+        <div style={{ paddingTop: "8rem" }}>{children}</div>
+      </main>
       <AppFooter />
 
       <ConfigSetting
@@ -45,6 +48,7 @@ export default function PublicLayout({
           setSettingsVisible(false);
         }}
       />
+      <BackToTop />
     </div>
   );
 }

@@ -76,9 +76,9 @@ const updatePrimeReactTheme = (theme: Theme) => {
 
   if (theme === "dark") {
     link.href =
-      "https://unpkg.com/primereact@latest/resources/themes/lara-dark-indigo/theme.css";
+      "https://unpkg.com/primereact@latest/resources/themes/lara-dark-cyan/theme.css";
   } else {
     link.href =
-      "https://unpkg.com/primereact@latest/resources/themes/lara-light-indigo/theme.css";
+      "https://unpkg.com/primereact@latest/resources/themes/lara-light-cyan/theme.css";
   }
 };

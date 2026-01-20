@@ -15,7 +15,7 @@ import { InputIcon } from "primereact/inputicon";
 import { InputText } from "primereact/inputtext";
 import { Menu } from "primereact/menu";
 import type { MenuItem } from "primereact/menuitem";
-import { OverlayPanel } from "primereact/overlaypanel";
+import { Sidebar } from "primereact/sidebar";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -39,27 +39,23 @@ export default function AppHeader({
   const [registerVisible, setRegisterVisible] = useState(false);
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(() =>
-    tokenCache.isAuthenticated()
+    tokenCache.isAuthenticated(),
   );
   const [currentUser, setCurrentUser] = useState<any>(() =>
-    tokenCache.getUser()
+    tokenCache.getUser(),
   );
 
   const [searchQuery, setSearchQuery] = useState("");
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [searchPanelVisible, setSearchPanelVisible] = useState(false);
+  const [searchSidebarVisible, setSearchSidebarVisible] = useState(false);
   const [activeMenu, setActiveMenu] = useState("/");
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
-  const userMenuContainerRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
-  const searchPanelRef = useRef<HTMLDivElement>(null);
-  const searchButtonRef = useRef<HTMLButtonElement>(null);
-  const trendingSearchRef = useRef<OverlayPanel>(null);
   const hoverTimeoutRef = useRef<number | null>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const userAvatarUrl = currentUser?.customer?.__avatar__?.[0]?.fileUrl;
-  const displayName =
-    currentUser?.customer?.name || currentUser?.username || "Thành viên";
+  const displayName = currentUser?.customer?.name || currentUser?.username;
 
   const avatarLabel = !userAvatarUrl
     ? (displayName?.[0] || "U").toUpperCase()
@@ -67,23 +63,12 @@ export default function AppHeader({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      console.log("🔍 handleClickOutside triggered");
-      // Delay để onClick của button được xử lý trước
       setTimeout(() => {
         if (
-          userMenuContainerRef.current &&
-          !userMenuContainerRef.current.contains(event.target as Node)
+          userMenuRef.current &&
+          !userMenuRef.current.contains(event.target as Node)
         ) {
-          console.log("❌ Closing user menu (click outside)");
           setShowUserMenu(false);
-        }
-        if (
-          searchPanelRef.current &&
-          !searchPanelRef.current.contains(event.target as Node) &&
-          searchButtonRef.current &&
-          !searchButtonRef.current.contains(event.target as Node)
-        ) {
-          setSearchPanelVisible(false);
         }
       }, 0);
     };
@@ -91,87 +76,76 @@ export default function AppHeader({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSearchFocus = (e: any) => {
-    trendingSearchRef.current?.show(e, e.currentTarget);
-  };
-
-  const handleSearchBlur = () => {
-    setTimeout(() => {
-      trendingSearchRef.current?.hide();
-    }, 200);
-  };
+  useEffect(() => {
+    if (searchSidebarVisible && searchInputRef.current) {
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 300);
+    }
+  }, [searchSidebarVisible]);
 
   const policyText =
     " Miễn phí vận chuyển cho đơn hàng từ 500.000đ |  Đổi trả trong 7 ngày |  Giảm giá 20% cho khách hàng mới |  Thanh toán an toàn 100%";
 
   const trendingSearchItems = [
     {
-      name: "iPhone 17 Series",
-      image: "https://via.placeholder.com/60x60/FF8C42/FFFFFF?text=📱",
+      name: "Tour Hạ Long 3N2Đ",
+      image: "https://via.placeholder.com/60x60/FF8C42/FFFFFF?text=🏖️",
     },
     {
-      name: "Samsung Z Fold7",
-      image: "https://via.placeholder.com/60x60/4A90E2/FFFFFF?text=📱",
+      name: "Du lịch Đà Nẵng",
+      image: "https://via.placeholder.com/60x60/4A90E2/FFFFFF?text=🏝️",
     },
     {
-      name: "Apple Watch Series 11",
-      image: "https://via.placeholder.com/60x60/E94B3C/FFFFFF?text=⌚",
+      name: "Tour Phú Quốc",
+      image: "https://via.placeholder.com/60x60/E94B3C/FFFFFF?text=🌴",
     },
     {
-      name: "iPhone Air",
-      image: "https://via.placeholder.com/60x60/C5E1A5/FFFFFF?text=📱",
+      name: "Du lịch Sapa",
+      image: "https://via.placeholder.com/60x60/C5E1A5/FFFFFF?text=⛰️",
     },
     {
-      name: "AirPods Pro 3",
-      image: "https://via.placeholder.com/60x60/F5F5F5/000000?text=🎧",
+      name: "Tour Nha Trang",
+      image: "https://via.placeholder.com/60x60/F5F5F5/000000?text=🏖️",
     },
     {
-      name: "iPad Pro M5",
-      image: "https://via.placeholder.com/60x60/424242/FFFFFF?text=💻",
+      name: "Du lịch Hội An",
+      image: "https://via.placeholder.com/60x60/424242/FFFFFF?text=🏮",
     },
     {
-      name: "Samsung Galaxy Watch8",
-      image: "https://via.placeholder.com/60x60/1E1E1E/FFFFFF?text=⌚",
+      name: "Tour Mũi Né",
+      image: "https://via.placeholder.com/60x60/1E1E1E/FFFFFF?text=🏖️",
     },
     {
-      name: "MacBook Pro M5",
-      image: "https://via.placeholder.com/60x60/2C2C2C/FFFFFF?text=💻",
-    },
-    {
-      name: "OPPO Find X9",
-      image: "https://via.placeholder.com/60x60/FF6B9D/FFFFFF?text=📱",
-    },
-    {
-      name: "Camera IP 8MP EZVIZ H6C G1",
-      image: "https://via.placeholder.com/60x60/FFFFFF/000000?text=📷",
+      name: "Du lịch Đà Lạt",
+      image: "https://via.placeholder.com/60x60/2C2C2C/FFFFFF?text=🌸",
     },
   ];
 
   const menuItems: MenuItemType[] = [
     {
-      label: "Tour trong nước",
-      path: "/tours/domestic",
+      label: "About",
+      path: "/about",
+    },
+    {
+      label: "Dịch vụ",
+      path: "/services",
+    },
+    {
+      label: "Điểm đến",
+      path: "/destinations",
+    },
+    {
+      label: "Tours",
+      path: "/tours",
       children: [
-        { label: "Miền Bắc", path: "/tours/domestic/north" },
-        { label: "Miền Trung", path: "/tours/domestic/central" },
-        { label: "Miền Nam", path: "/tours/domestic/south" },
-        { label: "Cao nguyên", path: "/tours/domestic/highland" },
+        { label: "Trong nước", path: "/tours/domestic" },
+        { label: "Nước ngoài", path: "/tours/international" },
       ],
     },
     {
-      label: "Tour nước ngoài",
-      path: "/tours/international",
-      children: [
-        { label: "Châu Á", path: "/tours/international/asia" },
-        { label: "Châu Âu", path: "/tours/international/europe" },
-        { label: "Châu Mỹ", path: "/tours/international/america" },
-        { label: "Châu Úc", path: "/tours/international/oceania" },
-      ],
-    },
-
-    {
-      label: "Khuyến mãi",
-      path: "/promotions",
+      label: "Bài viết",
+      path: "/blogs",
     },
     {
       label: "Liên hệ",
@@ -233,8 +207,9 @@ export default function AppHeader({
   const handleSearch = () => {
     if (searchQuery.trim()) {
       console.log("Tìm kiếm:", searchQuery);
-      setSearchPanelVisible(false);
-      trendingSearchRef.current?.hide();
+      setSearchSidebarVisible(false);
+      // Navigate to search results page
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -242,13 +217,15 @@ export default function AppHeader({
     if (e.key === "Enter") {
       handleSearch();
     }
+    if (e.key === "Escape") {
+      setSearchSidebarVisible(false);
+    }
   };
 
   const handleTrendingClick = (itemName: string) => {
     setSearchQuery(itemName);
-    trendingSearchRef.current?.hide();
     console.log("Tìm kiếm xu hướng:", itemName);
-    setSearchPanelVisible(false);
+    handleSearch();
   };
 
   const handleMenuClick = (path: string) => {
@@ -274,7 +251,7 @@ export default function AppHeader({
     <>
       <header
         className={`fixed z-50 transition-all duration-300 ${
-          isScrolled ? "top-0 shadow-lg" : "top-5 "
+          isScrolled ? "top-0 shadow-lg" : "top-5"
         }`}
         style={{
           backdropFilter: isScrolled ? "none" : "blur(10px)",
@@ -283,14 +260,13 @@ export default function AppHeader({
           borderRadius: isScrolled ? "0 0 12px 12px" : "12px",
         }}
       >
-        {/* Top bar */}
         <div
           style={{
             borderRadius: isScrolled ? "0" : "12px 12px 0 0",
           }}
           className={`${
             isScrolled ? "bg-blue-200" : "bg-transparent"
-          } surface-card border-bottom-1 surface-border transition-colors duration-300`}
+          } border-bottom-1 surface-border transition-colors duration-300`}
         >
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-10 text-sm">
@@ -354,9 +330,8 @@ export default function AppHeader({
           </div>
         </div>
 
-        {/* Main header */}
         <div
-          className={` surface-card border-bottom-1 surface-border transition-colors duration-300 ${
+          className={`border-bottom-1 surface-border transition-colors duration-300 ${
             isScrolled ? "bg-blue-200" : "bg-transparent"
           }`}
           style={{
@@ -365,7 +340,6 @@ export default function AppHeader({
         >
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between h-16 gap-4">
-              {/* Logo */}
               <div
                 className="flex items-center gap-2 cursor-pointer"
                 onClick={() => navigate("/")}
@@ -389,7 +363,6 @@ export default function AppHeader({
                 </span>
               </div>
 
-              {/* Navigation Menu */}
               <nav className="hidden lg:flex items-center gap-6">
                 {menuItems.map((item, index) => {
                   const isActive = activeMenu === item.path;
@@ -427,14 +400,13 @@ export default function AppHeader({
                         )}
                       </button>
 
-                      {/* Dropdown Menu */}
                       {hasChildren && isHovered && (
-                        <div className="absolute top-full left-0 mt-1  rounded-md overflow-hidden min-w-50 border surface-border">
+                        <div className="absolute top-full left-0 mt-1 surface-card shadow-lg rounded-md overflow-hidden min-w-50 border surface-border">
                           {item.children!.map((child, childIndex) => (
                             <button
                               key={childIndex}
                               onClick={() => handleMenuClick(child.path)}
-                              className="w-full text-left px-4 py-3  transition-colors text-sm font-medium text-[--text-color] hover:text-primary border-bottom-1 surface-border last:border-none"
+                              className="w-full text-left px-4 py-3 surface-card hover:surface-hover transition-colors text-sm font-medium text-[--text-color] hover:text-primary border-bottom-1 surface-border last:border-none"
                             >
                               {child.label}
                             </button>
@@ -446,14 +418,12 @@ export default function AppHeader({
                 })}
               </nav>
 
-              {/* Right side icons */}
               <div className="flex items-center gap-2">
-                {/* Search Icon */}
                 <Button
                   icon="pi pi-search"
                   rounded
                   text
-                  onClick={() => setSearchPanelVisible(!searchPanelVisible)}
+                  onClick={() => setSearchSidebarVisible(true)}
                   tooltip="Tìm kiếm"
                   tooltipOptions={{ position: "bottom" }}
                 />
@@ -467,10 +437,9 @@ export default function AppHeader({
                   tooltipOptions={{ position: "bottom" }}
                 />
 
-                {/* USER MENU */}
                 <div ref={userMenuRef} className="relative">
                   <div
-                    className="flex items-center gap-2 cursor-pointer p-1 rounded-full hover:bg-gray-100"
+                    className="flex items-center gap-2 cursor-pointer p-1 rounded-full hover:surface-hover transition-colors"
                     onClick={(e) => {
                       e.stopPropagation();
                       setShowUserMenu((v) => !v);
@@ -480,16 +449,19 @@ export default function AppHeader({
                       image={userAvatarUrl}
                       label={avatarLabel}
                       shape="circle"
-                      style={{ width: 32, height: 32 }}
+                      style={{
+                        width: 32,
+                        height: 32,
+                      }}
                     />
                     <span className="hidden sm:block text-sm font-medium">
                       {displayName}
                     </span>
-                    <i className="pi pi-angle-down text-xs" />
+                    {isLoggedIn && <i className="pi pi-angle-down text-xs" />}
                   </div>
 
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 z-50 surface-card shadow-lg rounded-md border min-w-48">
+                    <div className="absolute right-0 mt-2 z-50 surface-card shadow-lg rounded-md border surface-border min-w-48">
                       <Menu
                         model={
                           isLoggedIn
@@ -505,73 +477,73 @@ export default function AppHeader({
             </div>
           </div>
         </div>
+      </header>
 
-        {/* Search Panel */}
-        {searchPanelVisible && (
-          <div
-            ref={searchPanelRef}
-            className="surface-card border-bottom-1 surface-border shadow-lg relative"
-          >
-            <div className="container mx-auto px-4 py-6">
-              <div className="max-w-3xl mx-auto relative">
-                <IconField iconPosition="left" className="w-full">
-                  <InputIcon className="pi pi-search" />
-                  <InputText
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    onFocus={handleSearchFocus}
-                    onBlur={handleSearchBlur}
-                    placeholder="Tìm kiếm nhanh tour du lịch..."
-                    className="w-full text-base pr-10"
-                    autoFocus
-                  />
-                </IconField>
-                {searchQuery && (
+      <Sidebar
+        visible={searchSidebarVisible}
+        onHide={() => setSearchSidebarVisible(false)}
+        position="top"
+        className="search-sidebar"
+        blockScroll
+        style={{
+          height: "100vh",
+          background: "rgba(0, 0, 0, 0.95)",
+        }}
+      >
+        <div className="flex flex-col items-center justify-center h-full w-full px-4">
+          <div className="w-full max-w-3xl">
+            <IconField iconPosition="left" className="w-full">
+              <InputIcon className="pi pi-search text-2xl" />
+              <InputText
+                ref={searchInputRef}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Tìm kiếm tour du lịch..."
+                className="w-full text-2xl py-4 pl-16 pr-6 bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                style={{
+                  borderRadius: "50px",
+                }}
+              />
+            </IconField>
+
+            <div className="mt-12">
+              <div className="flex items-center gap-2 mb-6">
+                <i className="pi pi-fire text-2xl text-orange-500"></i>
+                <h3 className="text-xl font-bold text-white">
+                  Xu hướng tìm kiếm
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {trendingSearchItems.map((item, index) => (
                   <button
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center hover:bg-[--surface-hover] rounded-full transition-colors"
-                    aria-label="Xóa text"
+                    key={index}
+                    onClick={() => handleTrendingClick(item.name)}
+                    className="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-left border border-white/10"
                   >
-                    <i className="pi pi-times text-sm text-[--text-color-secondary] hover:text-primary"></i>
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-14 h-14 object-cover rounded-lg"
+                    />
+                    <span className="font-medium text-base text-white">
+                      {item.name}
+                    </span>
                   </button>
-                )}
-
-                <OverlayPanel
-                  ref={trendingSearchRef}
-                  dismissable
-                  className="w-full max-w-3xl"
-                >
-                  <div className="p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <i className="pi pi-fire text-xl text-orange-500"></i>
-                      <h3 className="text-lg font-bold">Xu hướng tìm kiếm</h3>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      {trendingSearchItems.map((item, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handleTrendingClick(item.name)}
-                          className="flex items-center gap-3 p-3 hover:surface-hover rounded-lg transition-colors text-left"
-                        >
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-12 h-12 object-cover rounded-lg"
-                          />
-                          <span className="font-medium text-sm">
-                            {item.name}
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </OverlayPanel>
+                ))}
               </div>
             </div>
+
+            <div className="mt-8 text-center">
+              <p className="text-white/50 text-sm">
+                Nhấn <kbd className="px-2 py-1 bg-white/10 rounded">Enter</kbd>{" "}
+                để tìm kiếm hoặc{" "}
+                <kbd className="px-2 py-1 bg-white/10 rounded">Esc</kbd> để đóng
+              </p>
+            </div>
           </div>
-        )}
-      </header>
+        </div>
+      </Sidebar>
 
       <LoginModal
         visible={loginVisible}

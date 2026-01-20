@@ -9,4 +9,5 @@ export const PUBLIC_SCREENS = {
   [PUBLIC_ROUTES.ABOUT]: <AboutScreen />,
   [PUBLIC_ROUTES.CONTACT]: <ContactScreen />,
   [PUBLIC_ROUTES.ZALO_CALLBACK]: <ZaloCallback />,
+  [PUBLIC_ROUTES.CONTACT]: <ContactScreen />,
 };

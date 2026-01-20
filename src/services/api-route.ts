@@ -26,4 +26,8 @@ export const API_ENDPOINTS = {
     COUNT_NOT_SEEN: `${prefix}/notify/find-count-notify-not-seen`,
     PAGINATION: `${prefix}/notify/pagination`,
   },
+
+  BANNER: {
+    GET_BY_TYPE: `${prefix}/banner/get-by-type`,
+  },
 };

@@ -31,3 +31,8 @@ export interface ActionLogDto extends BaseDto {
   createdByName?: string;
   employeeCode?: string;
 }
+
+export interface FileDto {
+  fileName: string;
+  fileUrl: string;
+}

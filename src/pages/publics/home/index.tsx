@@ -1,47 +1,39 @@
-import { HotelVideo } from "@/assets/videos";
+import BannerComponent from "@/components/ui/banner";
+import SearchBar from "@/components/ui/search-bar";
+import ContactSection from "./contact-section";
+import PopularDestinationsSection from "./destination-section";
+import HintMonthSection from "./hint-section";
+import NewSection from "./new-section";
+import PopularTourSection from "./tour-section";
 
 export default function HomeSection() {
   return (
-    <section
-      id="home"
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        minHeight: "100vh",
-      }}
-    >
-      {/* Video background */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100vh",
-          objectFit: "cover",
-          zIndex: 0,
-        }}
-      >
-        <source src={HotelVideo} type="video/mp4" />
-      </video>
+    <div className="min-h-screen ">
+      <section className="relative pt-4">
+        <BannerComponent type="HOME" />
+      </section>
 
-      {/* Overlay mờ giúp chữ nổi bật hơn */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0.35), rgba(0,0,0,0.2))",
-          zIndex: 0.5,
-        }}
-      />
-    </section>
+      <SearchBar />
+
+      <section className="max-w-7xl mx-auto">
+        <PopularDestinationsSection />
+      </section>
+
+      <section className="max-w-7xl mx-auto">
+        <PopularTourSection />
+      </section>
+
+      <section className="max-w-7xl mx-auto">
+        <NewSection />
+      </section>
+
+      <section className="max-w-7xl mx-auto">
+        <HintMonthSection />
+      </section>
+
+      <section className=" border-t ">
+        <ContactSection />
+      </section>
+    </div>
   );
 }
