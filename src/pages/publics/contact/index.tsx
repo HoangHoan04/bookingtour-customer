@@ -3,6 +3,7 @@ import Lottie from "lottie-react";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import { Checkbox } from "primereact/checkbox";
+import { Divider } from "primereact/divider";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
@@ -163,19 +164,12 @@ export default function ContactScreen() {
           </div>
         </div>
 
-        <Card
-          className="text-center shadow-xl"
-          style={{
-            borderRadius: "1.5rem",
-          }}
-        >
-          <h3 className="text-4xl font-bold mb-3" style={{ color: "white" }}>
+        <Divider />
+        <div className="text-center">
+          <h3 className="text-4xl font-bold mb-3">
             Sẵn sàng cho cuộc phiêu lưu tiếp theo của bạn?
           </h3>
-          <p
-            className="text-lg mb-6 max-w-2xl mx-auto"
-            style={{ color: "#e0e7ff" }}
-          >
+          <p className="text-lg mb-6 max-w-2xl mx-auto">
             Nhận ưu đãi độc quyền và khuyến mãi đặc biệt khi đặt tour ngay hôm
             nay!
           </p>
@@ -185,13 +179,12 @@ export default function ContactScreen() {
             className="px-6 py-3"
             raised
             style={{
-              backgroundColor: "white",
               border: "none",
               fontSize: "1.1rem",
               fontWeight: "600",
             }}
           />
-        </Card>
+        </div>
       </div>
     </div>
   );

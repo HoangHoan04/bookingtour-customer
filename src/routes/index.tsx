@@ -70,6 +70,30 @@ const PublicRoutes = [
         path: PUBLIC_ROUTES.CONTACT,
         element: PUBLIC_SCREENS[PUBLIC_ROUTES.CONTACT],
       },
+      {
+        path: PUBLIC_ROUTES.CONTACT,
+        element: PUBLIC_SCREENS[PUBLIC_ROUTES.CONTACT],
+      },
+      {
+        path: PUBLIC_ROUTES.BLOGS,
+        element: PUBLIC_SCREENS[PUBLIC_ROUTES.BLOGS],
+      },
+      {
+        path: PUBLIC_ROUTES.BLOG_DETAIL,
+        element: PUBLIC_SCREENS[PUBLIC_ROUTES.BLOG_DETAIL],
+      },
+      {
+        path: PUBLIC_ROUTES.FAQ,
+        element: PUBLIC_SCREENS[PUBLIC_ROUTES.FAQ],
+      },
+      {
+        path: PUBLIC_ROUTES.SERVICES,
+        element: PUBLIC_SCREENS[PUBLIC_ROUTES.SERVICES],
+      },
+      {
+        path: PUBLIC_ROUTES.SERVICE_DETAIL,
+        element: PUBLIC_SCREENS[PUBLIC_ROUTES.SERVICE_DETAIL],
+      },
     ],
   },
 ];

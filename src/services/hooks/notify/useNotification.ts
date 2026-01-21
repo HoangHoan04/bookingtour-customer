@@ -7,14 +7,14 @@ import apiService from "@/services/api.service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const usePaginationNotification = (
-  params: NotificationPaginationDto
+  params: NotificationPaginationDto,
 ) => {
   const { data, isLoading, refetch, error } = useQuery({
     queryKey: [API_ENDPOINTS.NOTIFY.PAGINATION, params],
     queryFn: async () => {
       const response = await apiService.post(
         API_ENDPOINTS.NOTIFY.PAGINATION,
-        params
+        params,
       );
       return response.data;
     },
@@ -29,18 +29,17 @@ export const usePaginationNotification = (
   };
 };
 
-// Hook đếm số notification chưa đọc
 export const useUnreadCount = () => {
   const { data, isLoading, refetch } = useQuery({
     queryKey: [API_ENDPOINTS.NOTIFY.COUNT_NOT_SEEN],
     queryFn: async () => {
       const response = await apiService.post(
         API_ENDPOINTS.NOTIFY.COUNT_NOT_SEEN,
-        {}
+        {},
       );
       return response.data;
     },
-    refetchInterval: 60000, // Tự động refresh mỗi 60 giây
+    refetchInterval: 60000,
   });
 
   return {
@@ -50,7 +49,6 @@ export const useUnreadCount = () => {
   };
 };
 
-// Hook đánh dấu danh sách notification đã đọc
 export const useMarkReadList = () => {
   const queryClient = useQueryClient();
 
@@ -75,7 +73,6 @@ export const useMarkReadList = () => {
   return { onMarkReadList, isLoading: isPending };
 };
 
-// Hook đánh dấu tất cả đã đọc
 export const useMarkAllRead = () => {
   const queryClient = useQueryClient();
 
@@ -98,35 +95,6 @@ export const useMarkAllRead = () => {
   return { onMarkAllRead, isLoading: isPending };
 };
 
-// Hook xóa notification
-export const useDeleteNotification = () => {
-  const queryClient = useQueryClient();
-
-  const { mutate: onDelete, isPending } = useMutation({
-    mutationFn: async (id: string) => {
-      const response = await apiService.delete(
-        `${API_ENDPOINTS.NOTIFY.PAGINATION.replace(
-          "/pagination",
-          ""
-        )}/delete/${id}`
-      );
-      return response.data;
-    },
-
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: [API_ENDPOINTS.NOTIFY.PAGINATION],
-      });
-      queryClient.invalidateQueries({
-        queryKey: [API_ENDPOINTS.NOTIFY.COUNT_NOT_SEEN],
-      });
-    },
-  });
-
-  return { onDelete, isLoading: isPending };
-};
-
-// Hook lấy chi tiết notification
 export const useNotificationDetail = (id: string) => {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["notification-detail", id],
@@ -134,9 +102,9 @@ export const useNotificationDetail = (id: string) => {
       const response = await apiService.post(
         `${API_ENDPOINTS.NOTIFY.PAGINATION.replace(
           "/pagination",
-          ""
+          "",
         )}/detail/${id}`,
-        {}
+        {},
       );
       return response.data;
     },
@@ -150,7 +118,6 @@ export const useNotificationDetail = (id: string) => {
   };
 };
 
-// Hook lấy cài đặt notification
 export const useNotificationSettings = () => {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["notification-settings"],
@@ -158,9 +125,9 @@ export const useNotificationSettings = () => {
       const response = await apiService.post(
         `${API_ENDPOINTS.NOTIFY.PAGINATION.replace(
           "/pagination",
-          ""
+          "",
         )}/get-settings`,
-        {}
+        {},
       );
       return response.data;
     },
@@ -173,7 +140,6 @@ export const useNotificationSettings = () => {
   };
 };
 
-// Hook cập nhật cài đặt notification
 export const useUpdateNotificationSettings = () => {
   const queryClient = useQueryClient();
 
@@ -182,9 +148,9 @@ export const useUpdateNotificationSettings = () => {
       const response = await apiService.post(
         `${API_ENDPOINTS.NOTIFY.PAGINATION.replace(
           "/pagination",
-          ""
+          "",
         )}/update-settings`,
-        data
+        data,
       );
       return response.data;
     },

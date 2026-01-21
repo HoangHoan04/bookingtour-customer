@@ -85,7 +85,7 @@ export default function AppHeader({
   }, [searchSidebarVisible]);
 
   const policyText =
-    " Miễn phí vận chuyển cho đơn hàng từ 500.000đ |  Đổi trả trong 7 ngày |  Giảm giá 20% cho khách hàng mới |  Thanh toán an toàn 100%";
+    " Huỷ miễn phí trước 72 giờ |  Đổi lịch tour 1 lần |  Ưu đãi 10% cho đoàn từ 10 người |  Bảo hiểm du lịch miễn phí";
 
   const trendingSearchItems = [
     {
@@ -124,12 +124,12 @@ export default function AppHeader({
 
   const menuItems: MenuItemType[] = [
     {
-      label: "About",
-      path: "/about",
-    },
-    {
       label: "Dịch vụ",
       path: "/services",
+      children: [
+        { label: "Khám phá dịch vụ", path: "/services" },
+        { label: "Hướng dẫn viên", path: "/guides" },
+      ],
     },
     {
       label: "Điểm đến",
@@ -150,6 +150,14 @@ export default function AppHeader({
     {
       label: "Liên hệ",
       path: "/contact",
+      children: [
+        { label: "Liên hệ ngay", path: "/contact" },
+        { label: "FAQ", path: "/faq" },
+      ],
+    },
+    {
+      label: "Về chúng tôi",
+      path: "/about",
     },
   ];
 
@@ -208,7 +216,6 @@ export default function AppHeader({
     if (searchQuery.trim()) {
       console.log("Tìm kiếm:", searchQuery);
       setSearchSidebarVisible(false);
-      // Navigate to search results page
       navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
   };
@@ -265,7 +272,7 @@ export default function AppHeader({
             borderRadius: isScrolled ? "0" : "12px 12px 0 0",
           }}
           className={`${
-            isScrolled ? "bg-blue-200" : "bg-transparent"
+            isScrolled ? "bg-[#ffaa0d] text-[#0f766e]" : "bg-transparent "
           } border-bottom-1 surface-border transition-colors duration-300`}
         >
           <div className="container mx-auto px-4">
@@ -332,7 +339,7 @@ export default function AppHeader({
 
         <div
           className={`border-bottom-1 surface-border transition-colors duration-300 ${
-            isScrolled ? "bg-blue-200" : "bg-transparent"
+            isScrolled ? "bg-[#ffaa0d] text-[#0f766e]" : "bg-transparent"
           }`}
           style={{
             borderRadius: isScrolled ? "0 0 12px 12px" : "0",
@@ -348,13 +355,8 @@ export default function AppHeader({
                   style={{
                     fontSize: "clamp(1.5rem, 6vw, 2.5rem)",
                     fontWeight: 700,
-                    color: "white",
+                    color: "#0f766e",
                     fontFamily: "'Brush Script MT', cursive",
-                    textShadow: `
-                      3px 3px 0 rgba(0,0,0,0.3),
-                      6px 6px 0 rgba(0,0,0,0.2),
-                      0 0 40px rgba(255,255,255,0.3)
-                `,
                     position: "relative",
                     display: "inline-block",
                   }}
@@ -401,12 +403,19 @@ export default function AppHeader({
                       </button>
 
                       {hasChildren && isHovered && (
-                        <div className="absolute top-full left-0 mt-1 surface-card shadow-lg rounded-md overflow-hidden min-w-50 border surface-border">
+                        <div
+                          className="absolute top-full left-0 mt-1 surface-card shadow-lg rounded-md overflow-hidden min-w-50 border surface-border z-10"
+                          style={{
+                            backgroundColor: "var(--surface-card)",
+                            opacity: 1,
+                          }}
+                        >
                           {item.children!.map((child, childIndex) => (
                             <button
                               key={childIndex}
                               onClick={() => handleMenuClick(child.path)}
                               className="w-full text-left px-4 py-3 surface-card hover:surface-hover transition-colors text-sm font-medium text-[--text-color] hover:text-primary border-bottom-1 surface-border last:border-none"
+                              style={{ opacity: 1 }}
                             >
                               {child.label}
                             </button>

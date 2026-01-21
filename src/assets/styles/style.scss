@@ -6,6 +6,11 @@ $radius: 6px;
 $font-size: 13px;
 $transition: all 0.2s ease;
 
+body {
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 700;
+}
+
 html[data-theme="light"],
 html:not([data-theme]) {
   --bg-main: #ffffff;
@@ -113,7 +118,6 @@ html[data-theme="dark"] {
   }
 }
 
-// Menu Components
 .p-menu,
 .p-menubar,
 .p-tieredmenu,
@@ -171,7 +175,6 @@ html[data-theme="dark"] {
   }
 }
 
-// MenuBar specific
 .p-menubar {
   padding: 0.5rem;
   border-radius: $radius;
@@ -204,7 +207,6 @@ html[data-theme="dark"] {
   }
 }
 
-// MegaMenu
 .p-megamenu {
   background: var(--bg-main);
   border: 1px solid var(--border-color);
@@ -237,7 +239,6 @@ html[data-theme="dark"] {
   }
 }
 
-// PanelMenu
 .p-panelmenu {
   .p-panelmenu-header {
     > a {
@@ -285,7 +286,6 @@ html[data-theme="dark"] {
   }
 }
 
-// Breadcrumb
 .p-breadcrumb {
   background: var(--bg-sub);
   border: 1px solid var(--border-color);
@@ -316,7 +316,6 @@ html[data-theme="dark"] {
   }
 }
 
-// Steps
 .p-steps {
   .p-steps-item {
     .p-menuitem-link {
@@ -369,7 +368,6 @@ html[data-theme="dark"] {
   @include input-adapter;
 }
 
-// Style cho icon calendar - tăng kích thước icon
 .p-calendar button {
   i {
     font-size: 1.5rem !important;
@@ -562,6 +560,202 @@ html[data-theme="dark"] {
     }
   }
 }
+.custom-grid-paginator {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  background: white !important;
+  padding: 24px 20px !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+  margin-top: 16px !important;
+}
+
+.custom-grid-paginator .p-paginator-current {
+  order: -1;
+  margin-right: auto;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b !important;
+  background: #f1f5f9;
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+
+.custom-grid-paginator .p-paginator-first,
+.custom-grid-paginator .p-paginator-prev,
+.custom-grid-paginator .p-paginator-next,
+.custom-grid-paginator .p-paginator-last {
+  min-width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #64748b !important;
+  background: #f8fafc !important;
+  border: 2px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  font-size: 16px !important;
+  transition: all 0.2s ease !important;
+
+  &:not(:disabled):hover {
+    background: #0ea5e9 !important;
+    border-color: #0ea5e9 !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3) !important;
+  }
+
+  &:disabled {
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+    background: #f8fafc !important;
+  }
+}
+
+.custom-grid-paginator .p-paginator-pages {
+  display: flex !important;
+  gap: 6px !important;
+}
+
+.custom-grid-paginator .p-paginator-page {
+  min-width: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #64748b !important;
+  background: #f8fafc !important;
+  border: 2px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+
+  &:not(.p-highlight):hover {
+    background: #e0f2fe !important;
+    border-color: #0ea5e9 !important;
+    color: #0ea5e9 !important;
+    transform: translateY(-2px);
+  }
+
+  &.p-highlight {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%) !important;
+    border-color: #0ea5e9 !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4) !important;
+    transform: translateY(-2px);
+  }
+}
+
+.custom-grid-paginator .p-dropdown {
+  order: 999;
+  margin-left: auto;
+  width: 80px !important;
+  height: 40px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc !important;
+  border: 2px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease !important;
+
+  &:hover {
+    border-color: #0ea5e9 !important;
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.2) !important;
+  }
+}
+
+.custom-grid-paginator .p-dropdown .p-dropdown-label {
+  padding: 0 !important;
+  text-align: center;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+}
+
+.custom-grid-paginator .p-dropdown .p-dropdown-trigger {
+  width: 24px !important;
+  color: #64748b !important;
+}
+
+.custom-grid-paginator .p-dropdown .p-dropdown-trigger .p-icon {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+// Dark mode support
+html[data-theme="dark"] {
+  .custom-grid-paginator {
+    background: #1e293b !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .custom-grid-paginator .p-paginator-current {
+    background: #334155;
+    color: #cbd5e1 !important;
+  }
+
+  .custom-grid-paginator .p-paginator-first,
+  .custom-grid-paginator .p-paginator-prev,
+  .custom-grid-paginator .p-paginator-next,
+  .custom-grid-paginator .p-paginator-last,
+  .custom-grid-paginator .p-paginator-page:not(.p-highlight) {
+    background: #334155 !important;
+    border-color: #475569 !important;
+    color: #cbd5e1 !important;
+
+    &:not(:disabled):hover {
+      background: #0ea5e9 !important;
+      border-color: #0ea5e9 !important;
+      color: white !important;
+    }
+  }
+
+  .custom-grid-paginator .p-dropdown {
+    background: #334155 !important;
+    border-color: #475569 !important;
+  }
+
+  .custom-grid-paginator .p-dropdown .p-dropdown-label {
+    color: #cbd5e1 !important;
+  }
+}
+
+// Mobile responsive
+@media (max-width: 768px) {
+  .custom-grid-paginator {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    padding: 16px !important;
+  }
+
+  .custom-grid-paginator .p-paginator-current {
+    order: -1;
+    width: 100%;
+    text-align: center;
+    margin: 0 0 12px 0 !important;
+  }
+
+  .custom-grid-paginator .p-paginator-first,
+  .custom-grid-paginator .p-paginator-prev,
+  .custom-grid-paginator .p-paginator-next,
+  .custom-grid-paginator .p-paginator-last,
+  .custom-grid-paginator .p-paginator-page {
+    min-width: 36px !important;
+    height: 36px !important;
+    font-size: 13px !important;
+  }
+
+  .custom-grid-paginator .p-dropdown {
+    width: 70px !important;
+    height: 36px !important;
+  }
+}
 
 @media (max-width: 768px) {
   .p-accordion-content .p-grid {
@@ -633,4 +827,8 @@ body,
 
 .search-sidebar .p-sidebar-content {
   padding: 0 !important;
+}
+
+.p-accordion-header-link {
+  padding: 20px !important;
 }

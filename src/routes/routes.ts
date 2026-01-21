@@ -6,6 +6,11 @@ export const PUBLIC_ROUTES = {
   RESET_PASSWORD: "/reset-password",
   ABOUT: "/about",
   CONTACT: "/contact",
+  BLOGS: "/blogs",
+  BLOG_DETAIL: "/blogs/:id",
+  FAQ: "/faq",
+  SERVICES: "/services",
+  SERVICE_DETAIL: "/services/:id",
   ZALO_CALLBACK: "/zalo-callback",
 };
 

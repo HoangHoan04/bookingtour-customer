@@ -13,20 +13,16 @@ export default function Notification() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  // Fetch notifications từ API
   const { data: notifications, refetch } = usePaginationNotification({
     skip: 0,
     take: 10,
     where: {},
   });
 
-  // Đếm số notification chưa đọc
   const { count: unreadCount, refetch: refetchCount } = useUnreadCount();
 
-  // Hook đánh dấu tất cả đã đọc
   const { onMarkAllRead } = useMarkAllRead();
 
-  // Hook đánh dấu danh sách đã đọc
   const { onMarkReadList } = useMarkReadList();
 
   useEffect(() => {
@@ -161,7 +157,7 @@ export default function Notification() {
                     onClick={() =>
                       handleNotificationClick(
                         notification.id,
-                        notification.isRead
+                        notification.isRead,
                       )
                     }
                     className={`group flex gap-4 p-4 border-b border-(--surface-border) last:border-0 cursor-pointer transition-all duration-200 hover:bg-(--surface-hover) 
@@ -174,7 +170,7 @@ export default function Notification() {
                     <div className="shrink-0 mt-1">
                       <i
                         className={`${getIconByType(
-                          notification.notificationType
+                          notification.notificationType,
                         )} text-xl transition-transform group-hover:scale-110`}
                       />
                     </div>

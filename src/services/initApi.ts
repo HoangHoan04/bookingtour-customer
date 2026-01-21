@@ -1,4 +1,4 @@
-import { logOut } from "@/lib/auth-event-emitter";
+import { logOut } from "@/layout/lib/auth-event-emitter";
 import axios from "axios";
 import Cookies from "js-cookie";
 

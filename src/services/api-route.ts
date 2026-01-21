@@ -30,4 +30,8 @@ export const API_ENDPOINTS = {
   BANNER: {
     GET_BY_TYPE: `${prefix}/banner/get-by-type`,
   },
+
+  NEWSLETTER: {
+    SUBSCRIBE: `${prefix}/newsletter/subscribe`,
+  },
 };

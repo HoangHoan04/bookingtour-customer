@@ -1,4 +1,3 @@
-// Enums
 export type NotificationType =
   | "system"
   | "booking"
@@ -8,7 +7,6 @@ export type NotificationType =
 export type NotificationPriority = "low" | "normal" | "high" | "urgent";
 export type RelatedEntityType = "booking" | "payment" | "tour" | "user";
 
-// Interface cho notification item
 export interface NotificationItem {
   id: string;
   customerId: string;
@@ -35,7 +33,6 @@ export interface NotificationItem {
   };
 }
 
-// DTO để filter notification
 export interface NotificationFilterDto {
   notificationType?: NotificationType;
   priority?: NotificationPriority;
@@ -43,24 +40,20 @@ export interface NotificationFilterDto {
   relatedEntity?: RelatedEntityType;
 }
 
-// DTO pagination cho notification
 export interface NotificationPaginationDto {
   skip?: number;
   take?: number;
   where?: NotificationFilterDto;
 }
 
-// DTO để đánh dấu đã đọc
 export interface MarkReadListDto {
   lstId: string[];
 }
 
-// Response count
 export interface NotificationCountResponse {
   countAll: number;
 }
 
-// DTO cài đặt notification
 export interface NotificationSettingDto {
   id: string;
   customerId: string;
@@ -74,7 +67,6 @@ export interface NotificationSettingDto {
   updatedAt?: string;
 }
 
-// DTO cập nhật cài đặt
 export interface UpdateNotificationSettingDto {
   emailNotifications?: boolean;
   pushNotifications?: boolean;
@@ -84,7 +76,6 @@ export interface UpdateNotificationSettingDto {
   recommendationNotifications?: boolean;
 }
 
-// Response pagination
 export interface NotificationPaginationResponse {
   data: NotificationItem[];
   total: number;
