@@ -1,252 +1,262 @@
+import { enumData } from "@/common/enums/enum";
 import Title from "@/components/ui/Tilte";
+import { useGetTravelHints } from "@/hooks/travel-hint";
+import { useRouter } from "@/routes/hooks";
 import "primeicons/primeicons.css";
 import { Button } from "primereact/button";
+import { Card } from "primereact/card";
+import { Dropdown } from "primereact/dropdown";
 import "primereact/resources/primereact.min.css";
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import { useState } from "react";
+import { PUBLIC_ROUTES } from "../../../../routes/routes";
+
+const getCardSize = (index: number): "large" | "medium" | "small" => {
+  const pattern = index % 9;
+  if (pattern === 0 || pattern === 4) return "large";
+  if (pattern === 1 || pattern === 5) return "medium";
+  return "small";
+};
 
 export default function HintMonthSection() {
-  const [hoveredMonth, setHoveredMonth] = useState<number | null>(null);
+  const [hoveredMonth, setHoveredMonth] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<string>("");
+  const router = useRouter();
+  const { data: travelHints = [], isLoading } = useGetTravelHints(
+    selectedType || undefined,
+  );
 
-  const monthlyDestinations = [
-    {
-      month: "January",
-      monthNumber: 1,
-      destination: "Switzerland",
-      description: "Perfect skiing season in the Alps",
-      image:
-        "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80",
-      color: "#60a5fa",
-      size: "large",
-    },
-    {
-      month: "February",
-      monthNumber: 2,
-      destination: "Japan",
-      description: "Cherry blossom season begins",
-      image:
-        "https://images.unsplash.com/photo-1492571350019-22de08371fd3?w=800&q=80",
-      color: "#f472b6",
-      size: "medium",
-    },
-    {
-      month: "March",
-      monthNumber: 3,
-      destination: "Morocco",
-      description: "Pleasant weather, fewer tourists",
-      image:
-        "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?w=800&q=80",
-      color: "#fb923c",
-      size: "small",
-    },
-    {
-      month: "April",
-      monthNumber: 4,
-      destination: "Netherlands",
-      description: "Tulip fields in full bloom",
-      image:
-        "https://images.unsplash.com/photo-1534577116079-e6650fc07c92?w=800&q=80",
-      color: "#a78bfa",
-      size: "small",
-    },
-    {
-      month: "May",
-      monthNumber: 5,
-      destination: "Greece",
-      description: "Warm weather, perfect beaches",
-      image:
-        "https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=800&q=80",
-      color: "#22d3ee",
-      size: "large",
-    },
-    {
-      month: "June",
-      monthNumber: 6,
-      destination: "Iceland",
-      description: "Midnight sun and green landscapes",
-      image:
-        "https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800&q=80",
-      color: "#4ade80",
-      size: "medium",
-    },
-    {
-      month: "July",
-      monthNumber: 7,
-      destination: "Norway",
-      description: "Best time for fjords exploration",
-      image:
-        "https://images.unsplash.com/photo-1601439678777-b2b3c56fa627?w=800&q=80",
-      color: "#818cf8",
-      size: "small",
-    },
-    {
-      month: "August",
-      monthNumber: 8,
-      destination: "Bali",
-      description: "Dry season, perfect for beaches",
-      image:
-        "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80",
-      color: "#fbbf24",
-      size: "small",
-    },
-    {
-      month: "September",
-      monthNumber: 9,
-      destination: "Italy",
-      description: "Harvest season, wine festivals",
-      image:
-        "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80",
-      color: "#f87171",
-      size: "large",
-    },
-    {
-      month: "October",
-      monthNumber: 10,
-      destination: "Scotland",
-      description: "Autumn colors and whisky tours",
-      image:
-        "https://images.unsplash.com/photo-1585155293339-47e8e0fa03f1?w=800&q=80",
-      color: "#fb7185",
-      size: "small",
-    },
-    {
-      month: "November",
-      monthNumber: 11,
-      destination: "Thailand",
-      description: "Cool dry season begins",
-      image:
-        "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&q=80",
-      color: "#a855f7",
-      size: "medium",
-    },
-    {
-      month: "December",
-      monthNumber: 12,
-      destination: "Dubai",
-      description: "Perfect weather for exploration",
-      image:
-        "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80",
-      color: "#14b8a6",
-      size: "small",
-    },
-  ];
+  const getMonthColor = (month: number) => {
+    return Object.values(enumData.MONTHS)[month - 1]?.color || "#3b82f6";
+  };
+
+  const getMonthName = (month: number) => {
+    return Object.values(enumData.MONTHS)[month - 1]?.name || `Tháng ${month}`;
+  };
+
+  const getImageUrl = (hint: any) => {
+    if (hint.images && hint.images.length > 0) {
+      return hint.images[0].fileUrl;
+    }
+  };
 
   return (
     <div className="py-6 px-4">
-      <div className="max-w-7xl mx-auto mb-4 text-center">
-        <div className="flex items-center justify-center gap-2 mb-2">
+      <div className="max-w-7xl mx-auto mb-6 text-center">
+        <div className="flex items-center justify-center gap-2 mb-3">
           <Title>Gợi ý điểm đến theo tháng</Title>
         </div>
-        <p className="text-base text-gray-600 max-w-3xl mx-auto">
-          Khám phá điểm đến lý tưởng cho mỗi tháng trong năm.
+        <p className="text-lg text-gray-600 max-w-3xl mx-auto font-light">
+          Khám phá điểm đến lý tưởng cho mỗi tháng trong năm
         </p>
       </div>
 
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-6 auto-rows-[90px] gap-2">
-          {monthlyDestinations.map((item) => {
-            const isHovered = hoveredMonth === item.monthNumber;
+      {/* Filter Section */}
+      <Card className="mb-6 max-w-7xl mx-auto shadow-sm border-0">
+        <div className="flex  items-center gap-4 w-1/2">
+          <i className="pi pi-filter text-purple-600 text-xl"></i>
+          <Dropdown
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.value)}
+            options={Object.values(enumData.TRAVEL_TYPE).map((type) => ({
+              label: type.name,
+              value: type.value,
+            }))}
+            placeholder="Chọn loại tour"
+            className="w-1/2"
+            showClear
+          />
+        </div>
+      </Card>
 
-            return (
-              <div
-                key={item.monthNumber}
-                className={`${
-                  item.size === "large"
-                    ? "md:col-span-2 md:row-span-4"
-                    : item.size === "medium"
-                      ? "md:col-span-2 md:row-span-3"
-                      : "md:col-span-2 md:row-span-2"
-                }`}
-                onMouseEnter={() => setHoveredMonth(item.monthNumber)}
-                onMouseLeave={() => setHoveredMonth(null)}
-              >
+      {isLoading ? (
+        <div className="text-center py-16">
+          <i className="pi pi-spin pi-spinner text-5xl text-purple-600 mb-4"></i>
+          <p className="text-lg text-gray-600 font-medium">
+            Đang tải dữ liệu...
+          </p>
+        </div>
+      ) : travelHints.length === 0 ? (
+        <div className="text-center py-16">
+          <i className="pi pi-inbox text-6xl text-gray-300 mb-4"></i>
+          <p className="text-lg text-gray-500">Không có dữ liệu</p>
+        </div>
+      ) : (
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-6 auto-rows-[90px] gap-3">
+            {travelHints.map((hint, index) => {
+              const isHovered = hoveredMonth === hint.id;
+              const size = getCardSize(index);
+              const color = getMonthColor(hint.month);
+              const monthName = getMonthName(hint.month);
+
+              return (
                 <div
-                  className="relative h-full w-full overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 cursor-pointer group"
-                  style={{
-                    borderRadius: "12px",
-                  }}
+                  key={hint.id}
+                  className={`${
+                    size === "large"
+                      ? "md:col-span-2 md:row-span-4"
+                      : size === "medium"
+                        ? "md:col-span-2 md:row-span-3"
+                        : "md:col-span-2 md:row-span-2"
+                  }`}
+                  onMouseEnter={() => setHoveredMonth(hint.id)}
+                  onMouseLeave={() => setHoveredMonth(null)}
                 >
-                  <img
-                    src={item.image}
-                    alt={item.destination}
-                    className="w-full h-full object-cover transition-transform duration-700"
-                    style={{
-                      transform: isHovered ? "scale(1.15)" : "scale(1)",
-                    }}
-                  />
-
                   <div
-                    className="absolute inset-0 transition-opacity duration-300"
+                    className="relative h-full w-full overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer group"
                     style={{
-                      background: `linear-gradient(to top, ${item.color}ee, transparent 60%)`,
-                      opacity: isHovered ? 1 : 0.85,
-                    }}
-                  />
-
-                  <div
-                    className="absolute top-2 left-2 px-2 py-1 backdrop-blur-md shadow-md flex items-center gap-1"
-                    style={{
-                      backgroundColor: "rgba(255, 255, 255, 0.9)",
-                      borderRadius: "8px",
+                      borderRadius: "16px",
                     }}
                   >
-                    <i
-                      className="pi pi-calendar text-xs"
-                      style={{ color: item.color }}
-                    ></i>
-                    <span className="font-bold text-gray-800 text-xs">
-                      {item.month}
-                    </span>
-                  </div>
-
-                  <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                    <div className="flex items-center gap-1 mb-1">
-                      <i className="pi pi-map-marker text-sm"></i>
-                      <h3 className="text-base font-bold">
-                        {item.destination}
-                      </h3>
-                    </div>
-                    <p className="text-white/90 text-xs font-medium line-clamp-1">
-                      {item.description}
-                    </p>
-
-                    <div
-                      className="flex items-center gap-1 transition-all duration-300 text-xs mt-1"
+                    {/* Image with enhanced zoom effect */}
+                    <img
+                      src={getImageUrl(hint)}
+                      alt={hint.locationName}
+                      className="w-full h-full object-cover transition-all duration-700 brightness-90"
                       style={{
-                        opacity: isHovered ? 1 : 0,
+                        transform: isHovered ? "scale(1.15)" : "scale(1)",
+                        filter: isHovered
+                          ? "brightness(0.85)"
+                          : "brightness(0.9)",
+                      }}
+                    />
+
+                    {/* Gradient overlay - smoother and more vibrant */}
+                    <div
+                      className="absolute inset-0 transition-opacity duration-500"
+                      style={{
+                        background: `linear-gradient(to top, ${color}f5 0%, ${color}aa 40%, transparent 70%)`,
+                        opacity: isHovered ? 1 : 0.9,
+                      }}
+                    />
+
+                    {/* Month badge - redesigned with better contrast */}
+                    <div
+                      className="absolute top-3 left-3 px-3 py-1.5 backdrop-blur-lg shadow-lg flex items-center gap-2 transition-all duration-300"
+                      style={{
+                        backgroundColor: "rgba(255, 255, 255, 0.95)",
+                        borderRadius: "12px",
                         transform: isHovered
-                          ? "translateY(0)"
-                          : "translateY(10px)",
+                          ? "translateY(-2px)"
+                          : "translateY(0)",
                       }}
                     >
-                      <i className="pi pi-arrow-right text-xs"></i>
-                      <span className="font-semibold">Explore</span>
+                      <i
+                        className="pi pi-calendar text-sm"
+                        style={{ color }}
+                      ></i>
+                      <span className="font-bold text-gray-800 text-sm tracking-wide">
+                        {monthName}
+                      </span>
                     </div>
-                  </div>
 
-                  <div
-                    className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center backdrop-blur-md transition-all duration-300"
-                    style={{
-                      backgroundColor: "rgba(255, 255, 255, 0.2)",
-                      transform: isHovered
-                        ? "scale(1.2) rotate(180deg)"
-                        : "scale(1) rotate(0deg)",
-                    }}
-                  >
-                    <i className="pi pi-sun text-white text-xs"></i>
+                    {/* Content section - better spacing and typography */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                      {/* Location title with icon */}
+                      <div className="flex items-start gap-2 mb-2">
+                        <i className="pi pi-map-marker text-lg mt-0.5 drop-shadow-lg"></i>
+                        <h3 className="text-xl font-bold leading-tight drop-shadow-lg">
+                          {hint.locationName}
+                        </h3>
+                      </div>
+
+                      {/* Description with better readability */}
+                      <p className="text-white/95 text-sm font-medium line-clamp-2 mb-2 drop-shadow-md leading-relaxed">
+                        {hint.description ||
+                          hint.reason ||
+                          `${hint.city}, ${hint.country}`}
+                      </p>
+
+                      {/* Tags with enhanced styling */}
+                      {hint.tags && hint.tags.length > 0 && (
+                        <div className="flex gap-1.5 mb-2 flex-wrap">
+                          {hint.tags.slice(0, 3).map((tag, idx) => (
+                            <span
+                              key={idx}
+                              className="text-xs px-2.5 py-1 rounded-lg bg-white/25 backdrop-blur-md border border-white/30 font-medium"
+                              style={{
+                                transition: "all 0.3s ease",
+                                transform: isHovered
+                                  ? "translateY(-2px)"
+                                  : "translateY(0)",
+                              }}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Explore button with smooth animation */}
+                      <div
+                        className="flex items-center gap-2 transition-all duration-400 text-sm font-semibold"
+                        style={{
+                          opacity: isHovered ? 1 : 0,
+                          transform: isHovered
+                            ? "translateY(0)"
+                            : "translateY(15px)",
+                        }}
+                      >
+                        <button
+                          className="drop-shadow-lg"
+                          onClick={() =>
+                            router.push(`/travel-hint-detail/${hint.id}`)
+                          }
+                        >
+                          Khám phá ngay
+                        </button>
+                        <i className="pi pi-arrow-right drop-shadow-lg"></i>
+                      </div>
+                    </div>
+
+                    {/* Decorative icon with rotation effect */}
+                    <div
+                      className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-lg transition-all duration-500 shadow-lg"
+                      style={{
+                        backgroundColor: "rgba(255, 255, 255, 0.25)",
+                        border: "1px solid rgba(255, 255, 255, 0.3)",
+                        transform: isHovered
+                          ? "scale(1.15) rotate(180deg)"
+                          : "scale(1) rotate(0deg)",
+                      }}
+                    >
+                      <i className="pi pi-compass text-white text-sm drop-shadow-lg"></i>
+                    </div>
+
+                    {/* Shine effect on hover */}
+                    <div
+                      className="absolute inset-0 pointer-events-none transition-opacity duration-700"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)",
+                        opacity: isHovered ? 1 : 0,
+                      }}
+                    />
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="max-w-7xl mx-auto mt-6 text-center">
-        <div className="p-4">
-          <Button className="px-5 py-2 bg-white text-purple-600 font-bold rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300 inline-flex items-center gap-2 text-sm">
-            <i className="pi pi-phone"></i>
-            Liên hệ với chúng tôi để được tư vấn chi tiết hơn
+      <div className="max-w-7xl mx-auto mt-10 text-center">
+        <div className="p-6  rounded-2xl">
+          <p className="text-gray-700 mb-4 text-base font-medium">
+            Cần tư vấn chi tiết hơn về các điểm đến?
+          </p>
+          <Button
+            className="px-6 py-3 font-bold rounded-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 inline-flex items-center gap-3 text-base border-0"
+            style={{
+              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+              color: "white",
+            }}
+            raised
+            onClick={() => router.push(PUBLIC_ROUTES.CONTACT)}
+          >
+            <i className="pi pi-phone text-lg"></i>
+            Liên hệ với chúng tôi
           </Button>
         </div>
       </div>

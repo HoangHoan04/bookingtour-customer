@@ -7,7 +7,7 @@ import "primereact/resources/themes/lara-light-blue/theme.css";
 import { useState } from "react";
 
 export default function PopularTourSection() {
-  const destinations = [
+  const tours = [
     {
       id: 1,
       name: "Bali, Indonesia",
@@ -43,8 +43,7 @@ export default function PopularTourSection() {
       name: "Switzerland",
       durations: 5,
       price: 120,
-      description:
-        "Experience the beauty and culture of this amazing destination",
+      description: "Experience the beauty and culture of this amazing tour",
       image:
         "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?w=800&q=80",
     },
@@ -80,14 +79,14 @@ export default function PopularTourSection() {
     },
   ];
 
-  const destinationTemplate = (destination: any) => {
-    const isHovered = hoveredCard === destination.id;
-    const nights = Math.ceil(destination.durations / 2);
+  const tourTemplate = (tour: any) => {
+    const isHovered = hoveredCard === tour.id;
+    const nights = Math.ceil(tour.durations / 2);
 
     return (
       <div
         className="p-3"
-        onMouseEnter={() => setHoveredCard(destination.id)}
+        onMouseEnter={() => setHoveredCard(tour.id)}
         onMouseLeave={() => setHoveredCard(null)}
       >
         <div
@@ -99,8 +98,8 @@ export default function PopularTourSection() {
         >
           <div className="relative overflow-hidden">
             <img
-              src={destination.image}
-              alt={destination.name}
+              src={tour.image}
+              alt={tour.name}
               className="w-full h-80 object-cover transition-transform duration-500"
               style={{
                 transform: isHovered ? "scale(1.1)" : "scale(1)",
@@ -117,7 +116,7 @@ export default function PopularTourSection() {
             >
               <i className="pi pi-calendar text-white"></i>
               <span className="text-sm font-semibold text-white">
-                {destination.durations} days, {nights} Nights
+                {tour.durations} days, {nights} Nights
               </span>
             </div>
 
@@ -130,7 +129,7 @@ export default function PopularTourSection() {
             >
               <div className="flex items-center gap-2 text-white">
                 <i className="pi pi-map-marker text-2xl"></i>
-                <h3 className="text-2xl font-bold">{destination.name}</h3>
+                <h3 className="text-2xl font-bold">{tour.name}</h3>
               </div>
             </div>
           </div>
@@ -142,7 +141,7 @@ export default function PopularTourSection() {
                   className="text-4xl font-bold"
                   style={{ color: "#ffa500" }}
                 >
-                  ${destination.price}
+                  ${tour.price}
                 </span>
                 <span className="text-gray-500">Per Day</span>
               </div>
@@ -150,7 +149,7 @@ export default function PopularTourSection() {
                 className="text-gray-600 text-sm leading-relaxed"
                 style={{ color: "#0d7377" }}
               >
-                {destination.description}
+                {tour.description}
               </p>
             </div>
 
@@ -202,11 +201,11 @@ export default function PopularTourSection() {
 
       <div className="max-w-7xl mx-auto">
         <Carousel
-          value={destinations}
+          value={tours}
           numVisible={3}
           numScroll={1}
           responsiveOptions={responsiveOptions}
-          itemTemplate={destinationTemplate}
+          itemTemplate={tourTemplate}
           circular
           autoplayInterval={5000}
         />

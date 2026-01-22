@@ -93,15 +93,6 @@ export const enumData = {
     },
   },
 
-  BANNER_TYPE: {
-    HOME: { code: "HOME", name: "Trang chủ" },
-    INTRODUCTION: { code: "INTRODUCTION", name: "Giới thiệu" },
-    BOOKING: { code: "BOOKING", name: "Đặt tour" },
-    TOUR: { code: "TOUR", name: "Tour" },
-    NEWS: { code: "NEWS", name: "Tin tức" },
-    FAQ: { code: "FAQ", name: "Câu hỏi thường gặp" },
-  },
-
   NEW_TYPE: {
     NEWS: { code: "NEWS", name: "Tin tức" },
     EVENT: { code: "EVENT", name: "Sự kiện" },
@@ -118,6 +109,66 @@ export const enumData = {
     PENDING: { code: "pending", name: "Chờ duyệt" },
     APPROVED: { code: "approved", name: "Đã duyệt" },
     REJECTED: { code: "rejected", name: "Từ chối" },
+  },
+
+  BANNER_TYPE: {
+    HOME: { code: "HOME", name: "Trang chủ" },
+    ABOUT: { code: "ABOUT", name: "Giới thiệu" },
+    BLOG: { code: "BLOG", name: "Blog" },
+    SERVICES: { code: "SERVICES", name: "Dịch vụ" },
+    TOUR: { code: "TOUR", name: "Tour" },
+    BOOKING: { code: "BOOKING", name: "Đặt tour" },
+    NEWS: { code: "NEWS", name: "Tin tức" },
+    FAQ: { code: "FAQ", name: "Câu hỏi thường gặp" },
+  },
+
+  MONTHS: {
+    JANUARY: { code: "JANUARY", name: "Tháng 1", number: 1, color: "#ef4444" },
+    FEBRUARY: {
+      code: "FEBRUARY",
+      name: "Tháng 2",
+      number: 2,
+      color: "#8b5cf6",
+    },
+    MARCH: { code: "MARCH", name: "Tháng 3", number: 3, color: "#ec4899" },
+    APRIL: { code: "APRIL", name: "Tháng 4", number: 4, color: "#f59e0b" },
+    MAY: { code: "MAY", name: "Tháng 5", number: 5, color: "#10b981" },
+    JUNE: { code: "JUNE", name: "Tháng 6", number: 6, color: "#06b6d4" },
+    JULY: { code: "JULY", name: "Tháng 7", number: 7, color: "#3b82f6" },
+    AUGUST: { code: "AUGUST", name: "Tháng 8", number: 8, color: "#6366f1" },
+    SEPTEMBER: {
+      code: "SEPTEMBER",
+      name: "Tháng 9",
+      number: 9,
+      color: "#a855f7",
+    },
+    OCTOBER: {
+      code: "OCTOBER",
+      name: "Tháng 10",
+      number: 10,
+      color: "#f43f5e",
+    },
+    NOVEMBER: {
+      code: "NOVEMBER",
+      name: "Tháng 11",
+      number: 11,
+      color: "#eab308",
+    },
+    DECEMBER: {
+      code: "DECEMBER",
+      name: "Tháng 12",
+      number: 12,
+      color: "#14b8a6",
+    },
+  },
+
+  TRAVEL_TYPE: {
+    DOMESTIC: { code: "DOMESTIC", name: "Trong nước", value: "DOMESTIC" },
+    INTERNATIONAL: {
+      code: "INTERNATIONAL",
+      name: "Nước ngoài",
+      value: "INTERNATIONAL",
+    },
   },
 };
 

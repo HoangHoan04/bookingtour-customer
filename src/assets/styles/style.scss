@@ -688,7 +688,6 @@ html[data-theme="dark"] {
   height: 14px !important;
 }
 
-// Dark mode support
 html[data-theme="dark"] {
   .custom-grid-paginator {
     background: #1e293b !important;
@@ -726,7 +725,6 @@ html[data-theme="dark"] {
   }
 }
 
-// Mobile responsive
 @media (max-width: 768px) {
   .custom-grid-paginator {
     flex-wrap: wrap !important;

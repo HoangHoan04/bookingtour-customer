@@ -1,7 +1,7 @@
 import { InputText } from "primereact/inputtext";
 import React from "react";
 import { useToast } from "../../../context/ToastContext";
-import { useSubscribeNewsletter } from "../../../services/hooks/newsletter";
+import { useSubscribeNewsletter } from "../../../hooks/newsletter";
 
 interface SendEmailComponentProps {
   title?: string;

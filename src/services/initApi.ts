@@ -30,6 +30,9 @@ const initApi = (url?: string, headers = {}) => {
       if (token != null) {
         config.headers.Authorization = `Bearer ${token}`;
       }
+      if (config.data instanceof FormData) {
+        delete config.headers["Content-Type"];
+      }
     } catch (error) {
       console.log("AsyncStorage error:", error);
     }
@@ -97,7 +100,7 @@ const initApi = (url?: string, headers = {}) => {
       }
 
       return Promise.reject(error);
-    }
+    },
   );
 
   return api;

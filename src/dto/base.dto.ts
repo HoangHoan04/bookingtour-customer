@@ -10,7 +10,7 @@ export interface BasePermissions {
 
 export interface BaseDto extends BasePermissions {
   id: string;
-  createAt: string;
+  createdAt: string;
   createdBy: string;
   updatedAt: string;
   updatedBy: string;
@@ -20,7 +20,17 @@ export interface BaseDto extends BasePermissions {
 export interface PaginationDto<T> {
   skip: number;
   take: number;
-  where: T;
+  where?: T;
+}
+
+export class PageResponse<T = any> {
+  data: T[] = [];
+  total: number = 0;
+}
+
+export interface SuccessResponse<T = any> {
+  message: string;
+  data: T;
 }
 
 export interface ActionLogDto extends BaseDto {

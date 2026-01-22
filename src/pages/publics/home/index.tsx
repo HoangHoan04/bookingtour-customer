@@ -1,3 +1,4 @@
+import { enumData } from "@/common/enums/enum";
 import BannerComponent from "@/components/ui/banner";
 import SearchBar from "@/components/ui/search-bar";
 import ContactSection from "./contact-section";
@@ -10,7 +11,7 @@ export default function HomeSection() {
   return (
     <div className="min-h-screen ">
       <section className="relative pt-4">
-        <BannerComponent type="HOME" />
+        <BannerComponent type={enumData.BANNER_TYPE.HOME.code} />
       </section>
 
       <SearchBar />

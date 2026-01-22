@@ -11,6 +11,8 @@ export const PUBLIC_ROUTES = {
   FAQ: "/faq",
   SERVICES: "/services",
   SERVICE_DETAIL: "/services/:id",
+  TOUR_GUIDE: "/tour-guide",
+  TOUR_GUIDE_DETAIL: "/tour-guide/:id",
   ZALO_CALLBACK: "/zalo-callback",
 };
 

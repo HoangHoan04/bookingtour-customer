@@ -1,4 +1,5 @@
-import { useBanners, type Banner } from "@/services/hooks/banner";
+import type { BannerDto } from "@/dto/banner.dto";
+import { useBanners } from "@/hooks/banner";
 import { useEffect, useState } from "react";
 
 interface BannerComponentProps {
@@ -81,7 +82,7 @@ const BannerComponent = ({ type = "HOME" }: BannerComponentProps) => {
       ? currentBanner.image[0].fileUrl
       : "";
 
-  const thumbnailTemplate = (banner: Banner, index: number) => {
+  const thumbnailTemplate = (banner: BannerDto, index: number) => {
     const thumbImageUrl =
       banner.image && banner.image.length > 0 ? banner.image[0].fileUrl : "";
 

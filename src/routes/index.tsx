@@ -94,6 +94,14 @@ const PublicRoutes = [
         path: PUBLIC_ROUTES.SERVICE_DETAIL,
         element: PUBLIC_SCREENS[PUBLIC_ROUTES.SERVICE_DETAIL],
       },
+      {
+        path: PUBLIC_ROUTES.TOUR_GUIDE,
+        element: PUBLIC_SCREENS[PUBLIC_ROUTES.TOUR_GUIDE],
+      },
+      {
+        path: PUBLIC_ROUTES.TOUR_GUIDE_DETAIL,
+        element: PUBLIC_SCREENS[PUBLIC_ROUTES.TOUR_GUIDE_DETAIL],
+      },
     ],
   },
 ];

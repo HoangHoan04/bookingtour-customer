@@ -1,3 +1,4 @@
+import { enumData } from "@/common/enums/enum";
 import BannerComponent from "@/components/ui/banner";
 import Title from "@/components/ui/Tilte";
 import { useState } from "react";
@@ -58,7 +59,7 @@ export default function ServiceScreen() {
   return (
     <div className="min-h-screen">
       <section className="relative pt-4">
-        <BannerComponent type="SERVICES" />
+        <BannerComponent type={enumData.BANNER_TYPE.SERVICES.code} />
       </section>
       <section className="bg-[#004d4d] py-6 mt-16  px-4">
         <div className="text-center mb-6">

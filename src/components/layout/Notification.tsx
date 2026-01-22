@@ -4,7 +4,7 @@ import {
   useMarkReadList,
   usePaginationNotification,
   useUnreadCount,
-} from "@/services/hooks/notify/useNotification";
+} from "@/hooks/notify/useNotification";
 import { Badge } from "primereact/badge";
 import { Button } from "primereact/button";
 import { useEffect, useRef, useState } from "react";
@@ -45,7 +45,6 @@ export default function Notification() {
 
   const handleViewAll = () => {
     setIsOpen(false);
-    // TODO: Navigate to notifications page
   };
 
   const handleMarkAllAsRead = () => {

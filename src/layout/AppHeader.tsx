@@ -128,7 +128,7 @@ export default function AppHeader({
       path: "/services",
       children: [
         { label: "Khám phá dịch vụ", path: "/services" },
-        { label: "Hướng dẫn viên", path: "/guides" },
+        { label: "Hướng dẫn viên", path: "/tour-guide" },
       ],
     },
     {

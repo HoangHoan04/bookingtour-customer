@@ -1,4 +1,5 @@
 import { travel } from "@/assets/animations";
+import { enumData } from "@/common/enums/enum";
 import BannerComponent from "@/components/ui/banner";
 import SendEmailComponent from "@/components/ui/send-email";
 import Title from "@/components/ui/Tilte";
@@ -66,7 +67,7 @@ export default function TravelLandingPage() {
   return (
     <div className="min-h-screen">
       <section className="relative pt-4">
-        <BannerComponent type="ABOUT" />
+        <BannerComponent type={enumData.BANNER_TYPE.ABOUT.code} />
       </section>
 
       <section className="bg-[#004d4d] py-6 mt-16  px-4">
@@ -278,7 +279,15 @@ export default function TravelLandingPage() {
         </div>
       </section>
 
-      <SendEmailComponent />
+      {/* Newsletter Subscription */}
+      <SendEmailComponent
+        onSuccess={(email) => {
+          console.log("User subscribed with email:", email);
+        }}
+        onError={(error) => {
+          console.error("Subscription failed:", error);
+        }}
+      />
     </div>
   );
 }

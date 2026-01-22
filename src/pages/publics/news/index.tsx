@@ -1,7 +1,7 @@
 import { enumData } from "@/common/enums/enum";
 import BannerComponent from "@/components/ui/banner";
 import Title from "@/components/ui/Tilte";
-import { usePaginationBlog } from "@/hooks/blog";
+import { usePaginationNew } from "@/hooks/news";
 import { useRouter } from "@/routes/hooks/use-router";
 import "primeicons/primeicons.css";
 import { Card } from "primereact/card";
@@ -14,22 +14,19 @@ import { Tag } from "primereact/tag";
 import { useState } from "react";
 import NewSection from "../home/new-section";
 
-export default function BlogScreen() {
+export default function NewScreen() {
   const router = useRouter();
   const [first, setFirst] = useState(0);
   const itemsPerPage = 9;
 
   const {
-    data: blogs,
+    data: news,
     total,
     isLoading,
-  } = usePaginationBlog({
+  } = usePaginationNew({
     skip: first,
     take: itemsPerPage,
-    where: {
-      status: "ACTIVE",
-      isDeleted: false,
-    },
+    where: {},
   });
 
   const onPageChange = (event: any) => {
@@ -43,17 +40,17 @@ export default function BlogScreen() {
     return { day, month };
   };
 
-  const renderBlogCard = (blog: any) => {
-    const { day, month } = formatDate(blog.createdAt || blog.publishedAt);
+  const renderNewCard = (item: any) => {
+    const { day, month } = formatDate(item.createdAt);
+
+    const imageUrl =
+      item.images && item.images.length > 0 ? item.images[0].fileUrl : "";
 
     const header = (
       <div className="relative">
         <img
-          alt={blog.title}
-          src={
-            blog.featuredImage?.fileUrl ||
-            "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80"
-          }
+          alt={item.titleVI || item.titleEN}
+          src={imageUrl}
           className="w-full h-80 object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-b from-black/20 to-black/75" />
@@ -63,12 +60,12 @@ export default function BlogScreen() {
         </div>
         <div className="absolute bottom-0 left-0 right-0 p-6">
           <Tag
-            value={`by ${blog.author?.fullName || blog.author?.username || "Admin"}`}
+            value={item.type || "NEWS"}
             severity="warning"
             className="mb-3"
           />
           <h3 className="text-xl font-bold text-white leading-tight line-clamp-2">
-            {blog.title}
+            {item.titleVI || item.titleEN}
           </h3>
         </div>
       </div>
@@ -78,7 +75,7 @@ export default function BlogScreen() {
       <Card
         header={header}
         className="cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-        onClick={() => router.push(`/blogs/${blog.slug}`)}
+        onClick={() => router.push(`/news/${item.id}`)}
       />
     );
   };
@@ -96,28 +93,31 @@ export default function BlogScreen() {
   };
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       {/* Banner Section */}
       <section className="relative pt-4">
-        <BannerComponent type={enumData.BANNER_TYPE.BLOG.code} />
+        <BannerComponent type={enumData.BANNER_TYPE.NEWS.code} />
       </section>
-      {/* Blog Grid Section */}
+
+      {/* News Grid Section */}
       <section className="max-w-7xl mx-auto px-4 py-16">
         <div className="text-center mb-6">
-          <Title>Blog</Title>
-          <p className="text-xl text-slate-500  mx-auto font-light leading-relaxed">
+          <Title>Tin tức</Title>
+          <p className="text-xl text-slate-500 mx-auto font-light leading-relaxed">
             Cập nhật những xu hướng du lịch mới nhất và những mẹo hữu ích cho
             chuyến đi của bạn.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {isLoading ? (
             Array.from({ length: itemsPerPage }).map((_, index) => (
               <div key={index}>{renderSkeletonCard()}</div>
             ))
-          ) : blogs.length > 0 ? (
-            blogs.map((blog) => <div key={blog.id}>{renderBlogCard(blog)}</div>)
+          ) : news.length > 0 ? (
+            news.map((item: any) => (
+              <div key={item.id}>{renderNewCard(item)}</div>
+            ))
           ) : (
             <div className="col-span-3 text-center py-12">
               <p className="text-xl text-slate-500">Chưa có bài viết nào</p>

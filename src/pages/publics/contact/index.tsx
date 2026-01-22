@@ -1,46 +1,18 @@
 import { earth } from "@/assets/animations";
+import ContactForm from "@/components/ui/contact-form";
 import Lottie from "lottie-react";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
-import { Checkbox } from "primereact/checkbox";
 import { Divider } from "primereact/divider";
-import { Dropdown } from "primereact/dropdown";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { useState } from "react";
 
 export default function ContactScreen() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [agreed, setAgreed] = useState(false);
-
-  const subjects = [
-    { label: "Câu hỏi chung", value: "general" },
-    { label: "Đặt tour", value: "booking" },
-    { label: "Hỗ trợ", value: "support" },
-    { label: "Phản hồi", value: "feedback" },
-  ];
-
-  const handleSubmit = () => {
-    if (!formData.name || !formData.email || !formData.message) {
-      alert("Vui lòng điền đầy đủ thông tin!");
-      return;
-    }
-    console.log("Form submitted:", formData);
-    alert("Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất.");
-  };
-
   return (
     <div className="min-h-screen pb-8 px-2">
       <div className="max-w-7xl mx-auto">
         <Card className="shadow-xl mb-8">
           <div className="rounded-2xl overflow-hidden">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.3216830969253!2d106.69522331533422!3d10.786834992313928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f4b3330bcc9%3A0xb3ff69197b10ec4f!2zSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1234567890"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.6696584619626!2d106.6796833753091!3d10.75992235949736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f1b7c3ed289%3A0xa06651894598e488!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBTw6BpIEfDsm4!5e0!3m2!1svi!2s!4v1769073394930!5m2!1svi!2s"
               width="100%"
               height="450"
               style={{ border: 0 }}
@@ -68,100 +40,7 @@ export default function ContactScreen() {
             </div>
           </div>
 
-          <div>
-            <Card className="shadow-xl">
-              <h2 className="text-3xl font-bold mb-6">
-                <span className="">Liên hệ cho chúng tôi </span>
-              </h2>
-
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Họ và Tên <span className="text-red-500">*</span>
-                  </label>
-                  <InputText
-                    placeholder="Nhập họ và tên của bạn"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    className="w-full"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email <span className="text-red-500">*</span>
-                  </label>
-                  <InputText
-                    type="email"
-                    placeholder="example@email.com"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="w-full"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Chủ đề
-                  </label>
-                  <Dropdown
-                    value={formData.subject}
-                    onChange={(e) =>
-                      setFormData({ ...formData, subject: e.value })
-                    }
-                    options={subjects}
-                    placeholder="Chọn chủ đề"
-                    className="w-full"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Nội dung <span className="text-red-500">*</span>
-                  </label>
-                  <InputTextarea
-                    placeholder="Nhập nội dung tin nhắn của bạn..."
-                    value={formData.message}
-                    onChange={(e) =>
-                      setFormData({ ...formData, message: e.target.value })
-                    }
-                    rows={6}
-                    className="w-full"
-                  />
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Checkbox
-                    inputId="agree"
-                    checked={agreed}
-                    onChange={(e) => setAgreed(e.checked || false)}
-                  />
-                  <label htmlFor="agree" className="text-sm text-gray-600">
-                    Tôi xác nhận không phải là robot
-                  </label>
-                </div>
-
-                <Button
-                  label="Gửi Tin Nhắn"
-                  icon="pi pi-send"
-                  onClick={handleSubmit}
-                  className="w-full"
-                  raised
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                    border: "none",
-                    fontSize: "1.1rem",
-                    padding: "0.75rem",
-                  }}
-                />
-              </div>
-            </Card>
-          </div>
+          <ContactForm />
         </div>
 
         <Divider />

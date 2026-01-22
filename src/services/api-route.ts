@@ -31,7 +31,50 @@ export const API_ENDPOINTS = {
     GET_BY_TYPE: `${prefix}/banner/get-by-type`,
   },
 
+  TRAVEL_HINT: {
+    GET_TRAVEL_HINT_BY_TYPE: `${prefix}/travel-hint/get-travel-hint-by-type`,
+  },
+
   NEWSLETTER: {
     SUBSCRIBE: `${prefix}/newsletter/subscribe`,
+    UNSUBSCRIBE: `${prefix}/newsletter/unsubscribe`,
+  },
+
+  BLOG: {
+    PAGINATION: `${prefix}/blog/pagination`,
+    FIND_BY_ID: `${prefix}/blog/find-by-id`,
+    FIND_BY_SLUG: `${prefix}/blog/find-by-slug`,
+    INCREMENT_VIEW: `${prefix}/blog/increment-view`,
+    LIKE: `${prefix}/blog/like`,
+    UNLIKE: `${prefix}/blog/unlike`,
+    CREATE_COMMENT: `${prefix}/blog/create-comment`,
+    UPDATE_COMMENT: `${prefix}/blog/update-comment`,
+    DELETE_COMMENT: `${prefix}/blog/delete-comment`,
+    PAGINATION_COMMENT: `${prefix}/blog/pagination-comment`,
+  },
+
+  NEWS: {
+    PAGINATION: `${prefix}/news/pagination`,
+    DETAIL: `${prefix}/news/detail`,
+    FEATURED: `${prefix}/news/featured`,
+    RELATED: `${prefix}/news/related`,
+    LATEST: `${prefix}/news/latest`,
+    FIND_BY_TYPE: `${prefix}/news/find-by-type`,
+    SEARCH: `${prefix}/news/search`,
+    COUNT_BY_TYPE: `${prefix}/news/count-by-type`,
+  },
+
+  UPLOAD_FILE: {
+    SINGLE: "/api/upload/uploadFiles/upload-single",
+    MULTI: "/api/upload/uploadFiles/upload-multi",
+  },
+
+  EMAIL: {
+    SEND_CONTACT: "/api/email/send-contact",
+  },
+
+  TOUR_GUIDE: {
+    PAGINATION: `${prefix}/tour-guide/pagination`,
+    FIND_BY_SLUG: `${prefix}/tour-guide/find-by-slug`,
   },
 };
