@@ -35,9 +35,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     const html = document.documentElement;
     if (theme === "dark") {
       html.classList.add("dark");
+      html.classList.remove("light");
       html.style.colorScheme = "dark";
     } else {
       html.classList.remove("dark");
+      html.classList.add("light");
       html.style.colorScheme = "light";
     }
     updatePrimeReactTheme(theme);

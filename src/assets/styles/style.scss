@@ -11,9 +11,14 @@ body {
   font-weight: 700;
 }
 
+html,
+body {
+  background-color: var(--bg-main) !important;
+}
+
 html[data-theme="light"],
 html:not([data-theme]) {
-  --bg-main: #ffffff;
+  --bg-main: #efffff;
   --bg-sub: #f5f5f5;
   --bg-hover: #f0f4f8;
   --text-main: #333333;

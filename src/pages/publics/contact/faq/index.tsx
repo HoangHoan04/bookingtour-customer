@@ -40,44 +40,44 @@ export default function FaqScreen() {
 
   const faqItems = [
     {
-      question: "Do you offer group discounts?",
+      question: "Bạn có cung cấp giảm giá cho nhóm không?",
       answer:
-        "Yes, we offer special group discounts for parties of 10 or more. Contact us for detailed pricing and availability.",
+        "Có, chúng tôi cung cấp giảm giá đặc biệt cho nhóm từ 10 người trở lên. Vui lòng liên hệ với chúng tôi để biết chi tiết về giá và tình trạng còn chỗ.",
     },
     {
-      question: "How do I make changes to my booking?",
+      question: "Làm thế nào để thay đổi đặt chỗ của tôi?",
       answer:
-        "You can make changes to your booking through your account dashboard or by contacting our support team directly.",
+        "Bạn có thể thay đổi đặt chỗ thông qua bảng điều khiển tài khoản hoặc liên hệ trực tiếp với đội ngũ hỗ trợ của chúng tôi.",
     },
     {
-      question: "Are flights included in the package price?",
+      question: "Vé máy bay có được bao gồm trong giá gói không?",
       answer:
-        "Flight inclusion depends on the package you choose. Check the package details or contact us for specific information.",
+        "Việc bao gồm vé máy bay phụ thuộc vào gói bạn chọn. Vui lòng kiểm tra chi tiết gói hoặc liên hệ với chúng tôi để biết thông tin cụ thể.",
     },
     {
-      question: "What is the cancellation policy?",
+      question: "Chính sách hủy tour là gì?",
       answer:
-        "Our cancellation policy varies by package. Generally, cancellations made 30+ days before departure receive a full refund.",
+        "Chính sách hủy tour của chúng tôi khác nhau tùy theo gói. Thông thường, việc hủy được thực hiện trước 30 ngày trở lên sẽ được hoàn tiền đầy đủ.",
     },
     {
-      question: "What's included in my travel package?",
+      question: "Gói du lịch của tôi bao gồm những gì?",
       answer:
-        "Travel packages typically include accommodation, select meals, guided tours, and transportation as specified in the package details.",
+        "Gói du lịch thường bao gồm chỗ ở, một số bữa ăn được chọn, các tour có hướng dẫn viên và phương tiện di chuyển như được chỉ định trong chi tiết gói.",
     },
     {
-      question: "How far in advance should I book my trip?",
+      question: "Tôi nên đặt chuyến đi trước bao lâu?",
       answer:
-        "We recommend booking at least 2-3 months in advance for the best availability and rates, especially during peak seasons.",
+        "Chúng tôi khuyên bạn nên đặt trước ít nhất 2-3 tháng để có sự sẵn có tốt nhất và mức giá tốt nhất, đặc biệt là trong mùa cao điểm.",
     },
     {
-      question: "Can I book only accommodations through your site?",
+      question: "Tôi có thể chỉ đặt chỗ ở qua trang web của bạn không?",
       answer:
-        "Yes, you can book accommodations separately without purchasing a full package. Browse our accommodation options.",
+        "Có, bạn có thể đặt chỗ ở riêng lẻ mà không cần mua gói đầy đủ. Hãy duyệt các tùy chọn chỗ ở của chúng tôi.",
     },
     {
-      question: "How can I contact support during my trip?",
+      question: "Làm thế nào để liên hệ hỗ trợ trong chuyến đi?",
       answer:
-        "Our 24/7 support team is available via phone, email, and live chat throughout your journey for any assistance you need.",
+        "Đội ngũ hỗ trợ 24/7 của chúng tôi luôn sẵn sàng qua điện thoại, email và chat trực tuyến trong suốt hành trình của bạn để hỗ trợ bất kỳ nhu cầu nào.",
     },
   ];
 
@@ -111,7 +111,7 @@ export default function FaqScreen() {
                   <div className="absolute -inset-1 bg-linear-to-r from-teal-400 to-cyan-400 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
                   <Image
                     src={faqMedia}
-                    alt="Travel consultant"
+                    alt="Tư vấn viên du lịch"
                     className="relative object-cover w-72 rounded-2xl shadow-2xl transform group-hover:scale-[1.02] transition duration-300"
                   />
                 </div>
@@ -120,7 +120,7 @@ export default function FaqScreen() {
                     <i className="pi pi-comments text-2xl text-white"></i>
                   </div>
                   <span className="text-teal-800 font-semibold text-sm">
-                    Give us a chance to help you!
+                    Hãy cho chúng tôi cơ hội được hỗ trợ bạn!
                   </span>
                 </div>
               </div>
@@ -280,10 +280,10 @@ export default function FaqScreen() {
       {/* Newsletter Subscription */}
       <SendEmailComponent
         onSuccess={(email) => {
-          console.log("User subscribed with email:", email);
+          console.log("Người dùng đã đăng ký với email:", email);
         }}
         onError={(error) => {
-          console.error("Subscription failed:", error);
+          console.error("Đăng ký thất bại:", error);
         }}
       />
     </div>

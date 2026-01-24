@@ -14,7 +14,6 @@ export default function PublicLayout({
   const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // Throttle scroll event to improve performance
     const handleScroll = () => {
       if (timeoutRef.current) return;
 
@@ -25,7 +24,7 @@ export default function PublicLayout({
           setIsScrolled(false);
         }
         timeoutRef.current = null;
-      }, 100); // Throttle to 100ms
+      }, 100);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });

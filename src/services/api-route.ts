@@ -42,15 +42,23 @@ export const API_ENDPOINTS = {
 
   BLOG: {
     PAGINATION: `${prefix}/blog/pagination`,
-    FIND_BY_ID: `${prefix}/blog/find-by-id`,
     FIND_BY_SLUG: `${prefix}/blog/find-by-slug`,
-    INCREMENT_VIEW: `${prefix}/blog/increment-view`,
+    RELATED: `${prefix}/blog/related`,
+    POPULAR: `${prefix}/blog/popular`,
+    LATEST: `${prefix}/blog/latest`,
+    SEARCH: `${prefix}/blog/search`,
+    BY_CATEGORY: `${prefix}/blog/by-category`,
+    BY_TAG: `${prefix}/blog/by-tag`,
+    CATEGORIES: `${prefix}/blog/categories`,
+    TAGS: `${prefix}/blog/tags`,
     LIKE: `${prefix}/blog/like`,
     UNLIKE: `${prefix}/blog/unlike`,
-    CREATE_COMMENT: `${prefix}/blog/create-comment`,
-    UPDATE_COMMENT: `${prefix}/blog/update-comment`,
-    DELETE_COMMENT: `${prefix}/blog/delete-comment`,
-    PAGINATION_COMMENT: `${prefix}/blog/pagination-comment`,
+
+    COMMENTS_BY_POST: `${prefix}/blog/comments/by-post`,
+    CREATE_COMMENT: `${prefix}/blog/comments/create`,
+    UPDATE_COMMENT: `${prefix}/blog/comments/update`,
+    DELETE_COMMENT: `${prefix}/blog/comments/delete`,
+    RESTORE_COMMENT: `${prefix}/blog/comments/restore`,
   },
 
   NEWS: {

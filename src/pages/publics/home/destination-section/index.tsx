@@ -9,7 +9,7 @@ import { useState } from "react";
 export default function PopularDestinationsSection() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
 
-  const { data: destinations, isLoading } = usePopularDestination();
+  const { data: destinations } = usePopularDestination();
   const responsiveOptions = [
     {
       breakpoint: "1400px",
@@ -166,10 +166,10 @@ export default function PopularDestinationsSection() {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto mt-5">
+      <div className="max-w-7xl mx-auto mt-1">
         <Card className="bg-linear-to-r from-blue-500 to-blue-700 border-none shadow-2xl overflow-hidden">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8">
-            <div className="flex items-center gap-6 text-white">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-1">
+            <div className="flex items-center gap-6">
               <i className="pi pi-compass text-6xl hidden md:block"></i>
               <div>
                 <h2 className="text-3xl font-bold mb-2">
