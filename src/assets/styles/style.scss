@@ -363,8 +363,7 @@ html[data-theme="dark"] {
 .p-inputtextarea,
 .p-inputnumber-input,
 .p-dropdown,
-.p-multiselect,
-.p-calendar .p-inputtext {
+.p-multiselect {
   @include input-adapter;
 }
 

@@ -76,7 +76,6 @@ export default function SearchBar() {
                 className="w-full"
                 dateFormat="dd/mm/yy"
                 showIcon={false}
-                style={{ border: "none", boxShadow: "none" }}
               />
             </div>
 

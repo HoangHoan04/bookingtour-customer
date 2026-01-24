@@ -39,7 +39,7 @@ export const useUnreadCount = () => {
       );
       return response.data;
     },
-    refetchInterval: 60000,
+    refetchInterval: 5 * 60 * 1000, // Changed from 1 minute to 5 minutes to reduce server load
   });
 
   return {
