@@ -1,7 +1,4 @@
-import "primeicons/primeicons.css";
 import { Card } from "primereact/card";
-import "primereact/resources/primereact.min.css";
-import "primereact/resources/themes/lara-light-teal/theme.css";
 
 const BookingSteps = () => {
   const steps = [

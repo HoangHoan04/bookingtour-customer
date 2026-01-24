@@ -1,7 +1,7 @@
 import { enumData } from "@/common/enums/enum";
 import BannerComponent from "@/components/ui/banner";
 import Title from "@/components/ui/Tilte";
-import { usePaginationBlog } from "@/hooks/blog";
+import { usePaginationDestination } from "@/hooks/destination";
 import { useRouter } from "@/routes/hooks/use-router";
 import { Card } from "primereact/card";
 import { Divider } from "primereact/divider";
@@ -10,20 +10,20 @@ import { Skeleton } from "primereact/skeleton";
 import { Tag } from "primereact/tag";
 import { useState } from "react";
 import NewSection from "../home/new-section";
-export default function BlogScreen() {
+
+export default function DestinationScreen() {
   const router = useRouter();
   const [first, setFirst] = useState(0);
   const itemsPerPage = 9;
 
   const {
-    data: blogs,
+    data: destinations,
     total,
     isLoading,
-  } = usePaginationBlog({
+  } = usePaginationDestination({
     skip: first,
     take: itemsPerPage,
     where: {
-      status: "ACTIVE",
       isDeleted: false,
     },
   });
@@ -39,17 +39,16 @@ export default function BlogScreen() {
     return { day, month };
   };
 
-  const renderBlogCard = (blog: any) => {
-    const { day, month } = formatDate(blog.createdAt || blog.publishedAt);
+  const renderDestinationCard = (destination: any) => {
+    const { day, month } = formatDate(
+      destination.createdAt || destination.publishedAt,
+    );
 
     const header = (
       <div className="relative">
         <img
-          alt={blog.title}
-          src={
-            blog.featuredImage?.fileUrl ||
-            "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80"
-          }
+          alt={destination.title}
+          src={destination.image?.fileUrl}
           className="w-full h-80 object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-b from-black/20 to-black/75" />
@@ -59,12 +58,12 @@ export default function BlogScreen() {
         </div>
         <div className="absolute bottom-0 left-0 right-0 p-6">
           <Tag
-            value={`by ${blog.author?.fullName || blog.author?.username || "Admin"}`}
+            value={`by ${destination.author?.fullName || destination.author?.username || "Admin"}`}
             severity="warning"
             className="mb-3"
           />
           <h3 className="text-xl font-bold text-white leading-tight line-clamp-2">
-            {blog.title}
+            {destination.title}
           </h3>
         </div>
       </div>
@@ -74,7 +73,7 @@ export default function BlogScreen() {
       <Card
         header={header}
         className="cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-        onClick={() => router.push(`/blogs/${blog.slug}`)}
+        onClick={() => router.push(`/destinations/${destination.slug}`)}
       />
     );
   };
@@ -95,12 +94,12 @@ export default function BlogScreen() {
     <div className="min-h-screen ">
       {/* Banner Section */}
       <section className="relative pt-4">
-        <BannerComponent type={enumData.BANNER_TYPE.BLOG.code} />
+        <BannerComponent type={enumData.BANNER_TYPE.DESTINATION.code} />
       </section>
-      {/* Blog Grid Section */}
+      {/* Destination Grid Section */}
       <section className="max-w-7xl mx-auto px-4 py-16">
         <div className="text-center mb-6">
-          <Title>Blog</Title>
+          <Title>Điểm đến</Title>
           <p className="text-xl text-slate-500  mx-auto font-light leading-relaxed">
             Cập nhật những xu hướng du lịch mới nhất và những mẹo hữu ích cho
             chuyến đi của bạn.
@@ -112,18 +111,22 @@ export default function BlogScreen() {
             Array.from({ length: itemsPerPage }).map((_, index) => (
               <div key={index}>{renderSkeletonCard()}</div>
             ))
-          ) : blogs.length > 0 ? (
-            blogs.map((blog) => <div key={blog.id}>{renderBlogCard(blog)}</div>)
+          ) : destinations.length > 0 ? (
+            destinations.map((destination) => (
+              <div key={destination.id}>
+                {renderDestinationCard(destination)}
+              </div>
+            ))
           ) : (
             <div className="col-span-3 text-center py-12">
-              <p className="text-xl text-slate-500">Chưa có bài viết nào</p>
+              <p className="text-xl text-slate-500">Chưa có điểm đến nào</p>
             </div>
           )}
         </div>
 
         {!isLoading && total > 0 && (
           <Paginator
-            currentPageReportTemplate={`Hiển thị {first} - {last} trong tổng số {totalRecords} bài viết`}
+            currentPageReportTemplate={`Hiển thị {first} - {last} trong tổng số {totalRecords} điểm đến`}
             totalRecords={total}
             rows={itemsPerPage}
             first={first}

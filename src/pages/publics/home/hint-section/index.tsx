@@ -2,12 +2,9 @@ import { enumData } from "@/common/enums/enum";
 import Title from "@/components/ui/Tilte";
 import { useGetTravelHints } from "@/hooks/travel-hint";
 import { useRouter } from "@/routes/hooks";
-import "primeicons/primeicons.css";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
-import "primereact/resources/primereact.min.css";
-import "primereact/resources/themes/lara-light-blue/theme.css";
 import { useState } from "react";
 import { PUBLIC_ROUTES } from "../../../../routes/routes";
 

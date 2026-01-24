@@ -13,6 +13,8 @@ export const PUBLIC_ROUTES = {
   SERVICE_DETAIL: "/services/:id",
   TOUR_GUIDE: "/tour-guide",
   TOUR_GUIDE_DETAIL: "/tour-guide/:id",
+  DESTINATIONS: "/destinations",
+  DESTINATION_DETAIL: "/destinations/:slug",
   ZALO_CALLBACK: "/zalo-callback",
 };
 

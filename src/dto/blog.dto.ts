@@ -2,11 +2,7 @@ import type { BaseDto, FileDto } from "./base.dto";
 
 export interface BlogDto extends BaseDto {
   authorId: string;
-  author?: {
-    id: string;
-    username?: string;
-    fullName?: string;
-  };
+  author?: any;
   title: string;
   slug: string;
   excerpt?: string;

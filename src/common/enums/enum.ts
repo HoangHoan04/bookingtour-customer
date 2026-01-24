@@ -120,6 +120,7 @@ export const enumData = {
     BOOKING: { code: "BOOKING", name: "Đặt tour" },
     NEWS: { code: "NEWS", name: "Tin tức" },
     FAQ: { code: "FAQ", name: "Câu hỏi thường gặp" },
+    DESTINATION: { code: "DESTINATION", name: "Điểm đến" },
   },
 
   MONTHS: {

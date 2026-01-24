@@ -1,9 +1,6 @@
 import Title from "@/components/ui/Tilte";
-import "primeicons/primeicons.css";
 import { Button } from "primereact/button";
 import { Carousel } from "primereact/carousel";
-import "primereact/resources/primereact.min.css";
-import "primereact/resources/themes/lara-light-blue/theme.css";
 import { useState } from "react";
 
 export default function PopularTourSection() {

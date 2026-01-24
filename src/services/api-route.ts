@@ -77,4 +77,13 @@ export const API_ENDPOINTS = {
     PAGINATION: `${prefix}/tour-guide/pagination`,
     FIND_BY_SLUG: `${prefix}/tour-guide/find-by-slug`,
   },
+
+  DESTINATION: {
+    PAGINATION: `${prefix}/destination/pagination`,
+    FIND_BY_SLUG: `${prefix}/destination/find-by-slug`,
+    GET_TOUR_BY_DESTINATION: `${prefix}/destination/get-tour-by-destination`,
+    INCREMENT_VIEW: `${prefix}/destination/increment-view`,
+    POPULAR: `${prefix}/destination/popular`,
+    SEARCH: `${prefix}/destination/search`,
+  },
 };

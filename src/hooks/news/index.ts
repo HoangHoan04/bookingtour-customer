@@ -1,8 +1,4 @@
-import type {
-  PageResponse,
-  PaginationDto,
-  SuccessResponse,
-} from "@/dto/base.dto";
+import type { PageResponse, PaginationDto } from "@/dto/base.dto";
 import type { NewDto, NewFilterDto } from "@/dto/new.dto";
 import { API_ENDPOINTS } from "@/services/api-route";
 import rootApiService from "@/services/api.service";
@@ -24,18 +20,16 @@ export const usePaginationNew = (params: PaginationDto<NewFilterDto>) => {
 };
 
 export const useNewDetail = (id: string | undefined | null) => {
-  const { data, isLoading, refetch, error } = useQuery<SuccessResponse<NewDto>>(
-    {
-      queryKey: [API_ENDPOINTS.NEWS.DETAIL, id],
-      queryFn: async () => {
-        const res = await rootApiService.post(API_ENDPOINTS.NEWS.DETAIL, {
-          id,
-        });
-        return res.data as SuccessResponse<NewDto>;
-      },
-      enabled: !!id,
+  const { data, isLoading, refetch, error } = useQuery({
+    queryKey: [API_ENDPOINTS.NEWS.DETAIL, id],
+    queryFn: async () => {
+      const res = await rootApiService.post(API_ENDPOINTS.NEWS.DETAIL, {
+        id,
+      });
+      return res;
     },
-  );
+    enabled: !!id,
+  });
 
   return {
     data: data?.data,
@@ -146,16 +140,14 @@ export const useSearchNews = (
 };
 
 export const useCountNewsByType = () => {
-  const { data, isLoading, refetch, error } = useQuery<
-    SuccessResponse<Record<string, number>>
-  >({
+  const { data, isLoading, refetch, error } = useQuery({
     queryKey: [API_ENDPOINTS.NEWS.COUNT_BY_TYPE],
     queryFn: async () => {
       const res = await rootApiService.post(
         API_ENDPOINTS.NEWS.COUNT_BY_TYPE,
         {},
       );
-      return res.data as SuccessResponse<Record<string, number>>;
+      return res;
     },
   });
 

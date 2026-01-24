@@ -1,9 +1,6 @@
-import "primeicons/primeicons.css";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
 import { InputNumber } from "primereact/inputnumber";
-import "primereact/resources/primereact.min.css";
-import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { useState } from "react";
 
 export default function SearchBar() {

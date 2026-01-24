@@ -31,15 +31,13 @@ export const usePaginationBlog = (params: PaginationDto<BlogFilterDto>) => {
 };
 
 export const useBlogDetail = (id: string | undefined | null) => {
-  const { data, isLoading, refetch, error } = useQuery<
-    SuccessResponse<BlogDto>
-  >({
+  const { data, isLoading, refetch, error } = useQuery({
     queryKey: [API_ENDPOINTS.BLOG.FIND_BY_ID, id],
     queryFn: async () => {
       const res = await apiService.post(API_ENDPOINTS.BLOG.FIND_BY_ID, {
         id,
       });
-      return res.data as SuccessResponse<BlogDto>;
+      return res;
     },
     enabled: !!id,
   });
@@ -53,15 +51,13 @@ export const useBlogDetail = (id: string | undefined | null) => {
 };
 
 export const useBlogBySlug = (slug: string | undefined | null) => {
-  const { data, isLoading, refetch, error } = useQuery<
-    SuccessResponse<BlogDto>
-  >({
+  const { data, isLoading, refetch, error } = useQuery({
     queryKey: [API_ENDPOINTS.BLOG.FIND_BY_SLUG, slug],
     queryFn: async () => {
       const res = await apiService.post(API_ENDPOINTS.BLOG.FIND_BY_SLUG, {
         slug,
       });
-      return res.data as SuccessResponse<BlogDto>;
+      return res;
     },
     enabled: !!slug,
   });
