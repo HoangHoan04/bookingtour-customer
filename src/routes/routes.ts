@@ -2,6 +2,9 @@ export const REQUIRE_AUTH_ROUTES = {};
 
 export const PUBLIC_ROUTES = {
   HOME: "/",
+  TOURS: "/tours",
+  TOUR_DETAIL: "/tours/:slug",
+  BOOKING: "/tours/booking/:slug",
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
   ABOUT: "/about",
