@@ -3,6 +3,7 @@ import BackToTop from "@/components/ui/back-to-top";
 import { useEffect, useState } from "react";
 import AppFooter from "./AppFooter";
 import AppHeader from "./AppHeader";
+import TravelChatbot from "@/components/ui/chatbot";
 
 export default function PublicLayout({
   children,
@@ -49,6 +50,7 @@ export default function PublicLayout({
         }}
       />
       <BackToTop />
+      <TravelChatbot />
     </div>
   );
 }
