@@ -7,6 +7,7 @@ import {
 import BookingSteps from "@/components/ui/booking-step";
 import SendEmailComponent from "@/components/ui/send-email";
 import Title from "@/components/ui/Tilte";
+import type { TourGuide } from "@/dto/tour-guide.dto";
 import { usePaginationTourGuide } from "@/hooks/tour-guide";
 import { useRouter } from "@/routes/hooks";
 import { Paginator } from "primereact/paginator";
@@ -14,293 +15,172 @@ import { Rating } from "primereact/rating";
 import { Skeleton } from "primereact/skeleton";
 import { useState } from "react";
 
+const ITEMS_PER_PAGE = 9;
+
 export default function TourGuideScreen() {
   const router = useRouter();
-  const [first, setFirst] = useState(0);
-  const itemsPerPage = 9;
+  const [page, setPage] = useState(1);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  const onPageChange = (event: any) => {
-    setFirst(event.first);
-  };
-
-  const {
-    data: tourGuides,
-    total,
-    isLoading,
-  } = usePaginationTourGuide({
-    skip: first,
-    take: itemsPerPage,
+  const { data, total, isLoading } = usePaginationTourGuide({
+    skip: (page - 1) * ITEMS_PER_PAGE,
+    take: ITEMS_PER_PAGE,
     where: {},
   });
 
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
-
-  const getAvatarUrl = (tourGuide: any) => {
-    if (tourGuide.avatar && tourGuide.avatar.length > 0) {
-      return tourGuide.avatar[0].fileUrl;
-    }
-    return "https://via.placeholder.com/400x500?text=No+Avatar";
+  const handlePageChange = (e: { first: number; rows: number }) => {
+    setPage(Math.floor(e.first / e.rows) + 1);
   };
 
-  const tourGuideTemplate = (tourGuide: any) => {
-    const isHovered = hoveredCard === tourGuide.id;
-    const avatarUrl = getAvatarUrl(tourGuide);
+  const getAvatar = (guide: TourGuide) =>
+    guide.avatar?.[0]?.fileUrl ||
+    "https://via.placeholder.com/400x500?text=HDV";
+
+  const renderGuideCard = (guide: TourGuide) => {
+    const isHovered = hoveredId === guide.id;
+    const avatar = getAvatar(guide);
 
     return (
       <div
-        className="p-0 cursor-pointer m-0"
-        onMouseEnter={() => setHoveredCard(tourGuide.id)}
-        onMouseLeave={() => setHoveredCard(null)}
+        key={guide.id}
+        className="group cursor-pointer"
+        onMouseEnter={() => setHoveredId(guide.id)}
+        onMouseLeave={() => setHoveredId(null)}
+        onClick={() => router.push(`/tour-guide/${guide.slug || guide.id}`)}
       >
         <div
-          className="overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500"
-          style={{
-            borderRadius: "24px",
-            transform: isHovered ? "translateY(-8px)" : "translateY(0)",
-          }}
-          onClick={() =>
-            router.push(`/tour-guide/${tourGuide.slug || tourGuide.id}`)
-          }
+          className={`
+            rounded-3xl overflow-hidden shadow-lg transition-all duration-500
+            ${isHovered ? "shadow-2xl -translate-y-3" : "shadow-lg"}
+          `}
         >
-          <div className="relative overflow-hidden">
+          {/* Image + Overlay */}
+          <div className="relative h-96 overflow-hidden">
             <img
-              src={avatarUrl}
-              alt={tourGuide.name}
-              className="w-full h-80 object-cover transition-transform duration-700"
-              style={{
-                transform: isHovered ? "scale(1.15)" : "scale(1)",
-                filter: isHovered ? "brightness(0.85)" : "brightness(1)",
-              }}
+              src={avatar}
+              alt={guide.name}
+              className={`
+                w-full h-full object-cover transition-transform duration-700
+                ${isHovered ? "scale-110 brightness-90" : "scale-100"}
+              `}
             />
-
-            {/* Gradient Overlay */}
             <div
-              className="absolute inset-0 transition-opacity duration-500"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(15, 118, 110, 0.9) 0%, rgba(0, 0, 0, 0.3) 40%, transparent 70%)",
-                opacity: isHovered ? 1 : 0.75,
-              }}
+              className="absolute inset-0 bg-linear-to-t from-teal-900/80 via-transparent to-transparent transition-opacity duration-500"
+              style={{ opacity: isHovered ? 0.95 : 0.75 }}
             />
 
-            {/* Name Section */}
-            <div className="absolute bottom-0 left-0 right-0 px-6 py-4">
-              <div className="flex items-center gap-3 mb-2">
-                <div
-                  className="w-12 h-12 rounded-full backdrop-blur-md flex items-center justify-center transition-all duration-300 "
-                  style={{
-                    transform: isHovered
-                      ? "scale(1.1) rotate(360deg)"
-                      : "scale(1) rotate(0deg)",
-                  }}
-                >
-                  <i className="pi pi-user text-xl"></i>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-white drop-shadow-lg">
-                    {tourGuide.name}
-                  </h3>
-                  {tourGuide.code && (
-                    <p className="text-sm font-medium text-white/90">
-                      ID: {tourGuide.code}
-                    </p>
-                  )}
-                </div>
-              </div>
+            {/* Name & Availability */}
+            <div className="absolute bottom-0 left-0 right-0 p-6">
+              <h3 className="text-2xl font-bold text-white drop-shadow-lg">
+                {guide.name}
+              </h3>
+              {guide.code && (
+                <p className="text-white/80 text-sm mt-1">ID: {guide.code}</p>
+              )}
             </div>
 
-            {/* Availability Badge */}
-            {tourGuide.isAvailable && (
-              <div className="absolute top-4 left-4">
-                <div className="px-3 py-1 bg-green-500 text-white rounded-full text-xs font-semibold shadow-lg backdrop-blur-md flex items-center gap-1">
-                  <i className="pi pi-check-circle"></i>
-                  <span>Sẵn sàng</span>
-                </div>
+            {guide.isAvailable ? (
+              <div className="absolute top-5 left-5">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-600/90 text-white text-xs font-semibold rounded-full backdrop-blur-sm shadow-md">
+                  <i className="pi pi-check-circle" />
+                  Sẵn sàng
+                </span>
               </div>
-            )}
-            {!tourGuide.isAvailable && (
-              <div className="absolute top-4 left-4">
-                <div className="px-3 py-1 bg-orange-500 text-white rounded-full text-xs font-semibold shadow-lg backdrop-blur-md flex items-center gap-1">
-                  <i className="pi pi-times-circle"></i>
-                  <span>Đang bận</span>
-                </div>
+            ) : (
+              <div className="absolute top-5 left-5">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-600/90 text-white text-xs font-semibold rounded-full backdrop-blur-sm shadow-md">
+                  <i className="pi pi-times-circle" />
+                  Đang bận
+                </span>
               </div>
             )}
           </div>
 
-          {/* Info Section */}
-          <div className="p-3 bg-white dark:bg-gray-800">
-            {/* Short Bio or Description */}
-            {(tourGuide.shortBio || tourGuide.description) && (
-              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2 leading-relaxed">
-                {tourGuide.shortBio || tourGuide.description}
+          {/* Info */}
+          <div className="p-6 bg-white dark:bg-gray-800">
+            {/* Bio */}
+            {(guide.shortBio || guide.description) && (
+              <p className="text-gray-600 dark:text-gray-300 text-sm mb-5 line-clamp-3">
+                {guide.shortBio || guide.description}
               </p>
             )}
 
-            {/* Stats Section */}
-            <div className="grid grid-cols-1 gap-3 mb-4">
-              {/* Experience */}
-              {tourGuide.yearsOfExperience && (
-                <div className="text-center p-2 rounded-xl">
-                  <i className="pi pi-briefcase text-blue-600 dark:text-blue-400 text-lg mb-1"></i>
-                  <p className="text-xs">Kinh nghiệm</p>
-                  <p className="text-sm font-bold text-gray-900 dark:text-white">
-                    {tourGuide.yearsOfExperience} năm
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-4 mb-6 text-center">
+              {guide.yearsOfExperience && (
+                <div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Kinh nghiệm
+                  </p>
+                  <p className="font-bold text-lg">
+                    {guide.yearsOfExperience} năm
                   </p>
                 </div>
               )}
 
-              {/* Rating */}
-              <div className="text-center p-2 rounded-xl">
-                <div className="flex justify-center items-center mb-1">
-                  <p className="text-xs mr-3">Đánh giá: </p>
+              <div>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Đánh giá
+                </p>
+                <div className="flex items-center justify-center gap-2">
                   <Rating
-                    value={Number(tourGuide.averageRating)}
+                    value={guide.averageRating || 0}
                     readOnly
                     cancel={false}
-                    className="text-sm"
-                    pt={{
-                      onIcon: { className: " text-xs" },
-                      offIcon: { className: " text-xs" },
-                    }}
+                    pt={{ onIcon: { className: "text-sm" } }}
                   />
-                </div>
-                <p className="text-sm font-bold text-gray-900 dark:text-white">
-                  {tourGuide.totalReviews > 0 && (
-                    <span className="text-xs font-normal ml-1">
-                      ({tourGuide.totalReviews})
+                  {guide.totalReviews ? (
+                    <span className="text-xs text-gray-500">
+                      ({guide.totalReviews})
                     </span>
-                  )}
-                </p>
+                  ) : null}
+                </div>
               </div>
 
-              {/* Tours Completed */}
-              <div className="text-center p-2 rounded-xl">
-                <p className="text-sm font-bold flex text-gray-900 dark:text-white">
-                  <p className="text-xs ">Tour hoàn thành:</p>
-                  {tourGuide.totalToursCompleted}
+              <div>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Tour hoàn thành
+                </p>
+                <p className="font-bold text-lg">
+                  {guide.totalToursCompleted || 0}
                 </p>
               </div>
             </div>
 
-            {/* Languages */}
-            {tourGuide.languages && tourGuide.languages.length > 0 && (
+            {/* Languages & Specialties (nếu có) */}
+            {guide.languages?.length ? (
               <div className="mb-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <i className="pi pi-globe text-purple-600 dark:text-purple-400"></i>
-                  <span className="text-sm font-semibold ">Ngôn ngữ:</span>
-                </div>
-                <div className="flex flex-wrap gap-1">
-                  {tourGuide.languages.map((lang: string, idx: number) => (
+                <p className="text-sm font-semibold mb-2">Ngôn ngữ:</p>
+                <div className="flex flex-wrap gap-2">
+                  {guide.languages.map((lang) => (
                     <span
-                      key={idx}
-                      className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-lg text-xs font-medium"
+                      key={lang}
+                      className="px-3 py-1 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 rounded-full text-xs"
                     >
                       {lang}
                     </span>
                   ))}
                 </div>
               </div>
-            )}
+            ) : null}
 
-            {/* Specialties */}
-            {tourGuide.specialties && tourGuide.specialties.length > 0 && (
-              <div className="mb-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <i className="pi pi-star text-orange-600 dark:text-orange-400"></i>
-                  <span className="text-sm font-semibold ">Chuyên môn:</span>
-                </div>
-                <div className="flex flex-wrap gap-1">
-                  {tourGuide.specialties
-                    .slice(0, 3)
-                    .map((specialty: string, idx: number) => (
-                      <span
-                        key={idx}
-                        className="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-lg text-xs font-medium"
-                      >
-                        {specialty}
-                      </span>
-                    ))}
-                </div>
-              </div>
-            )}
-
-            {/* Contact Info */}
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-              <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300 mb-2">
-                <i className="pi pi-phone text-teal-600 dark:text-teal-400"></i>
-                <span className="text-sm">{tourGuide.phone}</span>
-              </div>
-              {tourGuide.email && (
-                <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300 mb-4">
-                  <i className="pi pi-envelope text-teal-600 dark:text-teal-400"></i>
-                  <span className="text-sm">{tourGuide.email}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Social Media Links */}
-            <div className="flex items-center justify-center pt-4 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex items-center gap-6">
+            {/* Social */}
+            <div className="flex justify-center gap-6 pt-4 border-t dark:border-gray-700">
+              {[
+                { icon: FacebookIcon, name: "Facebook" },
+                { icon: YoutubeIcon, name: "YouTube" },
+                { icon: ZaloIcon, name: "Zalo" },
+                { icon: TiktokIcon, name: "TikTok" },
+              ].map((item) => (
                 <a
+                  key={item.name}
                   href="#"
                   onClick={(e) => e.stopPropagation()}
-                  className="transition-transform hover:scale-110 active:scale-95 opacity-80 hover:opacity-100"
+                  className="transition hover:scale-110"
                 >
-                  <img
-                    src={FacebookIcon}
-                    alt="Facebook"
-                    className="w-7 h-7 object-contain"
-                  />
+                  <img src={item.icon} alt={item.name} className="w-8 h-8" />
                 </a>
-                <a
-                  href="#"
-                  onClick={(e) => e.stopPropagation()}
-                  className="transition-transform hover:scale-110 active:scale-95 opacity-80 hover:opacity-100"
-                >
-                  <img
-                    src={YoutubeIcon}
-                    alt="Youtube"
-                    className="w-10 h-7 object-contain"
-                  />
-                </a>
-                <a
-                  href="#"
-                  onClick={(e) => e.stopPropagation()}
-                  className="transition-transform hover:scale-110 active:scale-95 opacity-80 hover:opacity-100"
-                >
-                  <img
-                    src={ZaloIcon}
-                    alt="Zalo"
-                    className="w-10 h-7 object-contain"
-                  />
-                </a>
-                <a
-                  href="#"
-                  onClick={(e) => e.stopPropagation()}
-                  className="transition-transform hover:scale-110 active:scale-95 opacity-80 hover:opacity-100"
-                >
-                  <img
-                    src={TiktokIcon}
-                    alt="Tiktok"
-                    className="w-10 h-7 object-contain"
-                  />
-                </a>
-              </div>
-            </div>
-
-            {/* View Details Button */}
-            <div
-              className="mt-4 text-center transition-all duration-300"
-              style={{
-                opacity: isHovered ? 1 : 0,
-                transform: isHovered ? "translateY(0)" : "translateY(10px)",
-              }}
-            >
-              <div className="inline-flex items-center gap-2 text-teal-600 dark:text-teal-400 font-semibold text-sm">
-                <span>Xem chi tiết</span>
-                <i className="pi pi-arrow-right"></i>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -308,68 +188,59 @@ export default function TourGuideScreen() {
     );
   };
 
-  const skeletonTemplate = () => (
-    <div className="p-0">
-      <div
-        className="overflow-hidden shadow-lg bg-white dark:bg-gray-800"
-        style={{ borderRadius: "24px" }}
-      >
-        <Skeleton height="20rem" />
-        <div className="p-6">
-          <Skeleton className="mb-3" />
-          <Skeleton width="70%" className="mb-4" />
-          <div className="grid grid-cols-3 gap-3">
-            <Skeleton height="4rem" />
-            <Skeleton height="4rem" />
-            <Skeleton height="4rem" />
-          </div>
+  const renderSkeleton = () => (
+    <div className="rounded-3xl overflow-hidden shadow-lg dark:bg-gray-800">
+      <Skeleton height="24rem" />
+      <div className="p-6">
+        <Skeleton height="2rem" className="mb-3" />
+        <Skeleton height="1rem" width="70%" className="mb-6" />
+        <div className="grid grid-cols-3 gap-4">
+          <Skeleton height="5rem" />
+          <Skeleton height="5rem" />
+          <Skeleton height="5rem" />
         </div>
       </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header Section */}
-      <section className="max-w-7xl mx-auto px-4 py-16">
-        <div className="text-center mb-8">
-          <Title>Kết nối với hướng dẫn viên</Title>
-          <p className="text-xl text-slate-500 dark:text-slate-400 mx-auto font-light leading-relaxed max-w-3xl">
-            Tìm kiếm và kết nối với những hướng dẫn viên du lịch chuyên nghiệp
-            để có những trải nghiệm tuyệt vời nhất trong chuyến đi của bạn.
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div className="text-center mb-12">
+          <Title>Hướng Dẫn Viên Du Lịch</Title>
+          <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            Kết nối với những hướng dẫn viên chuyên nghiệp, giàu kinh nghiệm để
+            có hành trình khám phá Việt Nam đáng nhớ.
           </p>
         </div>
 
-        {/* Tour Guides Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, index) => (
-              <div key={index}>{skeletonTemplate()}</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i}>{renderSkeleton()}</div>
             ))}
           </div>
-        ) : tourGuides.length === 0 ? (
-          <div className="text-center py-16">
-            <i className="pi pi-users text-6xl text-gray-300 dark:text-gray-600 mb-4"></i>
-            <p className="text-xl text-gray-500 dark:text-gray-400">
-              Chưa có hướng dẫn viên nào
+        ) : data.length === 0 ? (
+          <div className="text-center py-20">
+            <i className="pi pi-users text-7xl text-gray-300 dark:text-gray-600 mb-6" />
+            <p className="text-2xl text-gray-500 dark:text-gray-400">
+              Hiện chưa có hướng dẫn viên nào
             </p>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {tourGuides.map((tourGuide: any) => (
-                <div key={tourGuide.id}>{tourGuideTemplate(tourGuide)}</div>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {data.map(renderGuideCard)}
             </div>
 
-            {/* Pagination */}
-            <div className="mt-8">
+            <div className="mt-12 flex justify-center">
               <Paginator
-                first={first}
-                rows={itemsPerPage}
+                first={(page - 1) * ITEMS_PER_PAGE}
+                rows={ITEMS_PER_PAGE}
                 totalRecords={total}
-                onPageChange={onPageChange}
-                className="custom-grid-paginator"
+                onPageChange={handlePageChange}
+                template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+                className="custom-paginator"
               />
             </div>
           </>
@@ -378,29 +249,7 @@ export default function TourGuideScreen() {
 
       <BookingSteps />
 
-      {/* Wave Separator */}
-      <svg
-        className="w-full h-24"
-        viewBox="0 0 1440 120"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        preserveAspectRatio="none"
-      >
-        <path
-          d="M0 0C240 40 480 80 720 80C960 80 1200 40 1440 0V120H0V0Z"
-          fill="#FFA500"
-        />
-      </svg>
-
-      {/* Newsletter Subscription */}
-      <SendEmailComponent
-        onSuccess={(email) => {
-          console.log("User subscribed with email:", email);
-        }}
-        onError={(error) => {
-          console.error("Subscription failed:", error);
-        }}
-      />
+      <SendEmailComponent />
     </div>
   );
 }

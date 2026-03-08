@@ -16,7 +16,7 @@ import { InputText } from "primereact/inputtext";
 import { Menu } from "primereact/menu";
 import type { MenuItem } from "primereact/menuitem";
 import { Sidebar } from "primereact/sidebar";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type AppHeaderProps = {
@@ -84,175 +84,199 @@ export default function AppHeader({
     }
   }, [searchSidebarVisible]);
 
-  const policyText =
-    " Huỷ miễn phí trước 72 giờ |  Đổi lịch tour 1 lần |  Ưu đãi 10% cho đoàn từ 10 người |  Bảo hiểm du lịch miễn phí";
+  const policyText = useMemo(
+    () =>
+      " Huỷ miễn phí trước 72 giờ |  Đổi lịch tour 1 lần |  Ưu đãi 10% cho đoàn từ 10 người |  Bảo hiểm du lịch miễn phí",
+    [],
+  );
 
-  const trendingSearchItems = [
-    {
-      name: "Tour Hạ Long 3N2Đ",
-      image: "https://via.placeholder.com/60x60/FF8C42/FFFFFF?text=🏖️",
-    },
-    {
-      name: "Du lịch Đà Nẵng",
-      image: "https://via.placeholder.com/60x60/4A90E2/FFFFFF?text=🏝️",
-    },
-    {
-      name: "Tour Phú Quốc",
-      image: "https://via.placeholder.com/60x60/E94B3C/FFFFFF?text=🌴",
-    },
-    {
-      name: "Du lịch Sapa",
-      image: "https://via.placeholder.com/60x60/C5E1A5/FFFFFF?text=⛰️",
-    },
-    {
-      name: "Tour Nha Trang",
-      image: "https://via.placeholder.com/60x60/F5F5F5/000000?text=🏖️",
-    },
-    {
-      name: "Du lịch Hội An",
-      image: "https://via.placeholder.com/60x60/424242/FFFFFF?text=🏮",
-    },
-    {
-      name: "Tour Mũi Né",
-      image: "https://via.placeholder.com/60x60/1E1E1E/FFFFFF?text=🏖️",
-    },
-    {
-      name: "Du lịch Đà Lạt",
-      image: "https://via.placeholder.com/60x60/2C2C2C/FFFFFF?text=🌸",
-    },
-  ];
-
-  const menuItems: MenuItemType[] = [
-    {
-      label: "Dịch vụ",
-      path: "/services",
-      children: [
-        { label: "Khám phá dịch vụ", path: "/services" },
-        { label: "Hướng dẫn viên", path: "/tour-guide" },
-      ],
-    },
-    {
-      label: "Điểm đến",
-      path: "/destinations",
-    },
-    {
-      label: "Tours",
-      path: "/tours",
-      children: [
-        { label: "Trong nước", path: "/tours/domestic" },
-        { label: "Nước ngoài", path: "/tours/international" },
-      ],
-    },
-    {
-      label: "Bài viết",
-      path: "/blogs",
-    },
-    {
-      label: "Liên hệ",
-      path: "/contact",
-      children: [
-        { label: "Liên hệ ngay", path: "/contact" },
-        { label: "FAQ", path: "/faq" },
-      ],
-    },
-    {
-      label: "Về chúng tôi",
-      path: "/about",
-    },
-  ];
-
-  const userMenuItemsLoggedIn: MenuItem[] = [
-    {
-      label: displayName,
-      icon: "pi pi-fw pi-id-card",
-      className: "font-bold text-primary",
-      command: () => {},
-    },
-    { separator: true },
-    {
-      label: "Đơn hàng của tôi",
-      icon: "pi pi-fw pi-shopping-bag",
-      command: () => navigate("/my-orders"),
-    },
-    {
-      label: "Thông tin tài khoản",
-      icon: "pi pi-fw pi-user-edit",
-      command: () => navigate("/profile"),
-    },
-    {
-      label: "Đổi mật khẩu",
-      icon: "pi pi-fw pi-key",
-      command: () => navigate("/change-password"),
-    },
-    {
-      separator: true,
-    },
-    {
-      label: "Đăng xuất",
-      icon: "pi pi-fw pi-sign-out",
-      command: () => {
-        tokenCache.clear();
-        setIsLoggedIn(false);
-        setCurrentUser(null);
-        window.location.reload();
+  const trendingSearchItems = useMemo(
+    () => [
+      {
+        name: "Tour Hạ Long 3N2Đ",
+        image: "https://via.placeholder.com/60x60/FF8C42/FFFFFF?text=🏖️",
       },
-    },
-  ];
+      {
+        name: "Du lịch Đà Nẵng",
+        image: "https://via.placeholder.com/60x60/4A90E2/FFFFFF?text=🏝️",
+      },
+      {
+        name: "Tour Phú Quốc",
+        image: "https://via.placeholder.com/60x60/E94B3C/FFFFFF?text=🌴",
+      },
+      {
+        name: "Du lịch Sapa",
+        image: "https://via.placeholder.com/60x60/C5E1A5/FFFFFF?text=⛰️",
+      },
+      {
+        name: "Tour Nha Trang",
+        image: "https://via.placeholder.com/60x60/F5F5F5/000000?text=🏖️",
+      },
+      {
+        name: "Du lịch Hội An",
+        image: "https://via.placeholder.com/60x60/424242/FFFFFF?text=🏮",
+      },
+      {
+        name: "Tour Mũi Né",
+        image: "https://via.placeholder.com/60x60/1E1E1E/FFFFFF?text=🏖️",
+      },
+      {
+        name: "Du lịch Đà Lạt",
+        image: "https://via.placeholder.com/60x60/2C2C2C/FFFFFF?text=🌸",
+      },
+    ],
+    [],
+  );
 
-  const userMenuItemsGuest: MenuItem[] = [
-    {
-      label: "Đăng nhập",
-      icon: "pi pi-fw pi-sign-in",
-      command: () => setLoginVisible(true),
-    },
-    {
-      label: "Đăng ký",
-      icon: "pi pi-fw pi-user-plus",
-      command: () => setRegisterVisible(true),
-    },
-  ];
+  const menuItems: MenuItemType[] = useMemo(
+    () => [
+      {
+        label: "Dịch vụ",
+        path: "/services",
+        children: [
+          { label: "Khám phá dịch vụ", path: "/services" },
+          { label: "Hướng dẫn viên", path: "/tour-guide" },
+        ],
+      },
+      {
+        label: "Điểm đến",
+        path: "/destinations",
+      },
+      {
+        label: "Tours",
+        path: "/tours",
+        children: [
+          { label: "Trong nước", path: "/tours/domestic" },
+          { label: "Nước ngoài", path: "/tours/international" },
+        ],
+      },
+      {
+        label: "Bài viết",
+        path: "/blogs",
+      },
+      {
+        label: "Liên hệ",
+        path: "/contact",
+        children: [
+          { label: "Liên hệ ngay", path: "/contact" },
+          { label: "FAQ", path: "/faq" },
+        ],
+      },
+      {
+        label: "Về chúng tôi",
+        path: "/about",
+      },
+    ],
+    [],
+  );
 
-  const handleSearch = () => {
+  const userMenuItemsLoggedIn: MenuItem[] = useMemo(
+    () => [
+      {
+        label: displayName,
+        icon: "pi pi-fw pi-id-card",
+        className: "font-bold text-primary",
+        command: () => {},
+      },
+      { separator: true },
+      {
+        label: "Đơn hàng của tôi",
+        icon: "pi pi-fw pi-shopping-bag",
+        command: () => navigate("/my-orders"),
+      },
+      {
+        label: "Thông tin tài khoản",
+        icon: "pi pi-fw pi-user-edit",
+        command: () => navigate("/profile"),
+      },
+      {
+        label: "Đổi mật khẩu",
+        icon: "pi pi-fw pi-key",
+        command: () => navigate("/change-password"),
+      },
+      {
+        separator: true,
+      },
+      {
+        label: "Đăng xuất",
+        icon: "pi pi-fw pi-sign-out",
+        command: () => {
+          tokenCache.clear();
+          setIsLoggedIn(false);
+          setCurrentUser(null);
+          window.location.reload();
+        },
+      },
+    ],
+    [displayName, navigate],
+  );
+
+  const userMenuItemsGuest: MenuItem[] = useMemo(
+    () => [
+      {
+        label: "Đăng nhập",
+        icon: "pi pi-fw pi-sign-in",
+        command: () => setLoginVisible(true),
+      },
+      {
+        label: "Đăng ký",
+        icon: "pi pi-fw pi-user-plus",
+        command: () => setRegisterVisible(true),
+      },
+    ],
+    [],
+  );
+
+  const handleSearch = useCallback(() => {
     if (searchQuery.trim()) {
       console.log("Tìm kiếm:", searchQuery);
       setSearchSidebarVisible(false);
       navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
-  };
+  }, [searchQuery, navigate]);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        handleSearch();
+      }
+      if (e.key === "Escape") {
+        setSearchSidebarVisible(false);
+      }
+    },
+    [handleSearch],
+  );
+
+  const handleTrendingClick = useCallback(
+    (itemName: string) => {
+      setSearchQuery(itemName);
+      console.log("Tìm kiếm xu hướng:", itemName);
       handleSearch();
-    }
-    if (e.key === "Escape") {
-      setSearchSidebarVisible(false);
-    }
-  };
+    },
+    [handleSearch],
+  );
 
-  const handleTrendingClick = (itemName: string) => {
-    setSearchQuery(itemName);
-    console.log("Tìm kiếm xu hướng:", itemName);
-    handleSearch();
-  };
+  const handleMenuClick = useCallback(
+    (path: string) => {
+      setActiveMenu(path);
+      navigate(path);
+      setHoveredMenu(null);
+    },
+    [navigate],
+  );
 
-  const handleMenuClick = (path: string) => {
-    setActiveMenu(path);
-    navigate(path);
-    setHoveredMenu(null);
-  };
-
-  const handleMenuMouseEnter = (itemPath: string) => {
+  const handleMenuMouseEnter = useCallback((itemPath: string) => {
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current);
     }
     setHoveredMenu(itemPath);
-  };
+  }, []);
 
-  const handleMenuMouseLeave = () => {
+  const handleMenuMouseLeave = useCallback(() => {
     hoverTimeoutRef.current = setTimeout(() => {
       setHoveredMenu(null);
     }, 200);
-  };
+  }, []);
 
   return (
     <>

@@ -61,8 +61,10 @@ export default function AppFooter() {
               </span>
             </div>
             <p className="text-sm text-teal-100 leading-relaxed">
-              Travlla is a multi-award-winning strategy and content creation
-              agency that specializes in travel marketing.
+              HimLamTourist - Hành trình của bạn, đam mê của chúng tôi. Khám phá
+              thế giới cùng chúng tôi! Mang đến những trải nghiệm du lịch tuyệt
+              vời và kỷ niệm đáng nhớ. Hãy để chúng tôi biến ước mơ du lịch của
+              bạn thành hiện thực.
             </p>
             <div className="flex space-x-3">
               <button className="w-12 h-12 rounded-full bg-transparent border-2 border-yellow-400 hover:bg-yellow-400 transition-all flex items-center justify-center group">
@@ -82,7 +84,7 @@ export default function AppFooter() {
 
           <div className="md:col-span-2">
             <h3 className="text-lg font-semibold mb-6 flex items-center">
-              Explore
+              Hỗ trợ khách hàng
             </h3>
             <ul className="space-y-3">
               <li>
@@ -90,7 +92,7 @@ export default function AppFooter() {
                   href="#"
                   className="text-teal-100 hover:text-yellow-400 transition-colors text-sm"
                 >
-                  About us
+                  Về chúng tôi
                 </a>
               </li>
               <li>
@@ -106,7 +108,7 @@ export default function AppFooter() {
                   href="#"
                   className="text-teal-100 hover:text-yellow-400 transition-colors text-sm"
                 >
-                  Services
+                  Dịch vụ
                 </a>
               </li>
               <li>
@@ -114,7 +116,7 @@ export default function AppFooter() {
                   href="#"
                   className="text-teal-100 hover:text-yellow-400 transition-colors text-sm"
                 >
-                  Team
+                  Đội ngũ
                 </a>
               </li>
               <li>
@@ -122,14 +124,14 @@ export default function AppFooter() {
                   href="#"
                   className="text-teal-100 hover:text-yellow-400 transition-colors text-sm"
                 >
-                  News & Articles
+                  Tin tức & Bài viết
                 </a>
               </li>
             </ul>
           </div>
 
           <div className="md:col-span-2">
-            <h3 className="text-lg font-semibold mb-6">Destinations</h3>
+            <h3 className="text-lg font-semibold mb-6">Điểm đến</h3>
             <ul className="space-y-3">
               <li>
                 <a
@@ -175,14 +177,14 @@ export default function AppFooter() {
           </div>
 
           <div className="md:col-span-2">
-            <h3 className="text-lg font-semibold mb-6">Legal</h3>
+            <h3 className="text-lg font-semibold mb-6">Pháp lý</h3>
             <ul className="space-y-3">
               <li>
                 <a
                   href="#"
                   className="text-teal-100 hover:text-yellow-400 transition-colors text-sm"
                 >
-                  Terms & Condition
+                  Điều khoản & Điều kiện
                 </a>
               </li>
               <li>
@@ -190,7 +192,7 @@ export default function AppFooter() {
                   href="#"
                   className="text-teal-100 hover:text-yellow-400 transition-colors text-sm"
                 >
-                  Privacy Policy
+                  Chính sách bảo mật
                 </a>
               </li>
               <li>
@@ -198,7 +200,7 @@ export default function AppFooter() {
                   href="#"
                   className="text-teal-100 hover:text-yellow-400 transition-colors text-sm"
                 >
-                  Contact
+                  Liên hệ
                 </a>
               </li>
               <li>
@@ -206,7 +208,7 @@ export default function AppFooter() {
                   href="#"
                   className="text-teal-100 hover:text-yellow-400 transition-colors text-sm"
                 >
-                  Careers
+                  Tuyển dụng
                 </a>
               </li>
               <li>
@@ -214,7 +216,7 @@ export default function AppFooter() {
                   href="#"
                   className="text-teal-100 hover:text-yellow-400 transition-colors text-sm"
                 >
-                  Help
+                  Trợ giúp
                 </a>
               </li>
             </ul>
@@ -226,26 +228,30 @@ export default function AppFooter() {
                 <i className="pi pi-phone text-lg"></i>
               </div>
               <span className="text-yellow-400 font-bold text-xl italic">
-                123 654 0214
+                0123 456 768
               </span>
             </div>
             <div className="flex items-center space-x-3 bg-teal-600/50 rounded-lg p-3">
               <div className="w-10 h-10 rounded-full bg-teal-500/50 flex items-center justify-center shrink-0">
                 <i className="pi pi-envelope text-lg"></i>
               </div>
-              <span className="text-sm">travllainfo@gmail.com</span>
+              <span className="text-sm">himlamtourist@gmail.com</span>
             </div>
             <div className="flex items-start space-x-3 bg-teal-600/50 rounded-lg p-3">
               <div className="w-10 h-10 rounded-full bg-teal-500/50 flex items-center justify-center shrink-0">
                 <i className="pi pi-map-marker text-lg"></i>
               </div>
-              <span className="text-sm">55/11 ronin tower New York</span>
+              <span className="text-sm">
+                123 Đường Lê Lợi, Quận 1, TP. Hồ Chí Minh
+              </span>
             </div>
           </div>
         </div>
 
         <div className="mb-8">
-          <h3 className="text-2xl font-bold mb-6">Follow Instagram</h3>
+          <h3 className="text-2xl font-bold mb-6">
+            Theo dõi chúng tôi trên Instagram
+          </h3>
           <div className="grid grid-cols-5 md:grid-cols-10 gap-3">
             {instagramImages.map((img, index) => (
               <div

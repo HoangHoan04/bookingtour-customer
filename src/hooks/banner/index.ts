@@ -14,7 +14,7 @@ export const useBanners = (type?: string) => {
   return useQuery({
     queryKey: ["banners", type],
     queryFn: () => fetchBanners(type),
-    staleTime: 5 * 60 * 1000, // 5 phút
+    staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 };

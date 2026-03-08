@@ -3,7 +3,6 @@ import Title from "@/components/ui/Tilte";
 import { useGetTravelHints } from "@/hooks/travel-hint";
 import { useRouter } from "@/routes/hooks";
 import { Button } from "primereact/button";
-import { Card } from "primereact/card";
 import { Dropdown } from "primereact/dropdown";
 import { useState } from "react";
 import { PUBLIC_ROUTES } from "../../../../routes/routes";
@@ -49,22 +48,19 @@ export default function HintMonthSection() {
       </div>
 
       {/* Filter Section */}
-      <Card className="mb-6 max-w-7xl mx-auto shadow-sm border-0">
-        <div className="flex  items-center gap-4 w-1/2">
-          <i className="pi pi-filter text-purple-600 text-xl"></i>
-          <Dropdown
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.value)}
-            options={Object.values(enumData.TRAVEL_TYPE).map((type) => ({
-              label: type.name,
-              value: type.value,
-            }))}
-            placeholder="Chọn loại tour"
-            className="w-1/2"
-            showClear
-          />
-        </div>
-      </Card>
+      <div className="mb-6 max-w-7xl mx-auto shadow-sm border-0">
+        <Dropdown
+          value={selectedType}
+          onChange={(e) => setSelectedType(e.value)}
+          options={Object.values(enumData.TRAVEL_TYPE).map((type) => ({
+            label: type.name,
+            value: type.value,
+          }))}
+          placeholder="Chọn loại tour"
+          className="w-1/2"
+          showClear
+        />
+      </div>
 
       {isLoading ? (
         <div className="text-center py-16">
