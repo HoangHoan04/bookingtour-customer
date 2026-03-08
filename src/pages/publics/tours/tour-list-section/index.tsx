@@ -31,6 +31,7 @@ const mockToursData = [
     category: "Du lịch khám phá",
     tags: ["Sapa", "Fansipan", "Tây Bắc", "Trekking"],
     status: "ACTIVE",
+    flag: "BEST SELLER",
     __tourDetails__: [
       {
         id: "b3232e74-5ea0-47a9-8583-25d4c4e25147",
@@ -77,6 +78,7 @@ const mockToursData = [
     category: "Du lịch khám phá",
     tags: ["Sapa", "Fansipan", "Tây Bắc", "Trekking"],
     status: "ACTIVE",
+    flag: "BEST SELLER",
     __tourDetails__: [
       {
         id: "b3232e74-5ea0-47a9-8583-25d4c4e25147",
@@ -123,6 +125,7 @@ const mockToursData = [
     category: "Du lịch khám phá",
     tags: ["Sapa", "Fansipan", "Tây Bắc", "Trekking"],
     status: "ACTIVE",
+    flag: "BEST SELLER",
     __tourDetails__: [
       {
         id: "b3232e74-5ea0-47a9-8583-25d4c4e25147",
@@ -169,6 +172,7 @@ const mockToursData = [
     category: "Du lịch khám phá",
     tags: ["Sapa", "Fansipan", "Tây Bắc", "Trekking"],
     status: "ACTIVE",
+    flag: "BEST SELLER",
     __tourDetails__: [
       {
         id: "b3232e74-5ea0-47a9-8583-25d4c4e25147",
@@ -215,6 +219,7 @@ const mockToursData = [
     category: "Du lịch khám phá",
     tags: ["Sapa", "Fansipan", "Tây Bắc", "Trekking"],
     status: "ACTIVE",
+    flag: "BEST SELLER",
     __tourDetails__: [
       {
         id: "b3232e74-5ea0-47a9-8583-25d4c4e25147",
