@@ -72,14 +72,14 @@ export default function DestinationDetailScreen() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative h-96 lg:h-[32rem] overflow-hidden">
+      <div className="relative h-96 lg:h-128 overflow-hidden">
         <Image
           src={imageUrl}
           alt={destination.name}
           className="w-full h-full"
           imageClassName="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
 
         {/* Hero Content */}
         <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
@@ -370,7 +370,7 @@ export default function DestinationDetailScreen() {
       </div>
 
       {/* Bottom CTA */}
-      <div className="bg-gradient-to-r from-teal-600 to-teal-700 py-16 mt-16">
+      <div className="bg-linear-to-r from-teal-600 to-teal-700 py-16 mt-16">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-white">
             <div className="text-center md:text-left">

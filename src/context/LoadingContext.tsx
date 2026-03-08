@@ -1,4 +1,4 @@
-import GlobalLoading from "@/components/ui/Loading";
+import GlobalLoading from "@/components/ui/loading";
 import {
   createContext,
   type ReactNode,

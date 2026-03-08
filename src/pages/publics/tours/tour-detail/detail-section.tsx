@@ -1,22 +1,22 @@
 import { formatDate } from "@/common/helpers/format";
 import ShineButton from "@/components/ui/botton/ShineButton";
 import type { TourDto } from "@/dto/tour.dto";
-import { ScrollPanel } from "primereact/scrollpanel";
 import { Carousel } from "primereact/carousel";
-import { Timeline } from "primereact/timeline";
 import { Galleria } from "primereact/galleria";
+import { ScrollPanel } from "primereact/scrollpanel";
+import { Timeline } from "primereact/timeline";
 import {
+  IncludeItem,
   InfoItem,
+  customizedContent,
+  customizedMarker,
   imageTemplate,
   itemTemplate,
   thumbnailTemplate,
-  IncludeItem,
-  customizedMarker,
-  customizedContent,
 } from "./custom";
 
-import { Rating } from "primereact/rating";
 import { Divider } from "primereact/divider";
+import { Rating } from "primereact/rating";
 
 import { useNavigate } from "react-router-dom";
 
@@ -147,11 +147,13 @@ const TourDetailSection = ({ tour }: { tour: TourDto }) => {
           <div className="flex justify-between w-full">
             <div className="flex gap-6">
               <InfoItem label="Địa điểm" value={tour.location} />
-              <InfoItem label="Loại hoạt động" value={tour?.category!} />
+              <InfoItem label="Loại hoạt động" value={tour?.category ?? ""} />
               <InfoItem label="Ngày" value={formatDate(tourDetail?.startDay)} />
               <InfoItem
                 label="Người đi"
-                value={`${tourDetail?.capacity} người`}
+                value={
+                  tourDetail?.capacity ? `${tourDetail.capacity} người` : ""
+                }
               />
               <InfoItem label="Giá" value="" sub="$250 / Ngày" />
             </div>
