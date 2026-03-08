@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import Lottie from "lottie-react";
 import RobotWelcome from "@/assets/animations/RobotWelcome.json";
+import axios from "axios";
 
 const TravelChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
     {
@@ -20,56 +22,69 @@ const TravelChatbot = () => {
     }
   }, [messages, isOpen]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
     const newMsg = { role: "user", content: input };
     setMessages([...messages, newMsg]);
     setInput("");
 
-    setTimeout(() => {
+    try {
+      setIsWaiting(true);
+      const AiResponse = await axios.post(
+        `${import.meta.env.VITE_PYTHON_AI_URL}/chat`,
+        {
+          question: input,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": "SECRET_KEY_BETWEEN_NODE_AND_PYTHON",
+          },
+        },
+      );
       setMessages((prev) => [
         ...prev,
-        {
-          role: "bot",
-          content:
-            'Tôi đang tìm kiếm các tour có điểm nhấn "' +
-            input +
-            '" cho bạn đây...',
-        },
+        { role: "bot", content: AiResponse.data.answer },
       ]);
-    }, 1000);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setIsWaiting(false);
+    }
   };
 
   return (
-    <div className="fixed bottom-6 right-30 z-50 font-sans">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 ${
-          isOpen
-            ? "bg-red-500 rotate-90"
-            : "bg-teal-800/90 backdrop-blur-sm hover:bg-teal-700 scale-110"
-        } text-white`}
-      >
-        {isOpen ? (
-          <i className="pi pi-times"></i>
-        ) : (
-          <Lottie
-            animationData={RobotWelcome}
-            style={{
-              width: 150,
-              height: 150,
-              position: "absolute",
-              top: -70,
-              right: -43,
-              zIndex: -1,
-            }}
-            loop={true}
-          />
-        )}
-      </button>
+    <div className="fixed bottom-20 right-7 z-50 font-sans">
+      {!isOpen && (
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className={`w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 ${
+            isOpen
+              ? ""
+              : "bg-teal-800/90 backdrop-blur-sm hover:bg-teal-700 scale-110"
+          } text-white`}
+        >
+          {isOpen ? (
+            <i className="pi pi-times"></i>
+          ) : (
+            <Lottie
+              animationData={RobotWelcome}
+              style={{
+                width: 150,
+                height: 150,
+                position: "absolute",
+                top: -70,
+                right: -43,
+                zIndex: -1,
+              }}
+              loop={true}
+            />
+          )}
+        </button>
+      )}
 
       {isOpen && (
-        <div className="absolute bottom-20 right-0 w-[350px] sm:w-[400px] h-[500px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-100 animate-in slide-in-from-bottom-5 duration-300">
+        <div className="absolute bottom-0 right-10 w-[350px] sm:w-[400px] h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-100 animate-in slide-in-from-bottom-5 duration-300">
           <div className="bg-gradient-to-r from-teal-800/90 to-teal-600/90 p-4 text-white">
             <div className="flex items-center gap-3">
               <div className="relative">
@@ -95,6 +110,14 @@ const TravelChatbot = () => {
                 <p className="text-[10px] text-blue-100 opacity-90">
                   Sẵn sàng hỗ trợ 24/7
                 </p>
+              </div>
+              <div className="ml-auto">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-white hover:text-gray-400 transition-colors hover:cursor-pointer"
+                >
+                  <i className="pi pi-times" style={{ fontSize: "1.2rem" }}></i>
+                </button>
               </div>
             </div>
           </div>
