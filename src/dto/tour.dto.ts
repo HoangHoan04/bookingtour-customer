@@ -16,6 +16,7 @@ export interface TourDto {
   bookingCount: number;
   category?: string;
   tags?: string[];
+  flag: string;
   status: string;
   tourDetails?: any[];
   reviews?: any[];
@@ -27,8 +28,8 @@ export interface TourDetail {
   tourId?: string;
   tour?: TourDto;
   code: string;
-  startDay: Date;
-  endDay: Date;
+  startDay: string;
+  endDay: string;
   startLocation: string;
   capacity: number;
   remainingSeats: number;

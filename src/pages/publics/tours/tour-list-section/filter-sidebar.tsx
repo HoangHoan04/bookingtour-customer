@@ -86,13 +86,21 @@ const SearchSidebar = () => {
   const [duration, setDuration] = useState<number>(1);
   const [selectDate, setSelectDate] = useState<Date | null>(null);
 
-  const [selectedCity, setSelectedCity] = useState(null);
-  const cities = [
-    { name: "New York", code: "NY" },
-    { name: "Rome", code: "RM" },
-    { name: "London", code: "LDN" },
-    { name: "Istanbul", code: "IST" },
-    { name: "Paris", code: "PRS" },
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedActivityType, setSelectedActivityType] = useState(null);
+  const locations = [
+    { name: "Đà Lạt", code: "DL" },
+    { name: "Đà Nẵng", code: "DN" },
+    { name: "Sapa", code: "SP" },
+    { name: "Hà Nội", code: "HN" },
+    { name: "Huế", code: "HUE" },
+  ];
+
+  const activityTypes = [
+    { name: "Du lịch trải nghiệm", code: "TN" },
+    { name: "Mạo hiểm", code: "MH" },
+    { name: "Sa mạc", code: "SM" },
+    { name: "Văn hóa", code: "VH" },
   ];
 
   return (
@@ -101,12 +109,12 @@ const SearchSidebar = () => {
         <div className="cursor-pointer">
           <InputGroup label="Location" value="New Zealand">
             <Dropdown
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.value)}
-              options={cities}
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.value)}
+              options={locations}
               optionLabel="name"
-              placeholder="Select a City"
-              className="w-full md:w-14rem"
+              placeholder="Chọn Địa Điểm"
+              className="w-full"
             />
           </InputGroup>
         </div>
@@ -114,12 +122,12 @@ const SearchSidebar = () => {
         <div className="cursor-pointer">
           <InputGroup label="Activity Type" value="Adventure">
             <Dropdown
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.value)}
-              options={cities}
+              value={selectedActivityType}
+              onChange={(e) => setSelectedActivityType(e.value)}
+              options={activityTypes}
               optionLabel="name"
-              placeholder="Select a City"
-              className="w-full md:w-14rem"
+              placeholder="Chọn Loại Hoạt Động"
+              className="w-full"
             />
           </InputGroup>
         </div>
@@ -132,6 +140,7 @@ const SearchSidebar = () => {
         >
           <Calendar
             className="calendar-no-border input-date"
+            placeholder="Chọn ngày"
             value={selectDate}
             onChange={(e) => setSelectDate(e.value || null)}
           />
@@ -145,6 +154,7 @@ const SearchSidebar = () => {
         >
           <Calendar
             className="calendar-no-border input-date"
+            placeholder="Chọn giờ"
             value={selectDate}
             onChange={(e) => setSelectDate(e.value || null)}
             timeOnly
@@ -194,22 +204,20 @@ const SearchSidebar = () => {
         </div>
 
         <div className="space-y-3 pl-1">
-          {["New York", "Los Angeles", "Chicago", "Houston", "Phoenix"].map(
-            (city) => (
-              <label
-                key={city}
-                className="flex items-center gap-3 cursor-pointer group"
-              >
-                <input
-                  type="checkbox"
-                  className="w-5 h-5 border-2 border-gray-200 rounded checked:bg-teal-600 checked:border-teal-600 focus:ring-0 cursor-pointer accent-teal-600"
-                />
-                <span className="text-teal-800 font-medium text-sm group-hover:text-teal-600">
-                  {city}
-                </span>
-              </label>
-            ),
-          )}
+          {locations.map((location) => (
+            <label
+              key={location.code}
+              className="flex items-center gap-3 cursor-pointer group"
+            >
+              <input
+                type="checkbox"
+                className="w-5 h-5 border-2 border-gray-200 rounded checked:bg-teal-600 checked:border-teal-600 focus:ring-0 cursor-pointer accent-teal-600"
+              />
+              <span className="text-teal-800 font-medium text-sm group-hover:text-teal-600">
+                {location.name}
+              </span>
+            </label>
+          ))}
         </div>
 
         <button className="text-teal-700 font-bold text-sm mt-4 hover:underline">
@@ -241,20 +249,22 @@ const SearchSidebar = () => {
       <div className="mb-8">
         <SectionTitle title="Type of Theme" />
         <div className="space-y-3 pl-1">
-          {["Wild life", "Adventure", "Desert", "Culture"].map((theme) => (
-            <label
-              key={theme}
-              className="flex items-center gap-3 cursor-pointer group"
-            >
-              <input
-                type="checkbox"
-                className="w-5 h-5 border-2 border-gray-200 rounded checked:bg-teal-600 checked:border-teal-600 focus:ring-0 cursor-pointer accent-teal-600"
-              />
-              <span className="text-teal-800 font-medium text-sm group-hover:text-teal-600">
-                {theme}
-              </span>
-            </label>
-          ))}
+          {["Du lịch trải nghiệm", "Mạo hiểm", "Sa mạc", "Văn hóa"].map(
+            (theme) => (
+              <label
+                key={theme}
+                className="flex items-center gap-3 cursor-pointer group"
+              >
+                <input
+                  type="checkbox"
+                  className="w-5 h-5 border-2 border-gray-200 rounded checked:bg-teal-600 checked:border-teal-600 focus:ring-0 cursor-pointer accent-teal-600"
+                />
+                <span className="text-teal-800 font-medium text-sm group-hover:text-teal-600">
+                  {theme}
+                </span>
+              </label>
+            ),
+          )}
         </div>
         <button className="text-teal-700 font-bold text-sm mt-4 hover:underline">
           Show More...
