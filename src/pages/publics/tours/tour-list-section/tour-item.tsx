@@ -8,7 +8,7 @@ const TourItem = (tour: TourDto) => {
   return (
     <Link
       to={`/tours/${tour.slug}`}
-      className="flex h-[370px] max-w-[900px] overflow-hidden rounded-[32px] bg-white shadow-lg hover:cursor-pointer hover:shadow-2xl transition"
+      className="flex h-92.5 max-w-225 overflow-hidden rounded-4xl bg-white shadow-lg hover:cursor-pointer hover:shadow-2xl transition"
     >
       <div className="relative w-[40%]">
         <img
@@ -22,7 +22,7 @@ const TourItem = (tour: TourDto) => {
 
       <div className="flex w-[55%] flex-col justify-between p-8">
         <div className="flex items-start justify-between relative">
-          <div className=" absolute left-[-32px] flex items-center gap-2 bg-[#066168] px-5 py-3 rounded-r-full text-white">
+          <div className=" absolute -left-8 flex items-center gap-2 bg-[#066168] px-5 py-3 rounded-r-full text-white">
             <span className="text-sm">📅</span>
             <span className="text-sm font-medium">{tour.durations}</span>
           </div>

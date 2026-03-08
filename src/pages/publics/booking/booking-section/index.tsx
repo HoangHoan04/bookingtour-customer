@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { InputText } from "primereact/inputtext";
-import { RadioButton } from "primereact/radiobutton";
-import { Checkbox } from "primereact/checkbox";
-import { InputTextarea } from "primereact/inputtextarea";
-import "primeicons/primeicons.css";
 import ShineButton from "@/components/ui/botton/ShineButton";
+import "primeicons/primeicons.css";
+import { Checkbox } from "primereact/checkbox";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { RadioButton } from "primereact/radiobutton";
+import { useState } from "react";
 
 const tourSummary = {
   title: "Sapa - Chinh Phục Đỉnh Fansipan Hùng Vĩ",
@@ -31,7 +31,7 @@ const BookingInput = ({ label, id, icon, placeholder, type = "text" }: any) => (
         id={id}
         type={type}
         placeholder={placeholder}
-        className="w-full !rounded-full !py-3 !pl-10 !border-gray-200 focus:!border-teal-500 focus:!ring-0 hover:!border-teal-400 !text-sm text-gray-600 shadow-sm"
+        className="w-full rounded-full! py-3! pl-10! border-gray-200! focus:border-teal-500! focus:ring-0! hover:border-teal-400! text-sm! text-gray-600 shadow-sm"
       />
     </div>
   </div>
@@ -152,7 +152,7 @@ const BookingSection = () => {
               <InputTextarea
                 rows={4}
                 placeholder="Có gì cần lưu ý cho chuyến đi không?"
-                className="w-full !rounded-2xl !p-4 !border-gray-200 focus:!border-teal-500 hover:!border-teal-400 text-sm"
+                className="w-full rounded-2xl! p-4! border-gray-200! focus:border-teal-500! hover:border-teal-400! text-sm"
               />
             </div>
           </div>

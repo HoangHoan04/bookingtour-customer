@@ -31,15 +31,7 @@ export default function ShineButton({
       <Button
         label={label}
         className="
-          group relative overflow-hidden
-          !bg-[#96d232] hover:!bg-[#aae846]
-          !text-black hover:!text-white
-          !border-none font-medium text-lg
-          !rounded-full !px-10 !py-3
-          !transition-all !duration-300
-          hover:!scale-105 hover:!shadow-xl
-          focus:!shadow-none focus:!ring-0
-
+          group relative overflow-hidden bg-[#96d232]! hover:bg-[#aae846]! text-black! hover:text-white! border-none! font-medium text-lg rounded-full! px-10! py-3! transition-all! duration-300! hover:scale-105! hover:shadow-xl! focus:shadow-none! focus:ring-0!
         "
         style={buttonStyles}
         onClick={handleClick}
@@ -47,9 +39,9 @@ export default function ShineButton({
         <span
           className="
             shine-effect
-            absolute top-0 left-[-100%] h-full w-1/2
+            absolute top-0 -left-full h-full w-1/2
             -skew-x-12
-            bg-gradient-to-r from-transparent via-white to-transparent opacity-40
+            bg-linear-to-r from-transparent via-white to-transparent opacity-40
             pointer-events-none
           "
         />

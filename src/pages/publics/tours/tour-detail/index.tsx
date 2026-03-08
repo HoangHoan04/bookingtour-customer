@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import SearchSidebar from "../tour-list-section/filter-sidebar";
 import TourDetailSection from "./detail-section";
 
@@ -49,10 +48,6 @@ const mockTour = {
   __reviews__: [],
 };
 const TourDetailScreen = () => {
-  const [tour, setTour] = useState(mockTour);
-  useEffect(() => {
-    setTour(mockTour);
-  }, []);
   return (
     <div className="bg-[#EFFFFF]">
       <div className="max-w-7xl mx-auto flex gap-8 py-20">
@@ -60,7 +55,7 @@ const TourDetailScreen = () => {
           <SearchSidebar />
         </section>
         <section className="w-2/3">
-          <TourDetailSection tour={tour} />
+          <TourDetailSection tour={mockTour} />
         </section>
       </div>
     </div>

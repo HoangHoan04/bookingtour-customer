@@ -1,23 +1,33 @@
-import ZaloCallback from "@/pages/auth/ZaloCallBack";
-import AboutScreen from "@/pages/publics/about";
-import BlogScreen from "@/pages/publics/blogs";
-import BlogDetailScreen from "@/pages/publics/blogs/blog-detail";
-import ContactScreen from "@/pages/publics/contact";
-import FaqScreen from "@/pages/publics/contact/faq";
-import DestinationScreen from "@/pages/publics/destinations";
-import DestinationDetailScreen from "@/pages/publics/destinations/destination-detail";
-import HomeScreen from "@/pages/publics/home";
-import ServiceScreen from "@/pages/publics/services";
-import ServiceDetailScreen from "@/pages/publics/services/service-detail";
-<<<<<<< HEAD
-import TourGuideScreen from "@/pages/publics/tour-guides";
-import TourGuideDetailScreen from "@/pages/publics/tour-guides/tour-guide-detail";
-=======
-import TourScreen from "@/pages/publics/tours";
-import TourDetailScreen from "@/pages/publics/tours/tour-detail";
->>>>>>> origin/dltrung
+import { lazy } from "react";
 import { PUBLIC_ROUTES } from "./routes";
-import BookingScreen from "@/pages/publics/booking";
+
+// Lazy load all page components
+const ZaloCallback = lazy(() => import("@/pages/auth/ZaloCallBack"));
+const AboutScreen = lazy(() => import("@/pages/publics/about"));
+const BlogScreen = lazy(() => import("@/pages/publics/blogs"));
+const BlogDetailScreen = lazy(
+  () => import("@/pages/publics/blogs/blog-detail"),
+);
+const BookingScreen = lazy(() => import("@/pages/publics/booking"));
+const ContactScreen = lazy(() => import("@/pages/publics/contact"));
+const FaqScreen = lazy(() => import("@/pages/publics/contact/faq"));
+const DestinationScreen = lazy(() => import("@/pages/publics/destinations"));
+const DestinationDetailScreen = lazy(
+  () => import("@/pages/publics/destinations/destination-detail"),
+);
+const HomeScreen = lazy(() => import("@/pages/publics/home"));
+const ServiceScreen = lazy(() => import("@/pages/publics/services"));
+const ServiceDetailScreen = lazy(
+  () => import("@/pages/publics/services/service-detail"),
+);
+const TourGuideScreen = lazy(() => import("@/pages/publics/tour-guides"));
+const TourGuideDetailScreen = lazy(
+  () => import("@/pages/publics/tour-guides/tour-guide-detail"),
+);
+const TourScreen = lazy(() => import("@/pages/publics/tours"));
+const TourDetailScreen = lazy(
+  () => import("@/pages/publics/tours/tour-detail"),
+);
 
 export const PUBLIC_SCREENS = {
   [PUBLIC_ROUTES.HOME]: <HomeScreen />,
