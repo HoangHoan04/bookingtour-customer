@@ -242,7 +242,7 @@ const mockToursData = [
   },
 ];
 
-const mockTours = mockToursData as TourDto[];
+const mockTours = mockToursData as unknown as TourDto[];
 
 const TourListSection = () => {
   const [first, setFirst] = useState(0);
