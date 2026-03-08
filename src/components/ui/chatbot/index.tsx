@@ -2,10 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import Lottie from "lottie-react";
 import RobotWelcome from "@/assets/animations/RobotWelcome.json";
 import axios from "axios";
+import { MarkdownResponse } from "./markdownResponse";
 
 const TravelChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isWaiting, setIsWaiting] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
     {
@@ -30,6 +32,7 @@ const TravelChatbot = () => {
 
     try {
       setIsWaiting(true);
+      setIsError(false);
       const AiResponse = await axios.post(
         `${import.meta.env.VITE_PYTHON_AI_URL}/chat`,
         {
@@ -48,6 +51,7 @@ const TravelChatbot = () => {
       ]);
     } catch (error) {
       console.error("Error sending message:", error);
+      setIsError(true);
     } finally {
       setIsWaiting(false);
     }
@@ -138,10 +142,48 @@ const TravelChatbot = () => {
                       : "bg-white text-gray-700 border border-gray-100 rounded-tl-none"
                   }`}
                 >
-                  {msg.content}
+                  {msg.role === "bot" ? (
+                    <MarkdownResponse content={msg.content} />
+                  ) : (
+                    msg.content
+                  )}
                 </div>
               </div>
             ))}
+
+            {isWaiting && (
+              <div className="flex justify-start">
+                <div className="max-w-[80%] p-3 rounded-2xl rounded-tl-none text-sm leading-relaxed shadow-sm bg-white text-gray-700 border border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <span
+                        className="w-2 h-2 bg-teal-600 rounded-full animate-bounce"
+                        style={{ animationDelay: "0ms" }}
+                      ></span>
+                      <span
+                        className="w-2 h-2 bg-teal-600 rounded-full animate-bounce"
+                        style={{ animationDelay: "150ms" }}
+                      ></span>
+                      <span
+                        className="w-2 h-2 bg-teal-600 rounded-full animate-bounce"
+                        style={{ animationDelay: "300ms" }}
+                      ></span>
+                    </div>
+                    <span className="text-gray-500">
+                      Chờ tí mình kiếm thông tin cho bạn nha...
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+            {isError && (
+              <div className="flex justify-start">
+                <div className="max-w-[80%] p-3 rounded-2xl rounded-tl-none text-sm leading-relaxed shadow-sm bg-red-100 text-red-700 border border-red-200">
+                  Ui thui tình yêu ơi, đang có lỗi xảy ra rồi. Tình yêu thử lại
+                  sau nha! 😢
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="p-4 bg-white border-t border-gray-100">
@@ -156,7 +198,7 @@ const TravelChatbot = () => {
               />
               <button
                 onClick={handleSend}
-                className="text-teal-600 hover:text-teal-800 transition-colors"
+                className="text-teal-600 hover:text-teal-800 hover:cursor-pointer transition-colors p-1"
               >
                 <i className="pi pi-send"></i>
               </button>
