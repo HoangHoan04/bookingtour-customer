@@ -9,12 +9,21 @@ import DestinationDetailScreen from "@/pages/publics/destinations/destination-de
 import HomeScreen from "@/pages/publics/home";
 import ServiceScreen from "@/pages/publics/services";
 import ServiceDetailScreen from "@/pages/publics/services/service-detail";
+<<<<<<< HEAD
 import TourGuideScreen from "@/pages/publics/tour-guides";
 import TourGuideDetailScreen from "@/pages/publics/tour-guides/tour-guide-detail";
+=======
+import TourScreen from "@/pages/publics/tours";
+import TourDetailScreen from "@/pages/publics/tours/tour-detail";
+>>>>>>> origin/dltrung
 import { PUBLIC_ROUTES } from "./routes";
+import BookingScreen from "@/pages/publics/booking";
 
 export const PUBLIC_SCREENS = {
   [PUBLIC_ROUTES.HOME]: <HomeScreen />,
+  [PUBLIC_ROUTES.TOURS]: <TourScreen />,
+  [PUBLIC_ROUTES.TOUR_DETAIL]: <TourDetailScreen />,
+  [PUBLIC_ROUTES.BOOKING]: <BookingScreen />,
   [PUBLIC_ROUTES.ABOUT]: <AboutScreen />,
   [PUBLIC_ROUTES.CONTACT]: <ContactScreen />,
   [PUBLIC_ROUTES.ZALO_CALLBACK]: <ZaloCallback />,

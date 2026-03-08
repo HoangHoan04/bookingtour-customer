@@ -1,7 +1,9 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
   type FC,
   type ReactNode,
@@ -53,34 +55,36 @@ export const ConfigProvider: FC<{ children: ReactNode }> = ({ children }) => {
         STORAGE_KEY,
         JSON.stringify({
           settings,
-        })
+        }),
       );
     } catch (error) {
       console.error("Failed to save settings:", error);
     }
   }, [settings]);
 
-  const updateSettings = (key: keyof AppSettings, value: any) => {
+  const updateSettings = useCallback((key: keyof AppSettings, value: any) => {
     setSettings((prev) => ({
       ...prev,
       [key]: value,
     }));
-  };
-  const resetSettings = () => {
+  }, []);
+
+  const resetSettings = useCallback(() => {
     setSettings(defaultSettings);
     localStorage.removeItem(STORAGE_KEY);
-  };
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      settings,
+      updateSettings,
+      resetSettings,
+    }),
+    [settings, updateSettings, resetSettings],
+  );
 
   return (
-    <ConfigContext.Provider
-      value={{
-        settings,
-        updateSettings,
-        resetSettings,
-      }}
-    >
-      {children}
-    </ConfigContext.Provider>
+    <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>
   );
 };
 

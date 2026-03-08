@@ -23,3 +23,26 @@ export const usePaginationTourGuide = (
     error,
   };
 };
+
+/**
+ * Lấy chi tiết hướng dẫn viên theo slug
+ */
+export const useTourGuideDetail = (slug: string | undefined | null) => {
+  const { data, isLoading, refetch, error } = useQuery({
+    queryKey: [API_ENDPOINTS.TOUR_GUIDE.FIND_BY_SLUG, slug],
+    queryFn: async () => {
+      const res = await apiService.post(API_ENDPOINTS.TOUR_GUIDE.FIND_BY_SLUG, {
+        slug,
+      });
+      return res;
+    },
+    enabled: !!slug,
+  });
+
+  return {
+    data: data?.data,
+    isLoading,
+    refetch,
+    error,
+  };
+};

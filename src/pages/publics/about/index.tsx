@@ -22,7 +22,7 @@ export default function TravelLandingPage() {
     },
     {
       id: 2,
-      title: "Entertainment",
+      title: "Giải trí",
       image:
         "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80",
     },
@@ -92,23 +92,23 @@ export default function TravelLandingPage() {
             <div className="inline-flex items-center gap-2 bg-yellow-100 px-4 py-2 rounded-full mb-4">
               <i className="pi pi-sparkles text-yellow-600"></i>
               <span className="text-sm font-semibold text-yellow-700">
-                Monthly Recommendations
+                Gợi ý hàng tháng
               </span>
             </div>
 
-            <h2 className="text-3xl font-bold text-gray-800 mb-4 leading-tight">
-              We{" "}
+            <h2 className="text-3xl font-bold text-gray-300 mb-4 leading-tight">
+              Chúng tôi{" "}
               <span className="text-transparent bg-clip-text bg-linear-to-r from-yellow-500 to-orange-500">
-                Recommend
+                Giới thiệu
               </span>{" "}
-              Beautiful Destinations Every Month
+              Điểm đến tuyệt đẹp mỗi tháng
             </h2>
 
-            <p className="text-gray-600 text-base mb-6 leading-relaxed">
-              We are passionate about travel and dedicated to providing you with
-              the best destinations. Our curated selection ensures unforgettable
-              experiences every month. Trust us to guide you to amazing places
-              around the world.
+            <p className="text-gray-400 text-base mb-6 leading-relaxed">
+              Chúng tôi đam mê du lịch và tận tâm cung cấp cho bạn những điểm
+              đến tuyệt vời nhất. Lựa chọn được tuyển chọn kỹ lưỡng của chúng
+              tôi đảm bảo những trải nghiệm khó quên mỗi tháng. Hãy tin tưởng
+              chúng tôi dẫn bạn đến những nơi tuyệt vời trên khắp thế giới.
             </p>
 
             <Card className="border-none shadow-xl bg-linear-to-br from-white to-cyan-50 mb-6">
@@ -116,36 +116,36 @@ export default function TravelLandingPage() {
                 <div className="flex items-center justify-center w-12 h-12 bg-linear-to-br from-cyan-400 to-blue-500 rounded-xl">
                   <i className="pi pi-compass text-2xl text-white"></i>
                 </div>
-                <h3 className="text-2xl font-bold  m-0">Travel Guide</h3>
+                <h3 className="text-2xl font-bold  m-0">Hướng dẫn du lịch</h3>
               </div>
 
-              <div className="flex flex-column gap-4 mb-5">
-                <div className="flex gap-4 align-items-start p-3 bg-white rounded-xl hover:shadow-md transition-shadow">
+              <div className="flex flex-column gap-2 mb-5">
+                <div className="flex-1 gap-4 align-items-start p-3 bg-white rounded-xl hover:shadow-md transition-shadow">
                   <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg shrink-0">
                     <i className="pi pi-map-marker text-green-600 text-2xl"></i>
                   </div>
                   <div className="flex-1">
                     <p className="font-bold text-gray-800 m-0 mb-1 text-lg">
-                      Tricky to Pinpoint
+                      Dễ dàng xác định điểm đến
                     </p>
                     <p className="text-gray-600 m-0">
-                      All you need to do is plan your trip with our expert
-                      guidance
+                      Tất cả những gì bạn cần làm là lên kế hoạch cho chuyến đi
+                      của mình với sự hướng dẫn chuyên nghiệp của chúng tôi
                     </p>
                   </div>
                 </div>
 
-                <div className="flex gap-4 align-items-start p-3 bg-white rounded-xl hover:shadow-md transition-shadow">
+                <div className="flex-1 gap-4 align-items-start p-3 bg-white rounded-xl hover:shadow-md transition-shadow">
                   <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg shrink-0">
                     <i className="pi pi-calendar text-blue-600 text-2xl"></i>
                   </div>
                   <div className="flex-1">
                     <p className="font-bold text-gray-800 m-0 mb-1 text-lg">
-                      Best Time to Visit
+                      Thời điểm tốt nhất để tham quan
                     </p>
                     <p className="text-gray-600 m-0">
-                      We'll guide you with the perfect seasons for each
-                      destination
+                      Chúng tôi sẽ hướng dẫn bạn về mùa hoàn hảo cho mỗi điểm
+                      đến
                     </p>
                   </div>
                 </div>
@@ -153,7 +153,7 @@ export default function TravelLandingPage() {
 
               <div className="flex flex-wrap justify-content-between items-center gap-4 pt-4 border-top-1 border-gray-200">
                 <Button
-                  label="Discover More"
+                  label="Khám phá thêm"
                   icon="pi pi-arrow-right"
                   iconPos="right"
                   className="bg-linear-to-r from-green-500 to-emerald-500 border-none px-6 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-shadow"
@@ -188,7 +188,7 @@ export default function TravelLandingPage() {
                       2.5k+
                     </p>
                     <p className="text-sm text-gray-600 m-0 font-semibold">
-                      Happy Travelers
+                      Du khách hài lòng
                     </p>
                   </div>
                 </div>
@@ -199,19 +199,19 @@ export default function TravelLandingPage() {
               <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md">
                 <i className="pi pi-shield text-green-500"></i>
                 <span className="text-sm font-semibold text-gray-700">
-                  Trusted Service
+                  Dịch vụ uy tín
                 </span>
               </div>
               <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md">
                 <i className="pi pi-verified text-blue-500"></i>
                 <span className="text-sm font-semibold text-gray-700">
-                  Verified Reviews
+                  Đánh giá đã xác minh
                 </span>
               </div>
               <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-md">
                 <i className="pi pi-heart-fill text-red-500"></i>
                 <span className="text-sm font-semibold text-gray-700">
-                  Customer Favorite
+                  Yêu thích của khách hàng
                 </span>
               </div>
             </div>
@@ -282,10 +282,10 @@ export default function TravelLandingPage() {
       {/* Newsletter Subscription */}
       <SendEmailComponent
         onSuccess={(email) => {
-          console.log("User subscribed with email:", email);
+          console.log("Người dùng đã đăng ký với email:", email);
         }}
         onError={(error) => {
-          console.error("Subscription failed:", error);
+          console.error("Đăng ký thất bại:", error);
         }}
       />
     </div>

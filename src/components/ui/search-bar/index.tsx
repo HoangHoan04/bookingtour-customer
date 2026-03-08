@@ -25,8 +25,8 @@ export default function SearchBar() {
 
   return (
     <div className="h-full flex items-start justify-center py-20">
-      <div className="w-full border border-gray-300 rounded-full max-w-6xl px-2">
-        <div className="rounded-3xl shadow-lg p-6">
+      <div className="w-full border-0 rounded-full max-w-6xl px-2">
+        <div className="rounded-3xl border p-6">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
             <div className="flex flex-col">
               <div className="flex items-center gap-2 mb-2">
@@ -39,8 +39,7 @@ export default function SearchBar() {
                 value={location}
                 onChange={(e) => setLocation(e.value)}
                 options={locations}
-                className="w-full border-none"
-                style={{ border: "none", boxShadow: "none" }}
+                className="w-full"
                 panelClassName="text-sm"
               />
             </div>
@@ -56,8 +55,7 @@ export default function SearchBar() {
                 value={activityType}
                 onChange={(e) => setActivityType(e.value)}
                 options={activities}
-                className="w-full border-none"
-                style={{ border: "none", boxShadow: "none" }}
+                className="w-full"
                 panelClassName="text-sm"
               />
             </div>
@@ -76,7 +74,6 @@ export default function SearchBar() {
                 className="w-full"
                 dateFormat="dd/mm/yy"
                 showIcon={false}
-                style={{ border: "none", boxShadow: "none" }}
               />
             </div>
 
@@ -99,7 +96,6 @@ export default function SearchBar() {
                 incrementButtonIcon="pi pi-plus"
                 decrementButtonIcon="pi pi-minus"
                 className="w-full"
-                style={{ border: "none", boxShadow: "none" }}
               />
             </div>
 

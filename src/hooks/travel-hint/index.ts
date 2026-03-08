@@ -17,7 +17,7 @@ export const useGetTravelHints = (type?: string) => {
   return useQuery({
     queryKey: ["travelHints", type],
     queryFn: () => fetchTravelHints(type),
-    staleTime: 5 * 60 * 1000, // 5 phút
+    staleTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
   });
 };
