@@ -42,26 +42,26 @@ export default function ServiceDetailScreen() {
     setImages(galleryImages);
   }, []);
 
-  const recentPosts = [
-    {
-      date: "14",
-      month: "June",
-      author: "Aidan Butler",
-      title: "Resources for your first trip to overseas vacation",
-    },
-    {
-      date: "20",
-      month: "June",
-      author: "Ricardo Bell",
-      title: "How to get acquainted with natives in a strange land",
-    },
-    {
-      date: "24",
-      month: "June",
-      author: "Martin Hicks",
-      title: "Step by step guide to planning your ideal holiday",
-    },
-  ];
+  // const recentPosts = [
+  //   {
+  //     date: "14",
+  //     month: "June",
+  //     author: "Aidan Butler",
+  //     title: "Resources for your first trip to overseas vacation",
+  //   },
+  //   {
+  //     date: "20",
+  //     month: "June",
+  //     author: "Ricardo Bell",
+  //     title: "How to get acquainted with natives in a strange land",
+  //   },
+  //   {
+  //     date: "24",
+  //     month: "June",
+  //     author: "Martin Hicks",
+  //     title: "Step by step guide to planning your ideal holiday",
+  //   },
+  // ];
 
   const destinations = [
     { name: "Thailand", listings: "( 05 Listing )" },
@@ -284,7 +284,7 @@ export default function ServiceDetailScreen() {
                   "Customizing itineraries based on traveler interests",
                 ].map((item, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <div className="bg-green-500 rounded-full p-1 mt-1 flex-shrink-0">
+                    <div className="bg-green-500 rounded-full p-1 mt-1 shrink-0">
                       <i className="pi pi-check text-white text-xs"></i>
                     </div>
                     <p className="text-gray-700">{item}</p>
@@ -332,7 +332,7 @@ export default function ServiceDetailScreen() {
                   "Safety & Support: Guides help navigate unfamiliar areas and handle emergencies",
                 ].map((item, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <div className="bg-green-500 rounded-full p-1 mt-1 flex-shrink-0">
+                    <div className="bg-green-500 rounded-full p-1 mt-1 shrink-0">
                       <i className="pi pi-check text-white text-xs"></i>
                     </div>
                     <p className="text-gray-700">{item}</p>

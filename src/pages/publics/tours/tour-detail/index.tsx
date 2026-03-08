@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import SearchSidebar from "../tour-list-section/filter-sidebar";
 import TourDetailSection from "./detail-section";
 
@@ -18,15 +17,16 @@ const mockTour = {
     "Khám phá thị trấn trong sương, chinh phục nóc nhà Đông Dương và tìm hiểu văn hóa bản địa độc đáo.",
   longDescription:
     "Trải nghiệm cái lạnh đặc trưng của vùng cao Tây Bắc, có thể có tuyết rơi vào mùa đông. Chinh phục đỉnh Fansipan bằng cáp treo hoặc leo núi (trekking) cho người thích mạo hiểm. Tham quan bản Cát Cát của người H'mong, ngắm ruộng bậc thang vàng óng. Thưởng thức đồ nướng nóng hổi, thắng cố và lẩu cá hồi Sapa. Săn mây trên đỉnh núi, không khí lãng mạn phù hợp cho các cặp đôi.",
-  highlights: "Chinh phục đỉnh Fansipan, săn mây, khám phá văn hóa bản địa",
-  included: "Hướng dẫn viên, vé tham quan, phương tiện di chuyển",
-  excluded: "Chi phí cá nhân, đồ uống ngoài chương trình",
+  highlights: "Chinh phục đỉnh Fansipan - Săn mây - khám phá văn hóa bản địa",
+  included: "Hướng dẫn viên - vé tham quan - phương tiện di chuyển",
+  excluded: "Chi phí cá nhân - đồ uống ngoài chương trình",
   rating: 0,
   reviewCount: 0,
   viewCount: 0,
   bookingCount: 9,
   category: "Du lịch khám phá",
   tags: ["Sapa", "Fansipan", "Tây Bắc", "Trekking"],
+  flag: "VI",
   status: "ACTIVE",
   __tourDetails__: [
     {
@@ -49,10 +49,6 @@ const mockTour = {
   __reviews__: [],
 };
 const TourDetailScreen = () => {
-  const [tour, setTour] = useState(mockTour);
-  useEffect(() => {
-    setTour(mockTour);
-  }, []);
   return (
     <div className="bg-[#EFFFFF]">
       <div className="max-w-7xl mx-auto flex gap-8 py-20">
@@ -60,7 +56,7 @@ const TourDetailScreen = () => {
           <SearchSidebar />
         </section>
         <section className="w-2/3">
-          <TourDetailSection tour={tour} />
+          <TourDetailSection tour={mockTour} />
         </section>
       </div>
     </div>

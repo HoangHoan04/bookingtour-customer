@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Outlet, useRoutes } from "react-router-dom";
-import GlobalLoading from "../components/ui/Loading";
+import GlobalLoading from "../components/ui/loading";
 import AuthLayout from "../layout/AuthLayout";
 import PublicLayout from "../layout/PublicLayout";
 import RequireAuthLayout from "../layout/RequireAuthLayout";

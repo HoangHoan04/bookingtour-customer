@@ -1,11 +1,10 @@
-import { FacebookIcon, GoogleIcon, ZaloIcon } from "@/assets/icons";
+import { FacebookIcon, GoogleIcon } from "@/assets/icons";
 import { useToast } from "@/context/ToastContext";
 import {
   getMe,
   loginNormal,
   loginWithFacebook,
   loginWithGoogle,
-  loginWithZalo,
 } from "@/services/auth.service";
 import tokenCache from "@/utils/token-cache";
 import FacebookLogin from "@greatsumini/react-facebook-login";
@@ -102,7 +101,7 @@ export default function LoginModal({
       } catch (error: any) {
         showToast({
           type: "error",
-          title: "Lỗi",
+          title: `Lỗi Facebook ${error?.response?.status || ""}`,
           message: "Đăng nhập Facebook thất bại",
         });
       } finally {
@@ -158,10 +157,10 @@ export default function LoginModal({
       try {
         const res = await loginWithGoogle(tokenResponse.access_token);
         if (res && res.accessToken) handleLoginSuccess(res);
-      } catch (err: any) {
+      } catch (error: any) {
         showToast({
           type: "error",
-          title: "Lỗi Google",
+          title: `Lỗi Google ${error?.response?.status || ""}`,
           message: "Đăng nhập Google thất bại",
         });
       }
@@ -169,37 +168,37 @@ export default function LoginModal({
     onError: () => console.log("Google Login Failed"),
   });
 
-  const handleZaloLogin = () => {
-    const ZALO_APP_ID = import.meta.env.VITE_ZALO_APP_ID;
-    const REDIRECT_URI = window.location.origin + "/zalo-callback";
-    const zaloAuthUrl = `https://oauth.zaloapp.com/v4/permission?app_id=${ZALO_APP_ID}&redirect_uri=${REDIRECT_URI}&state=${Date.now()}`;
-    const width = 600;
-    const height = 600;
-    const left = window.screen.width / 2 - width / 2;
-    const top = window.screen.height / 2 - height / 2;
-    const popup = window.open(
-      zaloAuthUrl,
-      "Zalo Login",
-      `width=${width},height=${height},top=${top},left=${left}`
-    );
-    const messageListener = async (event: MessageEvent) => {
-      if (event.data?.type === "ZALO_AUTH_CODE") {
-        const code = event.data.code;
-        window.removeEventListener("message", messageListener);
-        try {
-          const res = await loginWithZalo(code);
-          if (res && res.accessToken) handleLoginSuccess(res);
-        } catch (error: any) {
-          showToast({
-            type: "error",
-            title: "Lỗi Zalo",
-            message: error?.response?.data?.message || "Lỗi đăng nhập Zalo",
-          });
-        }
-      }
-    };
-    window.addEventListener("message", messageListener);
-  };
+  // const handleZaloLogin = () => {
+  //   const ZALO_APP_ID = import.meta.env.VITE_ZALO_APP_ID;
+  //   const REDIRECT_URI = window.location.origin + "/zalo-callback";
+  //   const zaloAuthUrl = `https://oauth.zaloapp.com/v4/permission?app_id=${ZALO_APP_ID}&redirect_uri=${REDIRECT_URI}&state=${Date.now()}`;
+  //   const width = 600;
+  //   const height = 600;
+  //   const left = window.screen.width / 2 - width / 2;
+  //   const top = window.screen.height / 2 - height / 2;
+  //   const popup = window.open(
+  //     zaloAuthUrl,
+  //     "Zalo Login",
+  //     `width=${width},height=${height},top=${top},left=${left}`,
+  //   );
+  //   const messageListener = async (event: MessageEvent) => {
+  //     if (event.data?.type === "ZALO_AUTH_CODE") {
+  //       const code = event.data.code;
+  //       window.removeEventListener("message", messageListener);
+  //       try {
+  //         const res = await loginWithZalo(code);
+  //         if (res && res.accessToken) handleLoginSuccess(res);
+  //       } catch (error: any) {
+  //         showToast({
+  //           type: "error",
+  //           title: "Lỗi Zalo",
+  //           message: error?.response?.data?.message || "Lỗi đăng nhập Zalo",
+  //         });
+  //       }
+  //     }
+  //   };
+  //   window.addEventListener("message", messageListener);
+  // };
 
   return (
     <Dialog
@@ -216,7 +215,7 @@ export default function LoginModal({
           icon="pi pi-times"
           rounded
           text
-          className="!absolute top-3 right-3 z-10 !w-8 !h-8 text-[--text-color-secondary] hover:bg-[--surface-hover]"
+          className="absolute! top-3 right-3 z-10 w-8! h-8! text-[--text-color-secondary] hover:bg-[--surface-hover]"
           onClick={onHide}
         />
 
@@ -350,11 +349,11 @@ export default function LoginModal({
               )}
             />
 
-            <SocialButton
+            {/* <SocialButton
               icon={ZaloIcon}
               label="Zalo"
               onClick={handleZaloLogin}
-            />
+            /> */}
           </div>
 
           <div className="text-center mt-2">

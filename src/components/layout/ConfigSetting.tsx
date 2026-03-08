@@ -40,7 +40,7 @@ export default function ConfigSetting({ visible, onHide }: ConfigSettingProps) {
 
   const selectedLanguageTemplate = (
     option: LanguageOption,
-    props: DropdownProps
+    props: DropdownProps,
   ) => {
     if (option) {
       return (
@@ -124,10 +124,7 @@ export default function ConfigSetting({ visible, onHide }: ConfigSettingProps) {
             valueTemplate={selectedLanguageTemplate}
             itemTemplate={languageOptionTemplate}
             className="w-full"
-            pt={{
-              root: { className: "w-full border-(--surface-border)" },
-              input: { className: "flex items-center" },
-            }}
+            pt={{}}
           />
         </div>
 

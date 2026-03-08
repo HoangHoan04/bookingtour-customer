@@ -1,22 +1,22 @@
 import { formatDate } from "@/common/helpers/format";
 import ShineButton from "@/components/ui/botton/ShineButton";
 import type { TourDto } from "@/dto/tour.dto";
-import { ScrollPanel } from "primereact/scrollpanel";
 import { Carousel } from "primereact/carousel";
-import { Timeline } from "primereact/timeline";
 import { Galleria } from "primereact/galleria";
+import { ScrollPanel } from "primereact/scrollpanel";
+import { Timeline } from "primereact/timeline";
 import {
+  IncludeItem,
   InfoItem,
+  customizedContent,
+  customizedMarker,
   imageTemplate,
   itemTemplate,
   thumbnailTemplate,
-  IncludeItem,
-  customizedMarker,
-  customizedContent,
 } from "./custom";
 
-import { Rating } from "primereact/rating";
 import { Divider } from "primereact/divider";
+import { Rating } from "primereact/rating";
 
 import { useNavigate } from "react-router-dom";
 
@@ -113,28 +113,14 @@ const TourDetailSection = ({ tour }: { tour: TourDto }) => {
     },
   ];
 
-  const highlightList = [
-    "Scenic mountain views",
-    "Waterfalls and rivers",
-    "Diverse flora and fauna",
-    "Local village visits",
-    "Cultural experiences",
-  ];
+  const inclusions: { label: string; included: boolean }[] = [];
 
-  const inclusions = [
-    { label: "Professional Guides", included: true },
-    { label: "Eco-friendly Practices", included: true },
-    { label: "Optional Activities", included: true },
-    { label: "Flights to and from the destination", included: true },
-    { label: "Luxury hotel or resort stays", included: true },
-    { label: "Breakfast", included: true },
-    { label: "Travel Tax", included: true },
-    { label: "Family Expenses", included: false },
-    { label: "Tickets", included: false },
-    { label: "Seasonal Food", included: false },
-    { label: "Drinks", included: false },
-    { label: "Weapon", included: false },
-  ];
+  tour.included
+    ?.split(" - ")
+    .forEach((item) => inclusions.push({ label: item, included: true }));
+  tour.excluded
+    ?.split(" - ")
+    .forEach((item) => inclusions.push({ label: item, included: false }));
 
   const scheduleData = [
     {
@@ -153,6 +139,7 @@ const TourDetailSection = ({ tour }: { tour: TourDto }) => {
       desc: "Rising to 1,717 meters above sea level, it offers adventurous travelers a moderately challenging hike that rewards.",
     },
   ];
+
   return (
     <ScrollPanel style={{ height: "2000px" }}>
       <div className="w-full bg-white p-6 rounded-3xl shadow-xl border border-gray-100 font-sans">
@@ -160,11 +147,13 @@ const TourDetailSection = ({ tour }: { tour: TourDto }) => {
           <div className="flex justify-between w-full">
             <div className="flex gap-6">
               <InfoItem label="Địa điểm" value={tour.location} />
-              <InfoItem label="Loại hoạt động" value={tour?.category!} />
+              <InfoItem label="Loại hoạt động" value={tour?.category ?? ""} />
               <InfoItem label="Ngày" value={formatDate(tourDetail?.startDay)} />
               <InfoItem
                 label="Người đi"
-                value={`${tourDetail?.capacity} người`}
+                value={
+                  tourDetail?.capacity ? `${tourDetail.capacity} người` : ""
+                }
               />
               <InfoItem label="Giá" value="" sub="$250 / Ngày" />
             </div>
@@ -210,7 +199,7 @@ const TourDetailSection = ({ tour }: { tour: TourDto }) => {
           <div className="gap-8">
             <div className="md:col-span-1">
               <h2 className="text-xl font-bold text-teal-800 mb-3 flex items-center gap-2">
-                Geography & Climate
+                Ngắn gọn
               </h2>
               <p className="text-gray-500 text-sm leading-relaxed text-justify">
                 {tour.shortDescription} Vùng núi cao với khí hậu ôn đới, mát mẻ
@@ -221,7 +210,7 @@ const TourDetailSection = ({ tour }: { tour: TourDto }) => {
           <div className="mt-8 w-full ">
             <div className="md:col-span-2 p-6 bg-[#fffbf2] rounded-2xl border border-[#faeec7]">
               <h2 className="text-xl font-bold text-teal-800 mb-4 flex items-center gap-2">
-                Highlights & Attractions
+                Điểm nổi bật
               </h2>
 
               <div className="space-y-4">
@@ -231,29 +220,17 @@ const TourDetailSection = ({ tour }: { tour: TourDto }) => {
                     Adventure & Nature:
                   </h3>
                   <ul className="space-y-2 text-gray-500 text-sm pl-6">
-                    {highlightList.map((item, idx) => (
-                      <li
-                        key={idx}
-                        className="relative before:content-[''] before:absolute before:-left-4 before:top-2 before:w-1.5 before:h-1.5 before:bg-teal-600 before:rounded-full"
-                      >
-                        {item}
-                      </li>
-                    ))}
-                    <li className="relative before:content-[''] before:absolute before:-left-4 before:top-2 before:w-1.5 before:h-1.5 before:bg-teal-600 before:rounded-full">
-                      Trekking {tour.durations}
-                    </li>
+                    {tour.highlights
+                      ? tour.highlights?.split(" - ").map((item, idx) => (
+                          <li
+                            key={idx}
+                            className="relative before:content-[''] before:absolute before:-left-4 before:top-2 before:w-1.5 before:h-1.5 before:bg-teal-600 before:rounded-full"
+                          >
+                            {item}
+                          </li>
+                        ))
+                      : "Chưa có thông tin này"}
                   </ul>
-                </div>
-
-                <div className="pt-2 border-t border-orange-100">
-                  <h3 className="text-teal-700 font-bold text-sm mb-2 flex items-center gap-2">
-                    <i className="pi pi-users text-orange-400"></i>
-                    Culture & People:
-                  </h3>
-                  <p className="text-gray-500 text-sm pl-6">
-                    Tìm hiểu đời sống người H'mong, Dao Đỏ tại các bản làng.
-                    Thưởng thức ẩm thực đặc trưng vùng cao.
-                  </p>
                 </div>
               </div>
             </div>
@@ -344,18 +321,31 @@ const TourDetailSection = ({ tour }: { tour: TourDto }) => {
             />
           </div>
 
-          <div className="my-10 w-full">
+          <div className="mt-10 w-full">
             <h2 className="text-xl font-bold text-teal-800 mb-6">Vị trí</h2>
             <div className="w-full h-80 rounded-3xl overflow-hidden">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4648734866593!2d106.68153921462287!3d10.762622262021736!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752ee6b6f5f6b7%3A0x9a8ef6f4e4b8b0e6!2zMTUwIMSQ4bqhaSBUaMOgbmgsIFBoxrDhu51uZyAxLCBUaMOgbmgsIEjDoCBO4buZaSwgVmnhu4d0IE5hbQ!5e0!
-                3m2!1svi!2s!4v1600000000000!5m2!1svi!2s"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.3216830969253!2d106.69522331533422!3d10.786834992313928!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f4b3330bcc9%3A0xb3ff69197b10ec4f!2zSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1234567890"
                 width="100%"
-                height="100%"
+                height="450"
                 style={{ border: 0 }}
-                allowFullScreen={false}
+                allowFullScreen={true}
                 loading="lazy"
               ></iframe>
+            </div>
+          </div>
+
+          <div className="my-10 w-full">
+            <h2 className="text-xl font-bold text-teal-800 mb-6">Tags</h2>
+            <div className="flex flex-wrap gap-2">
+              {tour.tags?.map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="px-3 py-1 bg-teal-100 text-teal-800 text-sm rounded-full"
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
           </div>
         </div>

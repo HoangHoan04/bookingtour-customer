@@ -1,9 +1,10 @@
+import type { TourDto } from "@/dto/tour.dto";
+import { Paginator } from "primereact/paginator";
 import { useState } from "react";
 import SearchSidebar from "./filter-sidebar";
 import TourItem from "./tour-item";
-import { Paginator } from "primereact/paginator";
 
-const mockTours = [
+const mockToursData = [
   {
     id: "c33963f0-a124-4ab8-8900-835840f6d77a",
     createdAt: "2026-01-16T04:14:13.576Z",
@@ -30,6 +31,7 @@ const mockTours = [
     category: "Du lịch khám phá",
     tags: ["Sapa", "Fansipan", "Tây Bắc", "Trekking"],
     status: "ACTIVE",
+    flag: "BEST SELLER",
     __tourDetails__: [
       {
         id: "b3232e74-5ea0-47a9-8583-25d4c4e25147",
@@ -40,8 +42,8 @@ const mockTours = [
         isDeleted: false,
         tourId: "c33963f0-a124-4ab8-8900-835840f6d77a",
         code: "DETAIL-0001",
-        startDay: "2025-02-20T00:00:00.000Z",
-        endDay: "2025-02-28T00:00:00.000Z",
+        startDay: new Date("2025-02-20T00:00:00.000Z"),
+        endDay: new Date("2025-02-28T00:00:00.000Z"),
         startLocation: "Hà Nội",
         capacity: 20,
         remainingSeats: 11,
@@ -76,6 +78,7 @@ const mockTours = [
     category: "Du lịch khám phá",
     tags: ["Sapa", "Fansipan", "Tây Bắc", "Trekking"],
     status: "ACTIVE",
+    flag: "BEST SELLER",
     __tourDetails__: [
       {
         id: "b3232e74-5ea0-47a9-8583-25d4c4e25147",
@@ -86,8 +89,8 @@ const mockTours = [
         isDeleted: false,
         tourId: "c33963f0-a124-4ab8-8900-835840f6d77a",
         code: "DETAIL-0001",
-        startDay: "2025-02-20T00:00:00.000Z",
-        endDay: "2025-02-28T00:00:00.000Z",
+        startDay: new Date("2025-02-20T00:00:00.000Z"),
+        endDay: new Date("2025-02-28T00:00:00.000Z"),
         startLocation: "Hà Nội",
         capacity: 20,
         remainingSeats: 11,
@@ -122,6 +125,7 @@ const mockTours = [
     category: "Du lịch khám phá",
     tags: ["Sapa", "Fansipan", "Tây Bắc", "Trekking"],
     status: "ACTIVE",
+    flag: "BEST SELLER",
     __tourDetails__: [
       {
         id: "b3232e74-5ea0-47a9-8583-25d4c4e25147",
@@ -132,8 +136,8 @@ const mockTours = [
         isDeleted: false,
         tourId: "c33963f0-a124-4ab8-8900-835840f6d77a",
         code: "DETAIL-0001",
-        startDay: "2025-02-20T00:00:00.000Z",
-        endDay: "2025-02-28T00:00:00.000Z",
+        startDay: new Date("2025-02-20T00:00:00.000Z"),
+        endDay: new Date("2025-02-28T00:00:00.000Z"),
         startLocation: "Hà Nội",
         capacity: 20,
         remainingSeats: 11,
@@ -168,6 +172,7 @@ const mockTours = [
     category: "Du lịch khám phá",
     tags: ["Sapa", "Fansipan", "Tây Bắc", "Trekking"],
     status: "ACTIVE",
+    flag: "BEST SELLER",
     __tourDetails__: [
       {
         id: "b3232e74-5ea0-47a9-8583-25d4c4e25147",
@@ -178,8 +183,8 @@ const mockTours = [
         isDeleted: false,
         tourId: "c33963f0-a124-4ab8-8900-835840f6d77a",
         code: "DETAIL-0001",
-        startDay: "2025-02-20T00:00:00.000Z",
-        endDay: "2025-02-28T00:00:00.000Z",
+        startDay: new Date("2025-02-20T00:00:00.000Z"),
+        endDay: new Date("2025-02-28T00:00:00.000Z"),
         startLocation: "Hà Nội",
         capacity: 20,
         remainingSeats: 11,
@@ -214,6 +219,7 @@ const mockTours = [
     category: "Du lịch khám phá",
     tags: ["Sapa", "Fansipan", "Tây Bắc", "Trekking"],
     status: "ACTIVE",
+    flag: "BEST SELLER",
     __tourDetails__: [
       {
         id: "b3232e74-5ea0-47a9-8583-25d4c4e25147",
@@ -224,8 +230,8 @@ const mockTours = [
         isDeleted: false,
         tourId: "c33963f0-a124-4ab8-8900-835840f6d77a",
         code: "DETAIL-0001",
-        startDay: "2025-02-20T00:00:00.000Z",
-        endDay: "2025-02-28T00:00:00.000Z",
+        startDay: new Date("2025-02-20T00:00:00.000Z"),
+        endDay: new Date("2025-02-28T00:00:00.000Z"),
         startLocation: "Hà Nội",
         capacity: 20,
         remainingSeats: 11,
@@ -235,6 +241,9 @@ const mockTours = [
     __reviews__: [],
   },
 ];
+
+const mockTours = mockToursData as TourDto[];
+
 const TourListSection = () => {
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
