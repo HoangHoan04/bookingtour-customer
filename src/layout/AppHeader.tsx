@@ -7,6 +7,7 @@ import {
 import ForgotPasswordModal from "@/components/auth/ForgotPaswordForm";
 import LoginModal from "@/components/auth/LoginForm";
 import RegisterModal from "@/components/auth/RegisterFrom";
+import { useTheme } from "@/context/ThemeContext";
 import tokenCache from "@/utils/token-cache";
 import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
@@ -20,7 +21,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type AppHeaderProps = {
-  onOpenSettings: () => void;
   isScrolled?: boolean;
 };
 
@@ -31,9 +31,9 @@ type MenuItemType = {
 };
 
 export default function AppHeader({
-  onOpenSettings,
   isScrolled = false,
 }: AppHeaderProps) {
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [loginVisible, setLoginVisible] = useState(false);
   const [registerVisible, setRegisterVisible] = useState(false);
@@ -462,11 +462,11 @@ export default function AppHeader({
                 />
 
                 <Button
-                  icon="pi pi-cog"
+                  icon={theme === "dark" ? "pi pi-sun" : "pi pi-moon"}
                   rounded
                   text
-                  onClick={onOpenSettings}
-                  tooltip="Cài đặt"
+                  onClick={toggleTheme}
+                  tooltip={theme === "dark" ? "Chế độ sáng" : "Chế độ tối"}
                   tooltipOptions={{ position: "bottom" }}
                 />
 

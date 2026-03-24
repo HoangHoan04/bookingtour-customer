@@ -10,11 +10,7 @@ export default function RequireAuthLayout({
 }) {
   return (
     <div>
-      <AppHeader
-        onOpenSettings={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-      />
+      <AppHeader />
       <div>
         <div>{children}</div>
       </div>
