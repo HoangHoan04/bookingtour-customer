@@ -1,4 +1,3 @@
-import ConfigSetting from "@/components/layout/ConfigSetting";
 import BackToTop from "@/components/ui/back-to-top";
 import { useEffect, useRef, useState } from "react";
 import AppFooter from "./AppFooter";
@@ -10,7 +9,6 @@ export default function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [settingsVisible, setSettingsVisible] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const timeoutRef = useRef<number | null>(null);
 
@@ -42,24 +40,13 @@ export default function PublicLayout({
       className="w-full min-h-screen relative"
       style={{ margin: 0, padding: 0, overflow: "hidden" }}
     >
-      <AppHeader
-        onOpenSettings={() => {
-          setSettingsVisible(true);
-        }}
-        isScrolled={isScrolled}
-      />
+      <AppHeader isScrolled={isScrolled} />
 
       <main className="pt-32" style={{ margin: 0, padding: 0 }}>
         <div style={{ paddingTop: "8rem" }}>{children}</div>
       </main>
       <AppFooter />
 
-      <ConfigSetting
-        visible={settingsVisible}
-        onHide={() => {
-          setSettingsVisible(false);
-        }}
-      />
       <BackToTop />
       <TravelChatbot />
     </div>
