@@ -56,3 +56,14 @@ export interface TourItinerarie {
   title: string;
   description: string;
 }
+
+export interface TourFilterDto {
+  keyword?: string;
+  location?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  minDuration?: number;
+  maxDuration?: number;
+  category?: string;
+  tags?: string[];
+}
