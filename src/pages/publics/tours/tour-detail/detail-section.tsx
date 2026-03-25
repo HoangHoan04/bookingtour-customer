@@ -19,6 +19,7 @@ import { Divider } from "primereact/divider";
 import { Rating } from "primereact/rating";
 
 import { useNavigate } from "react-router-dom";
+import { formatPrice } from "@/common/helpers/formatPrice";
 
 const TourDetailSection = ({ tour }: { tour: TourDto }) => {
   const navigate = useNavigate();
@@ -155,11 +156,19 @@ const TourDetailSection = ({ tour }: { tour: TourDto }) => {
                   tourDetail?.capacity ? `${tourDetail.capacity} người` : ""
                 }
               />
-              <InfoItem label="Giá" value="" sub="$250 / Ngày" />
+              <InfoItem
+                label="Giá "
+                value=""
+                sub={`${formatPrice(tour.__tourDetails__?.[0]?.__tourPrice__?.[0]?.price ?? 0) || "0.00"}`}
+              />
             </div>
             <ShineButton
-              label="Book Now"
-              handleClick={() => navigate(`/tours/booking/${tour.slug}`)}
+              label="Xem mọi giá"
+              handleClick={() =>
+                navigate(`/tours-details/${tour.id}/all-prices`, {
+                  state: { tour },
+                })
+              }
             />
           </div>
           <Divider type="solid" />
@@ -337,7 +346,7 @@ const TourDetailSection = ({ tour }: { tour: TourDto }) => {
 
           <div className="my-10 w-full">
             <h2 className="text-xl font-bold text-teal-800 mb-6">Tags</h2>
-            <div className="flex flex-wrap gap-2">
+            {/* <div className="flex flex-wrap gap-2">
               {tour.tags?.map((tag, idx) => (
                 <span
                   key={idx}
@@ -346,7 +355,7 @@ const TourDetailSection = ({ tour }: { tour: TourDto }) => {
                   {tag}
                 </span>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
