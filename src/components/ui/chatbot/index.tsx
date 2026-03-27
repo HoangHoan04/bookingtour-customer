@@ -9,6 +9,15 @@ const TravelChatbot = () => {
   const [isWaiting, setIsWaiting] = useState(false);
   const [isError, setIsError] = useState(false);
   const [input, setInput] = useState("");
+
+  const formatTourContent = (text: string) => {
+    return text
+      .replace(/Địa điểm:/g, "📍 **Địa điểm:**")
+      .replace(/Thời gian:/g, "⏱️ **Thời gian:**")
+      .replace(/Điểm nổi bật:/g, "✨ **Điểm nổi bật:**")
+      .replace(/Đánh giá khách hàng:/g, "⭐ **Đánh giá:**")
+      .replace(/Mô tả:/g, "📝 **Mô tả:**");
+  };
   const [messages, setMessages] = useState([
     {
       role: "bot",
@@ -47,7 +56,7 @@ const TravelChatbot = () => {
       );
       setMessages((prev) => [
         ...prev,
-        { role: "bot", content: AiResponse.data.answer },
+        { role: "bot", content: formatTourContent(AiResponse.data.answer) },
       ]);
     } catch (error) {
       console.error("Error sending message:", error);
