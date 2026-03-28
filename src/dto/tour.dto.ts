@@ -34,7 +34,7 @@ export interface TourDetail {
   capacity: number;
   remainingSeats: number;
   status: string;
-  tourPrice?: TourPrice[];
+  __tourPrice__?: TourPrice[];
   tourItinerarie?: TourItinerarie[];
   bookingDetails?: any[];
 }
@@ -44,7 +44,7 @@ export interface TourPrice {
   tourDetailId?: string;
   tourDetail?: TourDetail;
   priceType: string;
-  amount: number;
+  price: number;
   currency: string;
 }
 
