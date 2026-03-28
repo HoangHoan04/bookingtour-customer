@@ -94,4 +94,11 @@ export const API_ENDPOINTS = {
     POPULAR: `${prefix}/destination/popular`,
     SEARCH: `${prefix}/destination/search`,
   },
+
+  TOUR: {
+    PAGINATION: `${prefix}/tour/pagination`,
+    FIND_BY_SLUG: `${prefix}/tour/find-by-slug`,
+    FIND_BY_ID: `${prefix}/tour/find-by-id`,
+    SEARCH: `${prefix}/tour/search`,
+  },
 };

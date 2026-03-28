@@ -1,10 +1,9 @@
-import ShineButton from "@/components/ui/botton/ShineButton";
-import "primeicons/primeicons.css";
-import { Checkbox } from "primereact/checkbox";
+import { useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { RadioButton } from "primereact/radiobutton";
-import { useState } from "react";
+import { Checkbox } from "primereact/checkbox";
+import ShineButton from "@/components/ui/botton/ShineButton";
 
 const tourSummary = {
   title: "Sapa - Chinh Phục Đỉnh Fansipan Hùng Vĩ",
@@ -54,7 +53,6 @@ const PaymentMethodCard = ({
   >
     <div className="flex items-center gap-4">
       <div className="w-12 h-8 flex items-center justify-center bg-white rounded border border-gray-100 p-1">
-        {/* Logo Placeholder */}
         <img src={logo} alt={label} className="h-full object-contain" />
       </div>
       <div>
@@ -88,9 +86,7 @@ const BookingSection = () => {
   return (
     <div className="min-h-screen  font-sans py-10 px-4">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* --- LEFT COLUMN: INPUT FORMS --- */}
         <div className="lg:col-span-2 space-y-8">
-          {/* 1. Contact Details */}
           <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100">
             <h2 className="text-xl font-bold text-teal-800 mb-6 flex items-center gap-2">
               <span className="w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center text-sm">
@@ -176,21 +172,12 @@ const BookingSection = () => {
               />
 
               <PaymentMethodCard
-                value="card"
-                selected={paymentMethod}
-                onChange={setPaymentMethod}
-                label="Credit / Debit Card"
-                subLabel="Visa, Mastercard, JCB"
-                logo="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg"
-              />
-
-              <PaymentMethodCard
                 value="momo"
                 selected={paymentMethod}
                 onChange={setPaymentMethod}
                 label="Momo E-Wallet"
                 subLabel="Fast & Convenient"
-                logo="https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png"
+                logo="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-MoMo-Square.png"
               />
             </div>
 

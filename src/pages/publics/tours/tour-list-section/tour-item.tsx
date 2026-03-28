@@ -30,7 +30,7 @@ const TourItem = (tour: TourDto) => {
           <div></div>
 
           <div className="text-right">
-            <p className="text-3xl font-bold text-orange-500">$192</p>
+            {/* <p className="text-3xl font-bold text-orange-500">${tour.price?.toFixed(2) || "N/A"}</p> */}
             <p className="text-sm text-gray-500">Per Day</p>
           </div>
         </div>
@@ -47,10 +47,12 @@ const TourItem = (tour: TourDto) => {
 
         <div className="mt-10 flex items-center justify-between">
           <ShineButton
-            label="Book Now"
+            label="Xem mọi giá"
             handleClick={(e) => {
               e.preventDefault();
-              navigate(`/tours/booking/${tour.slug}`);
+              navigate(
+                `/tours/details/${tour.__tourDetails__?.[0]?.id}/all-prices`,
+              );
             }}
             buttonStyles={{
               height: "40px",
@@ -61,9 +63,14 @@ const TourItem = (tour: TourDto) => {
           />
 
           <div className="text-right">
-            <p className="text-sm text-gray-500">(4.8 Review)</p>
+            <p className="text-sm text-gray-500">({tour.reviewCount} Review)</p>
             <div className="mt-1 flex justify-end gap-1 text-orange-400">
-              <Rating value={4.8} readOnly cancel={false} color="#f59e0b" />
+              <Rating
+                value={tour.rating}
+                readOnly
+                cancel={false}
+                color="#f59e0b"
+              />
             </div>
           </div>
         </div>
