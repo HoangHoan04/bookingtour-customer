@@ -28,12 +28,16 @@ const TourScreen = lazy(() => import("@/pages/publics/tours"));
 const TourDetailScreen = lazy(
   () => import("@/pages/publics/tours/tour-detail"),
 );
+const TourDetailAllPricesScreen = lazy(
+  () => import("@/pages/publics/tours/tour-detail/list-tour-detail"),
+);
 
 
 export const PUBLIC_SCREENS = {
   [PUBLIC_ROUTES.HOME]: <HomeScreen />,
   [PUBLIC_ROUTES.TOURS]: <TourScreen />,
   [PUBLIC_ROUTES.TOUR_DETAIL]: <TourDetailScreen />,
+  [PUBLIC_ROUTES.TOUR_DETAIL_ALL_PRICES]: <TourDetailAllPricesScreen />,
   [PUBLIC_ROUTES.BOOKING]: <BookingScreen />,
   [PUBLIC_ROUTES.ABOUT]: <AboutScreen />,
   [PUBLIC_ROUTES.CONTACT]: <ContactScreen />,

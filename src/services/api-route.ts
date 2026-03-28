@@ -97,7 +97,7 @@ export const API_ENDPOINTS = {
 
   TOUR: {
     PAGINATION: `${prefix}/tour/pagination`,
-    FIND_BY_SLUG: `${prefix}/tour/find-by-slug`,
+    FIND_BY_SLUG: `${prefix}/tour/slug/:slug`,
     FIND_BY_ID: `${prefix}/tour/find-by-id`,
     SEARCH: `${prefix}/tour/search`,
   },

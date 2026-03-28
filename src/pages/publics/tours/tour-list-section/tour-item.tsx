@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const TourItem = (tour: TourDto) => {
   const navigate = useNavigate();
+  const firstTourDetailId = tour.__tourDetails__?.[0]?.id;
   return (
     <Link
       to={`/tours/${tour.slug}`}
@@ -50,9 +51,14 @@ const TourItem = (tour: TourDto) => {
             label="Xem mọi giá"
             handleClick={(e) => {
               e.preventDefault();
-              navigate(
-                `/tours/details/${tour.__tourDetails__?.[0]?.id}/all-prices`,
-              );
+              if (!firstTourDetailId) {
+                navigate(`/tours/${tour.slug}`);
+                return;
+              }
+
+              navigate(`/tours-details/${firstTourDetailId}/all-prices`, {
+                state: { tour },
+              });
             }}
             buttonStyles={{
               height: "40px",

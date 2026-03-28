@@ -71,6 +71,10 @@ const PublicRoutes = [
         element: PUBLIC_SCREENS[PUBLIC_ROUTES.TOUR_DETAIL],
       },
       {
+        path: PUBLIC_ROUTES.TOUR_DETAIL_ALL_PRICES,
+        element: PUBLIC_SCREENS[PUBLIC_ROUTES.TOUR_DETAIL_ALL_PRICES],
+      },
+      {
         path: PUBLIC_ROUTES.BOOKING,
         element: PUBLIC_SCREENS[PUBLIC_ROUTES.BOOKING],
       },

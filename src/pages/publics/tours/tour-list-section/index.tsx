@@ -13,8 +13,6 @@ const TourListSection = () => {
     where: {},
   });
 
-  console.log("data: ", data);
-
   const onPageChange = (event: { first: number; rows: number }) => {
     setFirst(event.first);
     setRows(event.rows);
