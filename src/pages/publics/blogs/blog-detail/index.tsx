@@ -1,3 +1,4 @@
+import { formatDate } from "@/common/helpers/format";
 import LoginModal from "@/components/auth/LoginForm";
 import RegisterModal from "@/components/auth/RegisterFrom";
 import LabelTag from "@/components/ui/LabelTag";
@@ -20,469 +21,279 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Skeleton } from "primereact/skeleton";
 import { Tag } from "primereact/tag";
 import { Toast } from "primereact/toast";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 
 export default function BlogDetailScreen() {
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
   const toast = useRef<Toast>(null);
+
   const { data: blog, isLoading } = useBlogBySlug(slug);
   const { likeBlog, isLoading: isLiking } = useLikeBlog();
   const { createComment, isLoading: isCreatingComment } =
     useCreateBlogComment();
 
-  const [commentForm, setCommentForm] = useState({
-    content: "",
-  });
+  const [commentContent, setCommentContent] = useState("");
   const [loginVisible, setLoginVisible] = useState(false);
   const [registerVisible, setRegisterVisible] = useState(false);
-  const [isLoggedIn] = useState(() => tokenCache.isAuthenticated());
 
-  const {
-    data: comments,
-    refetch: refetchComments,
-    isLoading: isLoadingComments,
-  } = useBlogComments(blog?.id, {
-    skip: 0,
-    take: 100,
-  });
+  const isLoggedIn = useMemo(
+    () => tokenCache.isAuthenticated(),
+    [loginVisible],
+  );
+
+  const { data: comments = [], refetch: refetchComments } = useBlogComments(
+    blog?.id,
+    { skip: 0, take: 100 },
+  );
 
   const { data: relatedBlogs } = useRelatedBlogs(blog?.id, 3);
 
   const handleSubmitComment = () => {
     if (!isLoggedIn) {
-      toast.current?.show({
-        severity: "warn",
-        summary: "Yêu cầu đăng nhập",
-        detail: "Bạn cần đăng nhập để bình luận",
-        life: 3000,
-      });
       setLoginVisible(true);
       return;
     }
-
-    if (!commentForm.content.trim()) {
-      toast.current?.show({
-        severity: "warn",
-        summary: "Thông báo",
-        detail: "Vui lòng nhập nội dung bình luận!",
-        life: 3000,
-      });
-      return;
-    }
-
-    if (!blog?.id) return;
+    if (!commentContent.trim()) return;
 
     createComment(
-      {
-        postId: blog.id,
-        content: commentForm.content,
-      },
+      { postId: blog!.id, content: commentContent },
       {
         onSuccess: () => {
-          setCommentForm({ content: "" });
+          setCommentContent("");
           refetchComments();
           toast.current?.show({
             severity: "success",
             summary: "Thành công",
-            detail:
-              "Cảm ơn bạn đã bình luận! Bình luận của bạn đang chờ duyệt.",
-            life: 3000,
-          });
-        },
-        onError: () => {
-          toast.current?.show({
-            severity: "error",
-            summary: "Lỗi",
-            detail: "Có lỗi xảy ra khi gửi bình luận. Vui lòng thử lại!",
-            life: 3000,
+            detail: "Bình luận của bạn đã được gửi.",
           });
         },
       },
     );
   };
 
-  const handleLikeBlog = () => {
-    if (!isLoggedIn) {
-      toast.current?.show({
-        severity: "warn",
-        summary: "Yêu cầu đăng nhập",
-        detail: "Bạn cần đăng nhập để thích bài viết",
-        life: 3000,
-      });
-      setLoginVisible(true);
-      return;
-    }
+  if (isLoading) return <BlogLoadingSkeleton />;
 
-    if (!blog?.id) return;
-    likeBlog(blog.id);
-  };
-
-  const formatDate = (dateString: string | Date) => {
-    const date =
-      typeof dateString === "string" ? new Date(dateString) : dateString;
-    return date.toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <Skeleton width="100%" height="3rem" className="mb-4" />
-              <Skeleton width="100%" height="24rem" className="mb-4" />
-              <Skeleton width="100%" height="10rem" />
-            </div>
-            <div>
-              <Skeleton width="100%" height="20rem" />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!blog) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Không tìm thấy bài viết</h2>
-          <Button
-            label="Quay lại danh sách"
-            icon="pi pi-arrow-left"
-            onClick={() => router.push("/blogs")}
-          />
-        </div>
-      </div>
-    );
-  }
+  if (!blog) return <BlogNotFound onClick={() => router.push("/blogs")} />;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[--surface-ground] transition-colors duration-300 pb-12">
       <Toast ref={toast} />
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* Title */}
-            <div className="text-center mb-6">
-              <Title>{blog.title}</Title>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          {/* --- MAIN CONTENT (LEFT) --- */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* Header: Title & Meta */}
+            <div className="space-y-4">
+              <Tag
+                value={blog.category || "Tin tức"}
+                severity="info"
+                className="uppercase text-xs"
+              />
+              <Title className="text-left text-3xl md:text-5xl font-black leading-tight text-[--text-color]">
+                {blog.title}
+              </Title>
+
+              <div className="flex items-center flex-wrap gap-4 text-sm text-[--text-color-secondary] py-2 border-y border-[--surface-border]">
+                <div className="flex items-center gap-2">
+                  <Avatar icon="pi pi-user" shape="circle" size="normal" />
+                  <span className="font-semibold text-[--text-color]">
+                    {blog.author?.username || "Admin"}
+                  </span>
+                </div>
+                <Divider layout="vertical" className="hidden md:block" />
+                <div className="flex items-center gap-2">
+                  <i className="pi pi-calendar" />
+                  <span>{formatDate(blog.publishedAt || blog.createdAt)}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <i className="pi pi-eye" />
+                  <span>{blog.viewCount || 0} lượt xem</span>
+                </div>
+              </div>
             </div>
 
-            {/* Featured Image */}
+            {/* Featured Image - Hiện thị riêng biệt không đè chữ */}
             {blog.featuredImage && (
-              <div className="relative mb-6">
+              <div className="rounded-3xl overflow-hidden shadow-lg border border-[--surface-border] bg-[--surface-card]">
                 <Image
                   src={blog.featuredImage.fileUrl}
                   alt={blog.title}
                   className="w-full"
-                  imageClassName="w-full h-96 object-cover rounded-2xl"
+                  imageClassName="w-full max-h-[500px] object-cover hover:scale-105 transition-transform duration-700"
                   preview
                 />
               </div>
             )}
 
-            {/* Article Meta */}
-            <Card className="mb-6">
-              <div className="flex flex-wrap items-center justify-between gap-4 text-sm">
-                <div className="flex flex-wrap items-center gap-4">
-                  <span className="flex items-center gap-1">
-                    <i className="pi pi-user"></i>
-                    <span>
-                      {blog.author?.fullName ||
-                        blog.author?.username ||
-                        "Admin"}
-                    </span>
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <i className="pi pi-calendar"></i>
-                    <span>
-                      {formatDate(blog.publishedAt || blog.createdAt)}
-                    </span>
-                  </span>
-                  {blog.category && (
-                    <span className="flex items-center gap-1">
-                      <i className="pi pi-tag"></i>
-                      <span>{blog.category}</span>
-                    </span>
-                  )}
-                  <span className="flex items-center gap-1">
-                    <i className="pi pi-eye"></i>
-                    <span>{blog.viewCount || 0} lượt xem</span>
+            {/* Blog Body */}
+            <div className="bg-[--surface-card] p-6 md:p-10 rounded-3xl shadow-sm border border-[--surface-border]">
+              {/* Excerpt */}
+              {blog.excerpt && (
+                <div className="mb-8 p-4 bg-[--primary-50] border-l-4 border-[--primary-color] rounded-r-lg">
+                  <p className="italic text-lg text-[--text-color] opacity-80">
+                    {blog.excerpt}
+                  </p>
+                </div>
+              )}
+
+              {/* Main Content Render */}
+              <article
+                className="prose prose-lg dark:prose-invert max-w-none 
+                  prose-p:text-[--text-color] prose-p:opacity-90 prose-p:leading-relaxed
+                  prose-headings:text-[--text-color] prose-strong:text-[--text-color]
+                  prose-img:rounded-2xl prose-a:text-[--primary-color]"
+                dangerouslySetInnerHTML={{ __html: blog.content }}
+              />
+
+              {/* Action: Like & Share */}
+              <div className="mt-10 pt-6 border-t border-[--surface-border] flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <Button
+                    label={String(blog.likeCount || 0)}
+                    icon={`pi ${blog.likeCount > 0 ? "pi-heart-fill" : "pi-heart"}`}
+                    className={`p-button-rounded ${blog.likeCount > 0 ? "p-button-danger" : "p-button-outlined p-button-secondary"}`}
+                    loading={isLiking}
+                    onClick={() =>
+                      isLoggedIn ? likeBlog(blog.id) : setLoginVisible(true)
+                    }
+                  />
+                  <span className="text-sm font-medium opacity-60">
+                    Thích bài viết này
                   </span>
                 </div>
-
-                <Button
-                  label={`${blog.likeCount || 0} Thích`}
-                  icon="pi pi-heart"
-                  onClick={handleLikeBlog}
-                  loading={isLiking}
-                  severity="danger"
-                  outlined
-                />
-              </div>
-            </Card>
-
-            {/* Excerpt */}
-            {blog.excerpt && (
-              <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 rounded">
-                <p className="text-gray-800 italic">{blog.excerpt}</p>
-              </div>
-            )}
-
-            <Divider />
-
-            {/* Content */}
-            <div
-              className="prose prose-lg max-w-none mb-8 bg-white p-6 rounded-lg"
-              dangerouslySetInnerHTML={{ __html: blog.content }}
-            />
-
-            {/* Tags */}
-            {blog.tags && blog.tags.length > 0 && (
-              <Card className="mb-6">
-                <div className="flex flex-wrap items-center gap-4">
-                  <span className="font-semibold">Tags:</span>
-                  <div className="flex flex-wrap gap-2">
-                    {blog.tags.map((tag: string, index: number) => (
-                      <Tag key={index} value={tag} severity="info" />
-                    ))}
-                  </div>
-                </div>
-              </Card>
-            )}
-
-            {/* Share Buttons */}
-            <Card className="mb-8">
-              <div className="flex items-center justify-between">
-                <span className="font-semibold">Chia sẻ bài viết:</span>
                 <div className="flex gap-2">
                   <Button
                     icon="pi pi-facebook"
+                    text
                     rounded
-                    className="w-10 h-10 bg-blue-600 border-blue-600"
+                    severity="secondary"
                   />
                   <Button
                     icon="pi pi-twitter"
+                    text
                     rounded
-                    className="w-10 h-10 bg-blue-400 border-blue-400"
+                    severity="secondary"
                   />
                   <Button
-                    icon="pi pi-linkedin"
+                    icon="pi pi-share-alt"
+                    text
                     rounded
-                    className="w-10 h-10 bg-blue-700 border-blue-700"
-                  />
-                  <Button
-                    icon="pi pi-link"
-                    rounded
-                    outlined
-                    className="w-10 h-10"
+                    severity="secondary"
                   />
                 </div>
               </div>
-            </Card>
-
-            {/* Comments Section */}
-            <div className="mb-8">
-              <LabelTag>Bình luận ({comments.length})</LabelTag>
-
-              {isLoadingComments ? (
-                <div className="space-y-4 mt-4">
-                  {[1, 2, 3].map((i) => (
-                    <Card key={i}>
-                      <div className="flex gap-4">
-                        <Skeleton shape="circle" size="3rem" />
-                        <div className="flex-1">
-                          <Skeleton width="30%" className="mb-2" />
-                          <Skeleton width="100%" height="3rem" />
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              ) : comments.length > 0 ? (
-                <div className="space-y-4 mt-4">
-                  {comments.map((comment: any) => (
-                    <Card key={comment.id} className="shadow-sm">
-                      <div className="flex gap-4">
-                        <Avatar
-                          image={`https://i.pravatar.cc/150?u=${comment.customer?.id}`}
-                          size="large"
-                          shape="circle"
-                        />
-                        <div className="flex-1">
-                          <div className="mb-2">
-                            <h4 className="font-bold">
-                              {comment.customer?.fullName ||
-                                comment.customer?.username ||
-                                "Người dùng"}
-                            </h4>
-                            <p className="text-sm text-gray-500">
-                              {formatDate(comment.createdAt)}
-                            </p>
-                          </div>
-                          <p className="text-gray-700">{comment.content}</p>
-
-                          {/* Replies */}
-                          {comment.replies && comment.replies.length > 0 && (
-                            <div className="mt-4 ml-8 space-y-3">
-                              {comment.replies.map((reply: any) => (
-                                <div key={reply.id} className="flex gap-3">
-                                  <Avatar
-                                    image={`https://i.pravatar.cc/150?u=${reply.customer?.id}`}
-                                    size="normal"
-                                    shape="circle"
-                                  />
-                                  <div className="flex-1 bg-gray-50 p-3 rounded">
-                                    <h5 className="font-semibold text-sm">
-                                      {reply.customer?.fullName ||
-                                        reply.customer?.username ||
-                                        "Người dùng"}
-                                    </h5>
-                                    <p className="text-xs text-gray-500 mb-1">
-                                      {formatDate(reply.createdAt)}
-                                    </p>
-                                    <p className="text-sm">{reply.content}</p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <i className="pi pi-comments text-4xl mb-2"></i>
-                  <p>Chưa có bình luận nào. Hãy là người đầu tiên!</p>
-                </div>
-              )}
             </div>
 
-            {/* Comment Form */}
-            <Card className="shadow-lg">
-              <LabelTag>Viết bình luận</LabelTag>
-              <p className="mb-4 text-gray-600">
-                Hãy chia sẻ suy nghĩ của bạn về bài viết này
-              </p>
+            {/* Comments Section */}
+            <div className="bg-[--surface-card] p-6 md:p-10 rounded-3xl shadow-sm border border-[--surface-border] space-y-8">
+              <h3 className="text-xl font-bold flex items-center gap-2">
+                <i className="pi pi-comments text-[--primary-color]" />
+                Bình luận ({comments.length})
+              </h3>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Nội dung bình luận <span className="text-red-500">*</span>
-                  </label>
+              <div className="flex gap-4">
+                <Avatar
+                  icon="pi pi-user"
+                  size="large"
+                  shape="circle"
+                  className="bg-[--surface-100]"
+                />
+                <div className="flex-1 space-y-3">
                   <InputTextarea
-                    placeholder="Nhập bình luận của bạn..."
-                    value={commentForm.content}
-                    onChange={(e) =>
-                      setCommentForm({ content: e.target.value })
-                    }
-                    rows={5}
-                    className="w-full"
+                    value={commentContent}
+                    onChange={(e) => setCommentContent(e.target.value)}
+                    placeholder="Bạn nghĩ gì về bài viết này?"
+                    rows={3}
+                    className="w-full rounded-xl border-[--surface-border] bg-[--surface-ground] focus:bg-[--surface-card]"
                   />
+                  <div className="flex justify-end">
+                    <Button
+                      label="Gửi bình luận"
+                      icon="pi pi-send"
+                      disabled={!commentContent.trim() || isCreatingComment}
+                      loading={isCreatingComment}
+                      onClick={handleSubmitComment}
+                      className="px-6 rounded-xl"
+                    />
+                  </div>
                 </div>
+              </div>
 
+              <Divider />
+
+              <div className="space-y-6">
+                {comments.map((comment: any) => (
+                  <div key={comment.id} className="flex gap-4">
+                    <Avatar
+                      image={`https://api.dicebear.com/7.x/initials/svg?seed=${comment.customer?.username}`}
+                      shape="circle"
+                    />
+                    <div className="flex-1 p-4 rounded-2xl bg-[--surface-ground]">
+                      <div className="flex justify-between mb-2">
+                        <span className="font-bold">
+                          {comment.customer?.fullName || "Người dùng"}
+                        </span>
+                        <span className="text-xs opacity-50">
+                          {formatDate(comment.createdAt)}
+                        </span>
+                      </div>
+                      <p className="text-sm opacity-90">{comment.content}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* --- SIDEBAR (RIGHT) --- */}
+          <div className="lg:col-span-4 space-y-6">
+            <Card className="rounded-3xl border border-[--surface-border]">
+              <LabelTag>Bài viết liên quan</LabelTag>
+              <div className="space-y-5 mt-6">
+                {relatedBlogs?.map((item: any) => (
+                  <div
+                    key={item.id}
+                    className="group flex gap-4 cursor-pointer"
+                    onClick={() => router.push(`/blogs/${item.slug}`)}
+                  >
+                    <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 bg-[--surface-100]">
+                      <img
+                        src={item.featuredImage?.fileUrl}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h5 className="font-bold text-sm line-clamp-2 group-hover:text-[--primary-color] transition-colors">
+                        {item.title}
+                      </h5>
+                      <p className="text-xs opacity-50 mt-1">
+                        {formatDate(item.publishedAt || item.createdAt)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            <Card className="rounded-3xl border border-[--surface-border] bg-[--primary-color] text-white">
+              <h4 className="font-bold mb-2">Đăng ký bản tin</h4>
+              <p className="text-xs opacity-80 mb-4 text-white">
+                Nhận những cập nhật du lịch mới nhất qua email của bạn.
+              </p>
+              <div className="p-inputgroup">
                 <Button
-                  label={isCreatingComment ? "Đang gửi..." : "Gửi bình luận"}
-                  icon="pi pi-send"
-                  onClick={handleSubmitComment}
-                  disabled={isCreatingComment || !commentForm.content.trim()}
-                  className="w-full bg-teal-600 hover:bg-teal-700 border-teal-600"
+                  label="Theo dõi ngay"
+                  className="p-button-secondary w-full rounded-xl"
                 />
               </div>
             </Card>
-          </div>
-
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            {/* Author Info */}
-            {blog.author && (
-              <Card className="mb-6 shadow-sm">
-                <LabelTag>Tác giả</LabelTag>
-                <div className="flex items-center gap-4 mt-4">
-                  <Avatar
-                    image={`https://i.pravatar.cc/150?u=${blog.author.id}`}
-                    size="xlarge"
-                    shape="circle"
-                  />
-                  <div>
-                    <h4 className="font-bold text-lg">
-                      {blog.author.fullName || blog.author.username}
-                    </h4>
-                    <p className="text-sm text-gray-500">Tác giả</p>
-                  </div>
-                </div>
-              </Card>
-            )}
-
-            {/* Related Posts */}
-            {relatedBlogs && relatedBlogs.length > 0 && (
-              <Card className="mb-6 shadow-sm">
-                <LabelTag>Bài viết liên quan</LabelTag>
-                <div className="space-y-4 mt-4">
-                  {relatedBlogs.map((relatedBlog: any) => (
-                    <div
-                      key={relatedBlog.id}
-                      className="flex gap-3 cursor-pointer hover:bg-gray-50 p-2 rounded transition-colors"
-                      onClick={() => router.push(`/blogs/${relatedBlog.slug}`)}
-                    >
-                      {relatedBlog.featuredImage && (
-                        <img
-                          src={relatedBlog.featuredImage.fileUrl}
-                          alt={relatedBlog.title}
-                          className="w-20 h-20 object-cover rounded"
-                        />
-                      )}
-                      <div className="flex-1">
-                        <h5 className="font-semibold text-sm line-clamp-2 mb-1">
-                          {relatedBlog.title}
-                        </h5>
-                        <p className="text-xs text-gray-500">
-                          {formatDate(
-                            relatedBlog.publishedAt || relatedBlog.createdAt,
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            )}
-
-            {/* SEO Info */}
-            {(blog.seoTitle || blog.seoDescription) && (
-              <Card className="mb-6 shadow-sm">
-                <h3 className="font-bold text-lg mb-4 text-teal-700">
-                  Thông tin SEO
-                </h3>
-                {blog.seoTitle && (
-                  <div className="mb-2">
-                    <p className="text-sm text-gray-500">SEO Title:</p>
-                    <p className="font-medium">{blog.seoTitle}</p>
-                  </div>
-                )}
-                {blog.seoDescription && (
-                  <div>
-                    <p className="text-sm text-gray-500">SEO Description:</p>
-                    <p className="text-sm">{blog.seoDescription}</p>
-                  </div>
-                )}
-              </Card>
-            )}
           </div>
         </div>
       </div>
 
-      {/* Login/Register Modals */}
       <LoginModal
         visible={loginVisible}
         onHide={() => setLoginVisible(false)}
@@ -490,11 +301,8 @@ export default function BlogDetailScreen() {
           setLoginVisible(false);
           setRegisterVisible(true);
         }}
-        onSwitchToForgotPassword={() => {
-          setLoginVisible(false);
-        }}
+        onSwitchToForgotPassword={() => setLoginVisible(false)}
       />
-
       <RegisterModal
         visible={registerVisible}
         onHide={() => setRegisterVisible(false)}
@@ -503,6 +311,40 @@ export default function BlogDetailScreen() {
           setLoginVisible(true);
         }}
       />
+    </div>
+  );
+}
+
+// Sub-components giúp code sạch hơn
+function BlogNotFound({ onClick }: { onClick: () => void }) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+      <i className="pi pi-search text-6xl opacity-20" />
+      <h2 className="text-2xl font-bold">Không tìm thấy bài viết</h2>
+      <Button
+        label="Quay lại danh sách"
+        icon="pi pi-arrow-left"
+        text
+        onClick={onClick}
+      />
+    </div>
+  );
+}
+
+function BlogLoadingSkeleton() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-12 space-y-8">
+      <Skeleton width="40%" height="2rem" />
+      <Skeleton height="3rem" width="80%" />
+      <Skeleton height="400px" className="rounded-3xl" />
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-8 space-y-4">
+          <Skeleton height="20rem" />
+        </div>
+        <div className="lg:col-span-4 space-y-4">
+          <Skeleton height="10rem" />
+        </div>
+      </div>
     </div>
   );
 }
