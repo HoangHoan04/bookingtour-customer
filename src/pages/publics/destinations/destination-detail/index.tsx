@@ -23,7 +23,7 @@ export default function DestinationDetailScreen() {
     if (destination?.id) {
       incrementView(destination.id);
     }
-  }, [destination.id, incrementView]);
+  }, [destination?.id, incrementView]);
 
   if (isLoading) {
     return (
@@ -150,7 +150,7 @@ export default function DestinationDetailScreen() {
                         <p className="text-sm text-gray-500 mb-1">
                           Thời gian lý tưởng
                         </p>
-                        <p className="font-bold text-gray-900 text-lg">
+                        <p className="font-bold text-lg">
                           Tháng {destination.bestTimeToVisit}
                         </p>
                       </div>
@@ -166,7 +166,7 @@ export default function DestinationDetailScreen() {
                         <p className="text-sm text-gray-500 mb-1">
                           Nhiệt độ trung bình
                         </p>
-                        <p className="font-bold text-gray-900 text-lg">
+                        <p className="font-bold text-lg">
                           {destination.averageTemperature}°C
                         </p>
                       </div>
@@ -180,7 +180,7 @@ export default function DestinationDetailScreen() {
                       </div>
                       <div>
                         <p className="text-sm text-gray-500 mb-1">Tọa độ</p>
-                        <p className="font-bold text-gray-900">
+                        <p className="font-bold">
                           {destination.latitude}, {destination.longitude}
                         </p>
                       </div>
@@ -194,7 +194,7 @@ export default function DestinationDetailScreen() {
                       </div>
                       <div>
                         <p className="text-sm text-gray-500 mb-1">Đánh giá</p>
-                        <p className="font-bold text-gray-900 text-lg">
+                        <p className="font-bold text-lg">
                           {destination.rating}/5
                         </p>
                       </div>

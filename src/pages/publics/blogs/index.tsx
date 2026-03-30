@@ -116,7 +116,7 @@ export default function BlogScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screenx">
       {/* Banner Section */}
       <section className="relative pt-4">
         <BannerComponent type={enumData.BANNER_TYPE.BLOG.code} />
@@ -152,18 +152,16 @@ export default function BlogScreen() {
 
         {/* Pagination */}
         {!isLoading && total > 0 && (
-          <div className="mt-8">
-            <Paginator
-              currentPageReportTemplate="Hiển thị {first} - {last} trong tổng số {totalRecords} bài viết"
-              totalRecords={total}
-              rows={itemsPerPage}
-              first={first}
-              onPageChange={onPageChange}
-              rowsPerPageOptions={enumData.PAGE.LST_PAGESIZE}
-              template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-              className="border-none bg-white rounded-lg shadow-sm"
-            />
-          </div>
+          <Paginator
+            currentPageReportTemplate={`Hiển thị {first} - {last} trong tổng số {totalRecords} bài viết`}
+            totalRecords={total}
+            rows={itemsPerPage}
+            first={first}
+            onPageChange={onPageChange}
+            rowsPerPageOptions={enumData.PAGE.LST_PAGESIZE}
+            template="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+            className="w-full border-none custom-grid-paginator"
+          />
         )}
       </section>
 

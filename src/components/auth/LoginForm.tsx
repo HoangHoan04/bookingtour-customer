@@ -63,9 +63,10 @@ export default function LoginModal({
   const handleLoginSuccess = async (data: any) => {
     if (data?.accessToken) {
       tokenCache.setAuthData(data.accessToken, data.refreshToken, data.user);
+
       try {
         const userInfoRes = await getMe();
-        if (userInfoRes && userInfoRes.user) {
+        if (userInfoRes?.user) {
           tokenCache.updateUser(userInfoRes.user);
         }
       } catch (error) {
@@ -77,10 +78,11 @@ export default function LoginModal({
         title: "Thành công",
         message: "Đăng nhập thành công",
       });
+
       setTimeout(() => {
         onHide();
         window.location.reload();
-      }, 500);
+      }, 800);
     }
   };
 
@@ -231,16 +233,14 @@ export default function LoginModal({
             <label htmlFor="username" className="text-sm font-medium">
               Tên đăng nhập
             </label>
-            <IconField iconPosition="left" className="w-full">
+            <IconField iconPosition="left">
               <InputIcon className="pi pi-user" />
               <InputText
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Email hoặc số điện thoại"
-                className={`w-full pl-10 py-3 ${
-                  errors.username ? "p-invalid border-red-500" : ""
-                }`}
+                className={`w-full pl-10 py-3 ${errors.username ? "p-invalid border-red-500" : ""}`}
               />
             </IconField>
             {errors.username && (
