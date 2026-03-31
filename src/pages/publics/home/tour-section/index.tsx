@@ -210,13 +210,13 @@ export default function PopularTourSection() {
 
       <div className="max-w-7xl mx-auto mt-2">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8">
-          <div className="flex items-center gap-6 text-white">
+          <div className="flex items-center gap-6">
             <i className="pi pi-compass text-6xl hidden md:block"></i>
             <div>
               <h2 className="text-3xl font-bold mb-2">
                 Sẵn sàng cho chuyến phiêu lưu tiếp theo?
               </h2>
-              <p className="text-blue-100">
+              <p className="">
                 Tìm kiếm và đặt tour du lịch hoàn hảo cho bạn ngay hôm nay!
               </p>
             </div>

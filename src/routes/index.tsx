@@ -6,7 +6,8 @@ import PublicLayout from "../layout/PublicLayout";
 import RequireAuthLayout from "../layout/RequireAuthLayout";
 import PrivateRoute from "./PrivateRoutes";
 import { PUBLIC_SCREENS } from "./PublicScreens";
-import { PUBLIC_ROUTES } from "./routes";
+import { PUBLIC_ROUTES, REQUIRE_AUTH_ROUTES } from "./routes";
+import { REQUIRE_AUTH_SCREENS } from "./RequireAuthScreens";
 
 const Page404 = lazy(() => import("../pages/NotFound"));
 
@@ -20,7 +21,16 @@ const RequireAuthRoutes = [
         </Suspense>
       </RequireAuthLayout>
     ),
-    children: [],
+    children: [
+      {
+        path: REQUIRE_AUTH_ROUTES.CHANGE_PASSWORD,
+        element: REQUIRE_AUTH_SCREENS[REQUIRE_AUTH_ROUTES.CHANGE_PASSWORD],
+      },
+      {
+        path: REQUIRE_AUTH_ROUTES.PROFILE,
+        element: REQUIRE_AUTH_SCREENS[REQUIRE_AUTH_ROUTES.PROFILE],
+      },
+    ],
   },
 ];
 

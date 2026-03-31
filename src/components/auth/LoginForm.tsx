@@ -13,7 +13,6 @@ import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { Dialog } from "primereact/dialog";
 import { IconField } from "primereact/iconfield";
-import { InputIcon } from "primereact/inputicon";
 import { InputText } from "primereact/inputtext";
 import { useState } from "react";
 
@@ -234,13 +233,12 @@ export default function LoginModal({
               Tên đăng nhập
             </label>
             <IconField iconPosition="left">
-              <InputIcon className="pi pi-user" />
               <InputText
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Email hoặc số điện thoại"
-                className={`w-full pl-10 py-3 ${errors.username ? "p-invalid border-red-500" : ""}`}
+                className={`${errors.username ? "p-invalid border-red-500" : ""}`}
               />
             </IconField>
             {errors.username && (
@@ -264,7 +262,6 @@ export default function LoginModal({
               </span>
             </div>
             <IconField iconPosition="left" className="w-full">
-              <InputIcon className="pi pi-lock" />
               <InputText
                 id="password"
                 type={showPassword ? "text" : "password"}

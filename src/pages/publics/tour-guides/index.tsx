@@ -204,10 +204,10 @@ export default function TourGuideScreen() {
   );
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
+    <div className="min-h-screen">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
         <div className="text-center mb-12">
-          <Title>Hướng Dẫn Viên Du Lịch</Title>
+          <Title className="">Hướng Dẫn Viên Du Lịch</Title>
           <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
             Kết nối với những hướng dẫn viên chuyên nghiệp, giàu kinh nghiệm để
             có hành trình khám phá Việt Nam đáng nhớ.
