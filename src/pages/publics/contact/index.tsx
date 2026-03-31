@@ -46,7 +46,7 @@ export default function ContactScreen() {
         <Divider />
         <div className="text-center">
           <h3 className="text-4xl font-bold mb-3">
-            Sẵn sàng cho cuộc phiêu lưu tiếp theo của bạn?
+            Sẵn sàng cho chuyến phiêu lưu tiếp theo của bạn?
           </h3>
           <p className="text-lg mb-6 max-w-2xl mx-auto">
             Nhận ưu đãi độc quyền và khuyến mãi đặc biệt khi đặt tour ngay hôm

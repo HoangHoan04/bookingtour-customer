@@ -8,6 +8,8 @@ import ForgotPasswordModal from "@/components/auth/ForgotPaswordForm";
 import LoginModal from "@/components/auth/LoginForm";
 import RegisterModal from "@/components/auth/RegisterFrom";
 import { useTheme } from "@/context/ThemeContext";
+import { useRouter } from "@/routes/hooks";
+import { REQUIRE_AUTH_ROUTES } from "@/routes/routes";
 import tokenCache from "@/utils/token-cache";
 import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
@@ -18,7 +20,6 @@ import { Menu } from "primereact/menu";
 import type { MenuItem } from "primereact/menuitem";
 import { Sidebar } from "primereact/sidebar";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 type AppHeaderProps = {
   isScrolled?: boolean;
@@ -30,11 +31,9 @@ type MenuItemType = {
   children?: { label: string; path: string }[];
 };
 
-export default function AppHeader({
-  isScrolled = false,
-}: AppHeaderProps) {
+export default function AppHeader({ isScrolled = false }: AppHeaderProps) {
   const { theme, toggleTheme } = useTheme();
-  const navigate = useNavigate();
+  const router = useRouter();
   const [loginVisible, setLoginVisible] = useState(false);
   const [registerVisible, setRegisterVisible] = useState(false);
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
@@ -180,19 +179,19 @@ export default function AppHeader({
       },
       { separator: true },
       {
-        label: "Đơn hàng của tôi",
+        label: "Booking của tôi",
         icon: "pi pi-fw pi-shopping-bag",
-        command: () => navigate("/my-orders"),
+        command: () => router.push("/my-orders"),
       },
       {
         label: "Thông tin tài khoản",
         icon: "pi pi-fw pi-user-edit",
-        command: () => navigate("/profile"),
+        command: () => router.push(REQUIRE_AUTH_ROUTES.PROFILE),
       },
       {
         label: "Đổi mật khẩu",
         icon: "pi pi-fw pi-key",
-        command: () => navigate("/change-password"),
+        command: () => router.push(REQUIRE_AUTH_ROUTES.CHANGE_PASSWORD),
       },
       {
         separator: true,
@@ -208,7 +207,7 @@ export default function AppHeader({
         },
       },
     ],
-    [displayName, navigate],
+    [displayName, router.push],
   );
 
   const userMenuItemsGuest: MenuItem[] = useMemo(
@@ -231,9 +230,9 @@ export default function AppHeader({
     if (searchQuery.trim()) {
       console.log("Tìm kiếm:", searchQuery);
       setSearchSidebarVisible(false);
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
-  }, [searchQuery, navigate]);
+  }, [searchQuery, router.push]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -259,10 +258,10 @@ export default function AppHeader({
   const handleMenuClick = useCallback(
     (path: string) => {
       setActiveMenu(path);
-      navigate(path);
+      router.push(path);
       setHoveredMenu(null);
     },
-    [navigate],
+    [router.push],
   );
 
   const handleMenuMouseEnter = useCallback((itemPath: string) => {
@@ -373,7 +372,7 @@ export default function AppHeader({
             <div className="flex items-center justify-between h-16 gap-4">
               <div
                 className="flex items-center gap-2 cursor-pointer"
-                onClick={() => navigate("/")}
+                onClick={() => router.push("/")}
               >
                 <span
                   style={{
@@ -428,20 +427,29 @@ export default function AppHeader({
 
                       {hasChildren && isHovered && (
                         <div
-                          className="absolute top-full left-0 mt-1 surface-card shadow-lg rounded-md overflow-hidden min-w-50 border surface-border z-10"
+                          className="absolute top-full left-0 mt-2 shadow-2xl rounded-xl overflow-hidden min-w-[220px] z-20 transition-all duration-300"
                           style={{
-                            backgroundColor: "var(--surface-card)",
-                            opacity: 1,
+                            backgroundColor: "#efffff", // Nền trắng tinh tế hơn #efffff
+                            border: "1px solid rgba(0, 0, 0, 0.05)", // Border siêu mờ
+                            backdropFilter: "blur(10px)", // Hiệu ứng mờ nền nếu cần
                           }}
                         >
                           {item.children!.map((child, childIndex) => (
                             <button
                               key={childIndex}
                               onClick={() => handleMenuClick(child.path)}
-                              className="w-full text-left px-4 py-3 surface-card hover:surface-hover transition-colors text-sm font-medium text-[--text-color] hover:text-primary border-bottom-1 surface-border last:border-none"
-                              style={{ opacity: 1 }}
+                              className={`
+                                relative w-full text-left px-5 py-3.5 flex items-center transition-all duration-200 group
+                                border-b border-black/5 last:border-none
+                                hover:bg-teal-500/5
+                              `}
                             >
-                              {child.label}
+                              {/* Đường line dọc khi hover */}
+                              <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 bg-teal-500 transition-all duration-300 group-hover:h-3/4" />
+
+                              <span className="text-sm font-medium text-gray-600 group-hover:text-teal-600 group-hover:translate-x-1 transition-transform duration-200">
+                                {child.label}
+                              </span>
                             </button>
                           ))}
                         </div>
@@ -494,14 +502,15 @@ export default function AppHeader({
                   </div>
 
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 z-50 surface-card shadow-lg rounded-md border surface-border min-w-48">
+                    <div className="absolute right-0 mt-2 z-50 surface-card shadow-lg text-xs rounded-md border surface-border min-w-48">
                       <Menu
                         model={
                           isLoggedIn
                             ? userMenuItemsLoggedIn
                             : userMenuItemsGuest
                         }
-                        className="border-none"
+                        className="border-none text-xs"
+                        style={{ fontSize: "12px" }}
                       />
                     </div>
                   )}

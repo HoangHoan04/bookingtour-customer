@@ -1,7 +1,6 @@
 import { lazy } from "react";
 import { PUBLIC_ROUTES } from "./routes";
 
-// Lazy load all page components
 const ZaloCallback = lazy(() => import("@/pages/auth/ZaloCallBack"));
 const AboutScreen = lazy(() => import("@/pages/publics/about"));
 const BlogScreen = lazy(() => import("@/pages/publics/blogs"));
@@ -31,7 +30,6 @@ const TourDetailScreen = lazy(
 const TourDetailAllPricesScreen = lazy(
   () => import("@/pages/publics/tours/tour-detail/list-tour-detail"),
 );
-
 
 export const PUBLIC_SCREENS = {
   [PUBLIC_ROUTES.HOME]: <HomeScreen />,

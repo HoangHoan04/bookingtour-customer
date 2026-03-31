@@ -6,11 +6,9 @@ import {
   sendOtpCustomer,
 } from "@/services/auth.service";
 import tokenCache from "@/utils/token-cache";
-
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { IconField } from "primereact/iconfield";
-import { InputIcon } from "primereact/inputicon";
 import { InputOtp } from "primereact/inputotp";
 import { InputText } from "primereact/inputtext";
 import { RadioButton } from "primereact/radiobutton";
@@ -198,7 +196,7 @@ export default function RegisterModal({
         tokenCache.setAuthData(
           loginRes.accessToken,
           loginRes.refreshToken,
-          loginRes.user
+          loginRes.user,
         );
 
         showToast({
@@ -300,7 +298,6 @@ export default function RegisterModal({
                   </label>
                   <div className="relative">
                     <IconField iconPosition="left" className="w-full">
-                      <InputIcon className="pi pi-user" />
                       <InputText
                         id="name"
                         value={registerData.name}
@@ -329,7 +326,6 @@ export default function RegisterModal({
                     </label>
                     <div className="relative">
                       <IconField iconPosition="left" className="w-full">
-                        <InputIcon className="pi pi-phone" />
                         <InputText
                           id="phone"
                           value={registerData.phone}
@@ -357,7 +353,6 @@ export default function RegisterModal({
                     </label>
                     <div className="relative">
                       <IconField iconPosition="left" className="w-full">
-                        <InputIcon className="pi pi-envelope" />
                         <InputText
                           id="email"
                           value={registerData.email}
@@ -422,7 +417,6 @@ export default function RegisterModal({
                     </label>
                     <div className="relative">
                       <IconField iconPosition="left" className="w-full">
-                        <InputIcon className="pi pi-lock" />
                         <InputText
                           type={showPassword ? "text" : "password"}
                           value={registerData.password}
@@ -456,7 +450,6 @@ export default function RegisterModal({
                     </label>
                     <div className="relative">
                       <IconField iconPosition="left" className="w-full">
-                        <InputIcon className="pi pi-lock" />
                         <InputText
                           type={showPassword ? "text" : "password"}
                           value={registerData.confirmPassword}

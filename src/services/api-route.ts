@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
   LOGIN_WITH_GOOGLE: `${prefix}/auth/login/google`,
   LOGIN_WITH_FACEBOOK: `${prefix}/auth/login/facebook`,
   LOGIN_WITH_ZALO: `${prefix}/auth/login/zalo`,
+  UPDATE_AVATAR: `${prefix}/auth/update-avatar`,
 
   CUSTOMER: {
     CHECK_PHONE_EMAIL: `${prefix}/customer/check-phone-email`,
@@ -14,10 +15,9 @@ export const API_ENDPOINTS = {
     SEND_OTP_VERIFY: `${prefix}/customer/send-otp-verify`,
     FORGOT_PASSWORD: `${prefix}/customer/forgot-password`,
     REGISTER: `${prefix}/customer/register`,
-    UPDATE: `${prefix}/customer/:id`,
+    UPDATE: `${prefix}/customer/update`,
     VERIFY_OTP: `${prefix}/customer/verify-otp`,
     FIND_BY_PHONE_EMAIL: `${prefix}/customer/find-by-phone-email`,
-    UPDATE_AVATAR: `${prefix}/customer/update-avatar`,
   },
 
   NOTIFY: {

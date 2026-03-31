@@ -1,7 +1,6 @@
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { IconField } from "primereact/iconfield";
-import { InputIcon } from "primereact/inputicon";
 import { InputOtp } from "primereact/inputotp";
 import { InputText } from "primereact/inputtext";
 import { Steps } from "primereact/steps";
@@ -164,7 +163,6 @@ export default function ForgotPasswordModal({
                 </label>
                 <div className="relative">
                   <IconField iconPosition="left" className="w-full">
-                    <InputIcon className="pi pi-user" />
                     <InputText
                       id="contact"
                       value={formData.contact}
@@ -252,7 +250,6 @@ export default function ForgotPasswordModal({
                 <label className="text-sm font-medium">Mật khẩu mới</label>
                 <div className="relative">
                   <IconField iconPosition="left" className="w-full">
-                    <InputIcon className="pi pi-lock" />
                     <InputText
                       type={showPassword ? "text" : "password"}
                       value={formData.newPassword}
@@ -285,7 +282,6 @@ export default function ForgotPasswordModal({
                 <label className="text-sm font-medium">Xác nhận mật khẩu</label>
                 <div className="relative">
                   <IconField iconPosition="left" className="w-full">
-                    <InputIcon className="pi pi-lock" />
                     <InputText
                       type={showPassword ? "text" : "password"}
                       value={formData.confirmPassword}

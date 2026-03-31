@@ -210,6 +210,48 @@ const getMe = async (): Promise<any> => {
   }
 };
 
+const updateCustomer = async (body: any): Promise<any> => {
+  try {
+    const res: any = await apiService.post<any>(
+      API_ENDPOINTS.CUSTOMER.UPDATE, 
+      body, 
+      { showToastOnError: true } as any
+    );
+    return res;
+  } catch (error) {
+    console.error("UpdateCustomer error:", error);
+    throw error;
+  }
+};
+
+const changePassword = async (body: any): Promise<any> => {
+  try {
+    const res: any = await apiService.post<any>(
+      API_ENDPOINTS.CHANGE_PASSWORD,
+      body,
+      { showToastOnError: true } as any
+    );
+    return res;
+  } catch (error) {
+    console.error("ChangePassword error:", error);
+    throw error;
+  }
+};
+
+const updateAvatar = async (avatarUrl: string): Promise<any> => {
+  try {
+    const res: any = await apiService.post<any>(
+      API_ENDPOINTS.UPDATE_AVATAR, 
+      { avatarUrl },
+      { showToastOnError: true } as any
+    );
+    return res;
+  } catch (error) {
+    console.error("UpdateAvatar error:", error);
+    throw error;
+  }
+};
+
 export {
   checkPhoneEmail,
   forgotPassword,
@@ -222,4 +264,7 @@ export {
   sendOtpCustomer,
   sendOtpVerifyCustomer,
   verifyLoginOtp,
+  updateCustomer,
+  changePassword,
+  updateAvatar
 };

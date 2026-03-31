@@ -144,19 +144,7 @@ const BannerComponent = ({ type = "HOME" }: BannerComponentProps) => {
               className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"
               aria-label="Previous banner"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <i className="pi pi-chevron-left"></i>
             </button>
             <button
               onClick={(e) => {
@@ -166,19 +154,7 @@ const BannerComponent = ({ type = "HOME" }: BannerComponentProps) => {
               className="absolute right-40 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10"
               aria-label="Next banner"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+              <i className="pi pi-chevron-right"></i>
             </button>
           </>
         )}

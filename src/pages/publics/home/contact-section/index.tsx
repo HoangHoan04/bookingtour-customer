@@ -115,7 +115,7 @@ export default function ContactSection() {
             borderRadius: "1.5rem",
           }}
         >
-          <h3 className="text-4xl font-bold mb-3" style={{ color: "white" }}>
+          <h3 className="text-4xl font-bold mb-3">
             Sẵn sàng cho cuộc phiêu lưu tiếp theo của bạn?
           </h3>
           <p
