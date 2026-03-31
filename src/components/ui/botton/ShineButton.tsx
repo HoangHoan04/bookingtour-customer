@@ -6,12 +6,16 @@ export default function ShineButton({
   buttonStyles,
   icon,
   otherStyles,
+  loading = false,
+  disabled = false,
 }: {
   label?: string;
   buttonStyles?: object;
   otherStyles?: object;
   icon?: React.ReactNode;
   handleClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  loading?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <div className="flex justify-center" style={otherStyles}>
@@ -35,6 +39,8 @@ export default function ShineButton({
         "
         style={buttonStyles}
         onClick={handleClick}
+        loading={loading}
+        disabled={disabled || loading}
       >
         <span
           className="

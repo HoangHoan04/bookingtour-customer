@@ -101,4 +101,12 @@ export const API_ENDPOINTS = {
     FIND_BY_ID: `${prefix}/tour/find-by-id`,
     SEARCH: `${prefix}/tour/search`,
   },
+
+  BOOKING: {
+    CREATE: `${prefix}/bookings/create`,
+  },
+
+  PAYMENT: {
+    CREATE: `${prefix}/payment/vnpay/create`,
+  },
 };
