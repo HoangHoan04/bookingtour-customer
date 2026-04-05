@@ -10,6 +10,11 @@ import GlobalLoading from "@/components/ui/loading";
 import { formatDate } from "@/common/helpers/format";
 import { formatPrice } from "@/common/helpers/formatPrice";
 import type { TourPrice } from "@/dto/tour.dto";
+import {
+  useCreateBooking,
+  type BookingDetail,
+  type OrderInfo,
+} from "@/hooks/booking";
 
 const TOUR_FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1532599238321-4b3602f9064c?q=80&w=2070&auto=format&fit=crop";
@@ -27,7 +32,23 @@ const getPriceByType = (prices: TourPrice[] | undefined, type: TicketType) => {
   );
 };
 
-const BookingInput = ({ label, id, icon, placeholder, type = "text" }: any) => (
+const BookingInput = ({
+  label,
+  id,
+  icon,
+  placeholder,
+  type = "text",
+  value,
+  onChange,
+}: {
+  label: string;
+  id: string;
+  icon: string;
+  placeholder: string;
+  type?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => (
   <div className="flex flex-col gap-2">
     <label htmlFor={id} className="text-teal-800 font-bold text-sm ml-2">
       {label}
@@ -40,6 +61,8 @@ const BookingInput = ({ label, id, icon, placeholder, type = "text" }: any) => (
         id={id}
         type={type}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
         className="w-full rounded-full! py-3! pl-10! border-gray-200! focus:border-teal-500! focus:ring-0! hover:border-teal-400! text-sm! text-gray-600 shadow-sm"
       />
     </div>
@@ -53,7 +76,14 @@ const PaymentMethodCard = ({
   logo,
   label,
   subLabel,
-}: any) => (
+}: {
+  value: string;
+  selected: string;
+  onChange: (value: string) => void;
+  logo: string;
+  label: string;
+  subLabel?: string;
+}) => (
   <div
     onClick={() => onChange(value)}
     className={`
@@ -135,6 +165,13 @@ const TicketQuantityPicker = ({
 const BookingSection = () => {
   const { slug } = useParams();
   const location = useLocation();
+  const [userOrderInfo, setUserOrderInfo] = useState({
+    contactFullname: "",
+    contactEmail: "",
+    contactPhone: "",
+    contactAddress: "",
+    note: "",
+  });
   const { tourDetailId } = (location.state || {}) as BookingLocationState;
   const { data: tourData, isLoading } = useTourBySlug(slug || undefined);
 
@@ -142,6 +179,8 @@ const BookingSection = () => {
   const [agree, setAgree] = useState(false);
   const [adultQuantity, setAdultQuantity] = useState(0);
   const [childQuantity, setChildQuantity] = useState(0);
+
+  const { mutateAsync: createBooking, isPending } = useCreateBooking();
 
   const selectedTourDetail = useMemo(() => {
     const details = tourData?.__tourDetails__ || [];
@@ -175,6 +214,68 @@ const BookingSection = () => {
   const tax = 0;
   const discount = 0;
   const total = subtotal + tax - discount;
+
+  const handlePayment = async () => {
+    let bookingDetails: BookingDetail[] = [];
+    if (!agree) {
+      alert("Bạn cần đồng ý với điều khoản và chính sách để tiếp tục.");
+      return;
+    }
+
+    if (total <= 0) {
+      alert("Vui lòng chọn ít nhất một vé để đặt tour.");
+      return;
+    }
+
+    if (
+      !userOrderInfo.contactFullname ||
+      !userOrderInfo.contactEmail ||
+      !userOrderInfo.contactPhone ||
+      !userOrderInfo.contactAddress
+    ) {
+      alert("Vui lòng điền đầy đủ thông tin liên hệ.");
+      return;
+    }
+    if (adultQuantity > 0) {
+      bookingDetails.push({
+        price: adultPrice,
+        tourId: tourData?.id,
+        tourDetailId: selectedTourDetail?.id,
+        tourPriceId: adultPriceRow?.id,
+        quantity: adultQuantity,
+      });
+    }
+    if (childQuantity > 0) {
+      bookingDetails.push({
+        price: childPrice,
+        tourId: tourData?.id,
+        tourDetailId: selectedTourDetail?.id,
+        tourPriceId: childPriceRow?.id,
+        quantity: childQuantity,
+      });
+    }
+
+    const orderData: OrderInfo = {
+      contactFullname: userOrderInfo.contactFullname,
+      contactEmail: userOrderInfo.contactEmail,
+      contactPhone: userOrderInfo.contactPhone,
+      contactAddress: userOrderInfo.contactAddress,
+      note: userOrderInfo.note,
+      totalPrice: total,
+      bookingDetails,
+    };
+    try {
+      const bookingResult: any = await createBooking(orderData);
+
+      const paymentUrl = bookingResult?.paymentUrl;
+
+      if (typeof paymentUrl === "string" && paymentUrl.trim()) {
+        window.location.assign(paymentUrl);
+      }
+    } catch {
+      alert("Không thể tạo đơn đặt tour. Vui lòng thử lại.");
+    }
+  };
 
   if (isLoading) {
     return <GlobalLoading />;
@@ -247,30 +348,58 @@ const BookingSection = () => {
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               <BookingInput
-                id="firstName"
-                label="Họ"
+                id="contactFullname"
+                label="Họ và tên"
                 icon="pi-user"
                 placeholder="Le"
+                value={userOrderInfo.contactFullname}
+                onChange={(e) =>
+                  setUserOrderInfo({
+                    ...userOrderInfo,
+                    contactFullname: e.target.value,
+                  })
+                }
               />
               <BookingInput
-                id="lastName"
-                label="Tên đệm + Tên"
-                icon="pi-user"
-                placeholder="Văn Trung"
-              />
-              <BookingInput
-                id="email"
+                id="contactEmail"
                 label="Địa Chỉ Email"
                 icon="pi-envelope"
                 placeholder="admin@example.com"
                 type="email"
+                value={userOrderInfo.contactEmail}
+                onChange={(e) =>
+                  setUserOrderInfo({
+                    ...userOrderInfo,
+                    contactEmail: e.target.value,
+                  })
+                }
               />
               <BookingInput
-                id="phone"
+                id="contactPhone"
                 label="Số Điện Thoại"
                 icon="pi-phone"
                 placeholder="+84 999 999 999"
                 type="tel"
+                value={userOrderInfo.contactPhone}
+                onChange={(e) =>
+                  setUserOrderInfo({
+                    ...userOrderInfo,
+                    contactPhone: e.target.value,
+                  })
+                }
+              />
+              <BookingInput
+                id="contactAddress"
+                label="Địa Chỉ"
+                icon="pi-map-marker"
+                placeholder="123 Đường ABC, Quận XYZ, TP. HCM"
+                value={userOrderInfo.contactAddress}
+                onChange={(e) =>
+                  setUserOrderInfo({
+                    ...userOrderInfo,
+                    contactAddress: e.target.value,
+                  })
+                }
               />
             </div>
           </div>
@@ -299,6 +428,13 @@ const BookingSection = () => {
               <InputTextarea
                 rows={4}
                 placeholder="Có gì cần lưu ý cho chuyến đi không?"
+                value={userOrderInfo.note}
+                onChange={(e) =>
+                  setUserOrderInfo({
+                    ...userOrderInfo,
+                    note: e.target.value,
+                  })
+                }
                 className="w-full rounded-2xl! p-4! border-gray-200! focus:border-teal-500! hover:border-teal-400! text-sm"
               />
             </div>
@@ -424,7 +560,8 @@ const BookingSection = () => {
                 icon={
                   <i className="pi pi-arrow-right relative z-10 text-sm font-bold"></i>
                 }
-                handleClick={() => alert("Thanh toán thành công!")}
+                handleClick={() => handlePayment()}
+                loading={isPending}
               />
             </div>
 
