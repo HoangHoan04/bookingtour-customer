@@ -30,9 +30,7 @@ type MenuItemType = {
   children?: { label: string; path: string }[];
 };
 
-export default function AppHeader({
-  isScrolled = false,
-}: AppHeaderProps) {
+export default function AppHeader({ isScrolled = false }: AppHeaderProps) {
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [loginVisible, setLoginVisible] = useState(false);
