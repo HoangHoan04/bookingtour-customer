@@ -3,6 +3,7 @@ import { formatPrice } from "@/common/helpers/formatPrice";
 import ShineButton from "@/components/ui/botton/ShineButton";
 import type { TourDetail, TourDto, TourPrice } from "@/dto/tour.dto";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
+import { useTheme } from "@/context/ThemeContext";
 
 type TourDetailPageState = {
   tour?: TourDto;
@@ -34,14 +35,28 @@ const sortPriceByType = (a: TourPrice, b: TourPrice) => {
   return a.priceType.localeCompare(b.priceType);
 };
 
-const TourPriceRow = ({ price }: { price: TourPrice }) => {
+const TourPriceRow = ({
+  price,
+  isDark,
+}: {
+  price: TourPrice;
+  isDark: boolean;
+}) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 rounded-2xl border border-teal-100 bg-white p-4">
+    <div
+      className={`grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 rounded-2xl border p-4 ${
+        isDark ? "border-slate-700 bg-slate-800" : "border-teal-100 bg-white"
+      }`}
+    >
       <div>
-        <p className="text-xs uppercase tracking-wide text-teal-700 font-semibold">
+        <p
+          className={`text-xs uppercase tracking-wide font-semibold ${isDark ? "text-teal-300" : "text-teal-700"}`}
+        >
           Loại giá
         </p>
-        <p className="text-sm text-slate-700 mt-1">
+        <p
+          className={`text-sm mt-1 ${isDark ? "text-slate-200" : "text-slate-700"}`}
+        >
           {price.priceType == "ADULT"
             ? "Người lớn"
             : price.priceType == "CHILD"
@@ -51,7 +66,9 @@ const TourPriceRow = ({ price }: { price: TourPrice }) => {
       </div>
 
       <div>
-        <p className="text-xs uppercase tracking-wide text-teal-700 font-semibold">
+        <p
+          className={`text-xs uppercase tracking-wide font-semibold ${isDark ? "text-teal-300" : "text-teal-700"}`}
+        >
           Mức giá
         </p>
         <p className="text-base font-bold text-orange-500 mt-1">
@@ -60,10 +77,16 @@ const TourPriceRow = ({ price }: { price: TourPrice }) => {
       </div>
 
       <div>
-        <p className="text-xs uppercase tracking-wide text-teal-700 font-semibold">
+        <p
+          className={`text-xs uppercase tracking-wide font-semibold ${isDark ? "text-teal-300" : "text-teal-700"}`}
+        >
           Tiền tệ
         </p>
-        <p className="text-sm text-slate-700 mt-1">{price.currency || "VND"}</p>
+        <p
+          className={`text-sm mt-1 ${isDark ? "text-slate-200" : "text-slate-700"}`}
+        >
+          {price.currency || "VND"}
+        </p>
       </div>
     </div>
   );
@@ -73,10 +96,12 @@ const TourDetailBlock = ({
   detail,
   isFocused,
   currentTour,
+  isDark,
 }: {
   detail: TourDetail;
   isFocused: boolean;
   currentTour: TourDto;
+  isDark: boolean;
 }) => {
   const prices = [...(detail.__tourPrice__ || [])].sort(sortPriceByType);
   const navigate = useNavigate();
@@ -85,16 +110,24 @@ const TourDetailBlock = ({
     <article
       className={`rounded-3xl border p-6 md:p-8 shadow-sm transition ${
         isFocused
-          ? "bg-white border-teal-200 shadow-lg"
-          : "bg-white/90 border-slate-200"
+          ? isDark
+            ? "bg-slate-800 border-teal-700 shadow-lg"
+            : "bg-white border-teal-200 shadow-lg"
+          : isDark
+            ? "bg-slate-800/90 border-slate-700"
+            : "bg-white/90 border-slate-200"
       }`}
     >
       <div className="flex flex-wrap gap-3 items-center justify-between mb-5">
         <div>
-          <h3 className="text-xl font-extrabold text-teal-900">
+          <h3
+            className={`text-xl font-extrabold ${isDark ? "text-teal-300" : "text-teal-900"}`}
+          >
             Đợt tour {detail.code || "---"}
           </h3>
-          <p className="text-sm text-slate-500 mt-1">
+          <p
+            className={`text-sm mt-1 ${isDark ? "text-slate-300" : "text-slate-500"}`}
+          >
             {formatDate(detail.startDay)} - {formatDate(detail.endDay)}
           </p>
         </div>
@@ -109,44 +142,84 @@ const TourDetailBlock = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-        <div className="rounded-2xl bg-[#F3FBFB] p-4 border border-teal-100">
-          <p className="text-xs uppercase tracking-wide text-teal-700 font-semibold">
+        <div
+          className={`rounded-2xl p-4 border ${
+            isDark
+              ? "bg-slate-900 border-slate-700"
+              : "bg-[#F3FBFB] border-teal-100"
+          }`}
+        >
+          <p
+            className={`text-xs uppercase tracking-wide font-semibold ${isDark ? "text-teal-300" : "text-teal-700"}`}
+          >
             Điểm khởi hành
           </p>
-          <p className="text-sm font-medium text-slate-700 mt-1">
+          <p
+            className={`text-sm font-medium mt-1 ${isDark ? "text-slate-200" : "text-slate-700"}`}
+          >
             {detail.startLocation || "Đang cập nhật"}
           </p>
         </div>
 
-        <div className="rounded-2xl bg-[#F3FBFB] p-4 border border-teal-100">
-          <p className="text-xs uppercase tracking-wide text-teal-700 font-semibold">
+        <div
+          className={`rounded-2xl p-4 border ${
+            isDark
+              ? "bg-slate-900 border-slate-700"
+              : "bg-[#F3FBFB] border-teal-100"
+          }`}
+        >
+          <p
+            className={`text-xs uppercase tracking-wide font-semibold ${isDark ? "text-teal-300" : "text-teal-700"}`}
+          >
             Sức chứa
           </p>
-          <p className="text-sm font-medium text-slate-700 mt-1">
+          <p
+            className={`text-sm font-medium mt-1 ${isDark ? "text-slate-200" : "text-slate-700"}`}
+          >
             {detail.capacity ?? 0} chỗ
           </p>
         </div>
 
-        <div className="rounded-2xl bg-[#F3FBFB] p-4 border border-teal-100">
-          <p className="text-xs uppercase tracking-wide text-teal-700 font-semibold">
+        <div
+          className={`rounded-2xl p-4 border ${
+            isDark
+              ? "bg-slate-900 border-slate-700"
+              : "bg-[#F3FBFB] border-teal-100"
+          }`}
+        >
+          <p
+            className={`text-xs uppercase tracking-wide font-semibold ${isDark ? "text-teal-300" : "text-teal-700"}`}
+          >
             Chỗ còn lại
           </p>
-          <p className="text-sm font-medium text-slate-700 mt-1">
+          <p
+            className={`text-sm font-medium mt-1 ${isDark ? "text-slate-200" : "text-slate-700"}`}
+          >
             {detail.remainingSeats ?? 0} chỗ
           </p>
         </div>
       </div>
 
       <div>
-        <h4 className="text-base font-bold text-teal-800 mb-3">Chi tiết giá</h4>
+        <h4
+          className={`text-base font-bold mb-3 ${isDark ? "text-teal-300" : "text-teal-800"}`}
+        >
+          Chi tiết giá
+        </h4>
         {prices.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">
+          <p
+            className={`rounded-2xl border border-dashed p-4 text-sm ${
+              isDark
+                ? "border-slate-600 bg-slate-900 text-slate-300"
+                : "border-slate-300 bg-slate-50 text-slate-500"
+            }`}
+          >
             Chưa có dữ liệu giá cho đợt tour này.
           </p>
         ) : (
           <div className="space-y-3">
             {prices.map((price) => (
-              <TourPriceRow key={price.id} price={price} />
+              <TourPriceRow key={price.id} price={price} isDark={isDark} />
             ))}
           </div>
         )}
@@ -170,6 +243,8 @@ const AllTourDetailAndPrice = () => {
   const location = useLocation();
   const state = location.state as TourDetailPageState | null;
   const tour = state?.tour;
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   const tourDetails = [...(tour?.__tourDetails__ || [])].sort(sortByStartDate);
   const focusedIndex = tourDetails.findIndex((item) => item.id === detailId);
@@ -189,12 +264,22 @@ const AllTourDetailAndPrice = () => {
 
   if (!tour) {
     return (
-      <div className="bg-[#EFFFFF] min-h-screen py-20 px-4">
-        <div className="max-w-4xl mx-auto rounded-3xl border border-slate-200 bg-white p-8 md:p-10 text-center shadow-sm">
-          <h1 className="text-2xl font-extrabold text-teal-900 mb-3">
+      <div
+        className={`min-h-screen py-20 px-4 ${isDark ? "bg-[#111827]" : "bg-[#EFFFFF]"}`}
+      >
+        <div
+          className={`max-w-4xl mx-auto rounded-3xl border p-8 md:p-10 text-center shadow-sm ${
+            isDark
+              ? "border-slate-700 bg-slate-800"
+              : "border-slate-200 bg-white"
+          }`}
+        >
+          <h1
+            className={`text-2xl font-extrabold mb-3 ${isDark ? "text-teal-300" : "text-teal-900"}`}
+          >
             Không tìm thấy dữ liệu tour
           </h1>
-          <p className="text-slate-500 mb-6">
+          <p className={`mb-6 ${isDark ? "text-slate-300" : "text-slate-500"}`}>
             Vui lòng quay lại danh sách tour và bấm Xem mọi giá để mở đúng thông
             tin.
           </p>
@@ -210,25 +295,49 @@ const AllTourDetailAndPrice = () => {
   }
 
   return (
-    <div className="bg-[#EFFFFF] min-h-screen py-16 px-4">
+    <div
+      className={`min-h-screen py-16 px-4 ${isDark ? "bg-[#111827]" : "bg-[#EFFFFF]"}`}
+    >
       <div className="max-w-7xl mx-auto">
-        <div className="rounded-4xl bg-white border border-teal-100 p-6 md:p-10 shadow-lg">
-          <div className="flex flex-wrap items-start justify-between gap-5 pb-6 border-b border-slate-100">
+        <div
+          className={`rounded-4xl border p-6 md:p-10 shadow-lg ${
+            isDark
+              ? "bg-slate-800 border-slate-700"
+              : "bg-white border-teal-100"
+          }`}
+        >
+          <div
+            className={`flex flex-wrap items-start justify-between gap-5 pb-6 border-b ${
+              isDark ? "border-slate-700" : "border-slate-100"
+            }`}
+          >
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-teal-700 font-semibold">
+              <p
+                className={`text-xs uppercase tracking-[0.2em] font-semibold ${
+                  isDark ? "text-teal-300" : "text-teal-700"
+                }`}
+              >
                 THÔNG TIN TOUR
               </p>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-teal-900 mt-2 leading-tight">
+              <h1
+                className={`text-3xl md:text-4xl font-bold mt-2 ${isDark ? "text-teal-300" : "text-teal-900"}`}
+              >
                 {tour.title}
               </h1>
-              <p className="text-slate-500 mt-2">
+              <p
+                className={`mt-2 ${isDark ? "text-slate-300" : "text-slate-500"}`}
+              >
                 {tour.location} • {tour.durations}
               </p>
             </div>
 
             <Link
               to={`/tours/${tour.slug}`}
-              className="inline-flex items-center gap-2 rounded-full border border-teal-200 px-5 py-2.5 text-teal-800 font-semibold hover:bg-teal-50 transition"
+              className={`inline-flex items-center gap-2 rounded-full border px-5 py-2.5 font-semibold transition ${
+                isDark
+                  ? "border-teal-700 text-teal-300 hover:bg-slate-700"
+                  : "border-teal-200 text-teal-800 hover:bg-teal-50"
+              }`}
             >
               <i className="pi pi-arrow-left"></i>
               Quay lại chi tiết tour
@@ -236,7 +345,13 @@ const AllTourDetailAndPrice = () => {
           </div>
 
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div className="rounded-2xl bg-[#FFF7E8] border border-orange-200 p-4">
+            <div
+              className={`rounded-2xl border p-4 ${
+                isDark
+                  ? "bg-orange-950/30 border-orange-900"
+                  : "bg-[#FFF7E8] border-orange-200"
+              }`}
+            >
               <p className="text-xs uppercase tracking-wide text-orange-700 font-semibold">
                 Tổng số đợt tour
               </p>
@@ -245,16 +360,32 @@ const AllTourDetailAndPrice = () => {
               </p>
             </div>
 
-            <div className="rounded-2xl bg-[#F3FBFB] border border-teal-100 p-4">
-              <p className="text-xs uppercase tracking-wide text-teal-700 font-semibold">
+            <div
+              className={`rounded-2xl border p-4 ${
+                isDark
+                  ? "bg-slate-900 border-slate-700"
+                  : "bg-[#F3FBFB] border-teal-100"
+              }`}
+            >
+              <p
+                className={`text-xs uppercase tracking-wide font-semibold ${isDark ? "text-teal-300" : "text-teal-700"}`}
+              >
                 Tổng số dòng giá
               </p>
-              <p className="text-2xl font-extrabold text-teal-800 mt-1">
+              <p
+                className={`text-2xl font-extrabold mt-1 ${isDark ? "text-teal-300" : "text-teal-800"}`}
+              >
                 {totalPriceRows}
               </p>
             </div>
 
-            <div className="rounded-2xl bg-[#F8F7FF] border border-indigo-100 p-4">
+            <div
+              className={`rounded-2xl border p-4 ${
+                isDark
+                  ? "bg-indigo-950/25 border-indigo-900"
+                  : "bg-[#F8F7FF] border-indigo-100"
+              }`}
+            >
               <p className="text-xs uppercase tracking-wide text-indigo-700 font-semibold">
                 Đánh giá
               </p>
@@ -266,7 +397,13 @@ const AllTourDetailAndPrice = () => {
 
           <div className="mt-8 space-y-5">
             {orderedDetails.length === 0 ? (
-              <p className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-5 text-sm text-slate-500">
+              <p
+                className={`rounded-2xl border border-dashed p-5 text-sm ${
+                  isDark
+                    ? "border-slate-600 bg-slate-900 text-slate-300"
+                    : "border-slate-300 bg-slate-50 text-slate-500"
+                }`}
+              >
                 Tour này chưa có đợt tour chi tiết để hiển thị.
               </p>
             ) : (
@@ -276,6 +413,7 @@ const AllTourDetailAndPrice = () => {
                   detail={detail}
                   isFocused={detail.id === detailId}
                   currentTour={tour}
+                  isDark={isDark}
                 />
               ))
             )}
