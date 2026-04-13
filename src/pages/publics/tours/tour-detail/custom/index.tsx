@@ -2,18 +2,30 @@ const InfoItem = ({
   label,
   value,
   sub,
+  isDark,
 }: {
   label: string;
   value: string;
   sub?: string;
+  isDark?: boolean;
 }) => (
   <div className="flex flex-col">
-    <span className="text-teal-800 font-bold text-xs mb-1 uppercase tracking-wide opacity-80">
+    <span
+      className={` ${isDark ? "text-teal-300" : "text-teal-800"} font-bold text-xs mb-1 uppercase tracking-wide opacity-80`}
+    >
       {label}
     </span>
-    <span className="text-gray-700 text-sm font-bold">{value}</span>
+    <span
+      className={` ${isDark ? "dark:text-slate-200" : "text-gray-700"} text-sm font-bold`}
+    >
+      {value}
+    </span>
     {sub && (
-      <span className="text-orange-500 text-sm font-bold mt-1">{sub}</span>
+      <span
+        className={`text-orange-500 ${isDark ? "dark:text-orange-300" : ""} text-sm font-bold mt-1`}
+      >
+        {sub}
+      </span>
     )}
   </div>
 );
@@ -52,9 +64,11 @@ const thumbnailTemplate = (item: any) => {
 const IncludeItem = ({
   label,
   included,
+  isDark,
 }: {
   label: string;
   included: boolean;
+  isDark?: boolean;
 }) => (
   <div className="flex items-center gap-3 mb-3">
     {included ? (
@@ -67,11 +81,15 @@ const IncludeItem = ({
       </div>
     )}
     <span
-      className={
+      className={`font-medium text-sm ${
         included
-          ? "text-teal-800 font-medium text-sm"
-          : "text-gray-500 font-medium text-sm"
-      }
+          ? isDark
+            ? "dark:text-teal-300"
+            : "text-teal-800"
+          : isDark
+            ? "dark:text-slate-300"
+            : "text-gray-500"
+      }`}
     >
       {label}
     </span>
@@ -80,7 +98,7 @@ const IncludeItem = ({
 
 const customizedMarker = (item: any) => {
   return (
-    <div className="flex flex-col items-center justify-center w-12 h-12 rounded-full bg-teal-600 shadow-md border-4 border-[#fffbf2] z-10">
+    <div className="flex flex-col items-center justify-center w-12 h-12 rounded-full bg-teal-600 shadow-md border-4 border-[#fffbf2] dark:border-slate-800 z-10">
       <span className="text-white font-bold text-sm leading-none">
         {item.day}
       </span>
@@ -92,8 +110,12 @@ const customizedMarker = (item: any) => {
 const customizedContent = (item: any) => {
   return (
     <div className="ml-4 mb-8">
-      <h3 className="text-teal-800 font-bold text-lg mb-2">{item.title}</h3>
-      <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+      <h3 className="text-teal-800 dark:text-teal-300 font-bold text-lg mb-2">
+        {item.title}
+      </h3>
+      <p className="text-gray-500 dark:text-slate-300 text-sm leading-relaxed">
+        {item.desc}
+      </p>
     </div>
   );
 };
